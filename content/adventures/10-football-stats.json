@@ -1,0 +1,46 @@
+{
+  "id": "adv-10-football-stats",
+  "title": { "zh": "足球统计师", "en": "Football Statistician" },
+  "category": "sports",
+  "icon": "⚽",
+  "difficulty": 3,
+  "age_target": "6+",
+  "modules_used": ["probability", "fraction", "sequence"],
+  "unlock_condition": null,
+  "stages": [
+    {
+      "id": "s1",
+      "narrative": {
+        "zh": "世界杯来了！统计一下这个球员的进球概率——10场比赛进了几个球？",
+        "en": "World Cup time! Track this player's scoring probability — goals in 10 matches?"
+      },
+      "character": "⚽",
+      "puzzle_module": "probability",
+      "puzzle_id": "probability-l1-coin-flip-10"
+    },
+    {
+      "id": "s2",
+      "narrative": {
+        "zh": "教练要分析球队的得分趋势：1, 3, 5, 7, ?  下一场会进几个球？",
+        "en": "Coach analyzes the scoring trend: 1, 3, 5, 7, ?  How many goals next?"
+      },
+      "character": "📋",
+      "puzzle_module": "sequence",
+      "puzzle_id": "sequence-l1-count-by-two"
+    },
+    {
+      "id": "s3",
+      "narrative": {
+        "zh": "比赛结束！把奖杯蛋糕平均分给球队的4个前锋！",
+        "en": "Match over! Share the trophy cake equally among the 4 strikers!"
+      },
+      "character": "🏆",
+      "puzzle_module": "fraction",
+      "puzzle_id": "fraction-l1-pizza-quarter"
+    }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "adv-01-kitchen-scientist",
+  "title": { "zh": "厨房科学家", "en": "Kitchen Scientist" },
+  "category": "life",
+  "icon": "👨‍🍳",
+  "difficulty": 1,
+  "age_target": "6+",
+  "modules_used": ["fraction", "sequence"],
+  "unlock_condition": null,
+  "stages": [
+    {
+      "id": "s1",
+      "narrative": {
+        "zh": "小熊想做一个大蛋糕！食谱上说需要把面粉分成4份，每次只加1份。",
+        "en": "Bear wants to bake a big cake! The recipe says to divide flour into 4 parts, adding 1 part at a time."
+      },
+      "character": "🐻",
+      "puzzle_module": "fraction",
+      "puzzle_id": "fraction-l1-pizza-quarter"
+    },
+    {
+      "id": "s2",
+      "narrative": {
+        "zh": "蛋糕需要烤30分钟。小熊发现温度每5分钟升10度！帮它找出规律！",
+        "en": "The cake bakes for 30 minutes. Bear notices temperature rises 10° every 5 minutes! Find the pattern!"
+      },
+      "character": "🐻",
+      "puzzle_module": "sequence",
+      "puzzle_id": "sequence-l1-count-by-two"
+    },
+    {
+      "id": "s3",
+      "narrative": {
+        "zh": "蛋糕烤好了！现在要切给6个朋友吃！",
+        "en": "The cake is done! Now cut it for 6 friends!"
+      },
+      "character": "🐻",
+      "puzzle_module": "fraction",
+      "puzzle_id": "fraction-l1-pizza-six"
+    }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28"
+  }
+}

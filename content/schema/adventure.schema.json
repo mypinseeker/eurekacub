@@ -3,7 +3,7 @@
   "$id": "adventure.schema.json",
   "title": "EurekaCub Adventure Schema",
   "type": "object",
-  "required": ["id", "title", "group_tag", "stages"],
+  "required": ["id", "title", "category", "stages"],
   "properties": {
     "id": {
       "type": "string",
@@ -19,18 +19,42 @@
       },
       "additionalProperties": false
     },
-    "group_tag": {
+    "category": {
       "type": "string",
-      "description": "Tag for grouping related adventures"
+      "enum": ["life", "challenger", "ultimate", "sports", "science"],
+      "description": "Adventure category for grouping"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Emoji icon for the adventure"
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "age_target": {
+      "type": "string",
+      "description": "Target age range (e.g. 6+, 9+)"
+    },
+    "modules_used": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Module IDs used in this adventure"
+    },
+    "unlock_condition": {
+      "type": ["string", "null"],
+      "description": "Condition to unlock this adventure (null = always available)"
     },
     "stages": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["scenario", "module_ids", "puzzle_type", "data"],
+        "required": ["id", "narrative", "character", "puzzle_module", "puzzle_id"],
         "properties": {
-          "scenario": {
+          "id": { "type": "string" },
+          "narrative": {
             "type": "object",
             "required": ["zh", "en"],
             "properties": {
@@ -39,19 +63,17 @@
             },
             "additionalProperties": false
           },
-          "module_ids": {
-            "type": "array",
-            "items": { "type": "string" },
-            "minItems": 1,
-            "description": "Puzzle IDs used in this stage"
-          },
-          "puzzle_type": {
+          "character": {
             "type": "string",
-            "description": "Type of puzzle interaction for this stage"
+            "description": "Character emoji for this stage"
           },
-          "data": {
-            "type": "object",
-            "description": "Stage-specific configuration data"
+          "puzzle_module": {
+            "type": "string",
+            "description": "Module renderer to use"
+          },
+          "puzzle_id": {
+            "type": "string",
+            "description": "Puzzle content ID to load"
           }
         },
         "additionalProperties": false

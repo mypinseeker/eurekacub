@@ -1,0 +1,46 @@
+{
+  "id": "adv-15-chemistry-lab",
+  "title": { "zh": "化学配方师", "en": "Chemistry Mixer" },
+  "category": "science",
+  "icon": "🧪",
+  "difficulty": 5,
+  "age_target": "9+",
+  "modules_used": ["fraction", "equation", "probability"],
+  "unlock_condition": "complete_2_sports",
+  "stages": [
+    {
+      "id": "s1",
+      "narrative": {
+        "zh": "实验室里要配制药水！把液体精确分成3等份——每份加入不同的试剂！",
+        "en": "Time to mix a potion! Divide the liquid into 3 equal parts — each gets a different reagent!"
+      },
+      "character": "🧑‍🔬",
+      "puzzle_module": "fraction",
+      "puzzle_id": "fraction-l1-pizza-three"
+    },
+    {
+      "id": "s2",
+      "narrative": {
+        "zh": "化学方程式要平衡！左边有原料，右边有产物——让天平平衡！",
+        "en": "Chemical equations must balance! Reactants on the left, products on the right — balance them!"
+      },
+      "character": "🧑‍🔬",
+      "puzzle_module": "equation",
+      "puzzle_id": "equation-l2-multiply"
+    },
+    {
+      "id": "s3",
+      "narrative": {
+        "zh": "实验结果有随机性！做50次实验看看成功率是不是接近理论值！",
+        "en": "Results are random! Run 50 experiments to see if success rate matches theory!"
+      },
+      "character": "🧑‍🔬",
+      "puzzle_module": "probability",
+      "puzzle_id": "probability-l1-coin-flip-50"
+    }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28"
+  }
+}

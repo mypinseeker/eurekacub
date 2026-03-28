@@ -39,3 +39,28 @@ export interface ContentVersion {
   version: number
   updated_at: string
 }
+
+// Adventure mode types
+
+export type AdventureCategory = 'life' | 'challenger' | 'ultimate' | 'sports' | 'science'
+
+export interface AdventureStage {
+  id: number
+  narrative_zh: string
+  narrative_en: string
+  character: string          // emoji avatar for the narrator
+  renderer_id: string        // references a registered renderer (e.g. 'fraction', 'geometry')
+  puzzle: Record<string, unknown>
+}
+
+export interface Adventure {
+  id: number
+  category: AdventureCategory
+  title_zh: string
+  title_en: string
+  icon: string
+  difficulty: number         // 1-5 stars
+  unlocked: boolean
+  module_tags: string[]      // renderer IDs used in this adventure
+  stages: AdventureStage[]
+}

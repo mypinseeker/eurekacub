@@ -3,6 +3,8 @@ import { initReactI18next } from 'react-i18next'
 import zh from './zh.json'
 import en from './en.json'
 
+const savedLang = localStorage.getItem('eurekacub:lang') || 'zh'
+
 i18n
   .use(initReactI18next)
   .init({
@@ -10,9 +12,14 @@ i18n
       zh: { translation: zh },
       en: { translation: en },
     },
-    lng: 'zh',  // default Chinese
-    fallbackLng: 'en',
+    lng: savedLang,
+    fallbackLng: 'zh',
     interpolation: { escapeValue: false },
   })
+
+// Persist language changes
+i18n.on('languageChanged', (lng) => {
+  localStorage.setItem('eurekacub:lang', lng)
+})
 
 export default i18n

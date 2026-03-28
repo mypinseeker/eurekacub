@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import type { Module } from '../api/types'
 import ModuleCard from '../components/ModuleCard'
 import SettingsDrawer from '../components/SettingsDrawer'
@@ -26,6 +27,7 @@ export default function HomePage() {
   const [activeTrack, setActiveTrack] = useState<Track>('explorer')
   const [settingsOpen, setSettingsOpen] = useState(false)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const trackModules = MODULES.filter(
     (m) => m.group_tag === activeTrack,
@@ -40,6 +42,7 @@ export default function HomePage() {
         <button
           onClick={() => setSettingsOpen(true)}
           className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/80 shadow-sm hover:shadow-md flex items-center justify-center transition-all"
+          aria-label={t('a11y.settingsButton')}
         >
           {'\u2699\uFE0F'}
         </button>
@@ -48,6 +51,7 @@ export default function HomePage() {
         <button
           onClick={() => navigate('/parent')}
           className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/80 shadow-sm hover:shadow-md flex items-center justify-center transition-all text-sm"
+          aria-label={t('a11y.parentButton')}
         >
           {'\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67'}
         </button>
@@ -62,10 +66,10 @@ export default function HomePage() {
             {'\uD83D\uDC3B'}
           </motion.div>
           <h1 className="text-4xl font-extrabold bg-gradient-to-r from-amber-600 via-orange-500 to-red-500 bg-clip-text text-transparent">
-            EurekaCub
+            {t('app.title')}
           </h1>
           <p className="text-sm text-amber-600/80 mt-1 font-medium">
-            {'\u5C0F\u79D1\u5B66\u5BB6\u7684\u53D1\u73B0\u4E4B\u65C5'} | A Cub's Journey of Discovery
+            {t('app.tagline')}
           </p>
         </div>
       </header>
@@ -76,16 +80,16 @@ export default function HomePage() {
           active={activeTrack === 'explorer'}
           onClick={() => setActiveTrack('explorer')}
           icon={'\uD83C\uDF31'}
-          label={'\u63A2\u7D22\u5BB6'}
-          sublabel="Explorer 6+"
+          label={t('app.explorer')}
+          sublabel={t('app.explorerSublabel')}
           color="emerald"
         />
         <TrackTab
           active={activeTrack === 'challenger'}
           onClick={() => setActiveTrack('challenger')}
           icon={'\uD83D\uDE80'}
-          label={'\u6311\u6218\u8005'}
-          sublabel="Challenger 9+"
+          label={t('app.challenger')}
+          sublabel={t('app.challengerSublabel')}
           color="violet"
         />
       </div>
@@ -121,7 +125,7 @@ export default function HomePage() {
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">{'\uD83C\uDF1F'}</span>
           <h2 className="text-base font-bold text-gray-600">
-            {'\u5171\u4EAB\u6A21\u5757'} Shared
+            {t('app.shared')}
           </h2>
           <div className="flex-1 h-px bg-gradient-to-r from-amber-200 to-transparent" />
         </div>
@@ -142,9 +146,9 @@ export default function HomePage() {
       {/* Bottom nav */}
       <div className="fixed bottom-0 left-0 right-0 pb-4 pt-2 bg-gradient-to-t from-orange-50/90 to-transparent">
         <div className="flex justify-center gap-6">
-          <NavDot icon={'\uD83C\uDFE0'} label={'\u9996\u9875'} active />
-          <NavDot icon={'\uD83C\uDFD5\uFE0F'} label={'\u5192\u9669'} onClick={() => navigate('/adventures')} />
-          <NavDot icon={'\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67'} label={'\u5BB6\u957F'} onClick={() => navigate('/parent')} />
+          <NavDot icon={'\uD83C\uDFE0'} label={t('app.home')} active />
+          <NavDot icon={'\uD83C\uDFD5\uFE0F'} label={t('app.adventures')} onClick={() => navigate('/adventures')} />
+          <NavDot icon={'\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67'} label={t('app.parent')} onClick={() => navigate('/parent')} />
         </div>
       </div>
 

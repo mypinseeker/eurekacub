@@ -1,0 +1,46 @@
+{
+  "id": "adv-07-space-navigator",
+  "title": { "zh": "太空导航员", "en": "Space Navigator" },
+  "category": "ultimate",
+  "icon": "🚀",
+  "difficulty": 7,
+  "age_target": "9+",
+  "modules_used": ["derivative", "geometry", "probability"],
+  "unlock_condition": "complete_3_challenger",
+  "stages": [
+    {
+      "id": "s1",
+      "narrative": {
+        "zh": "飞船需要精确控制速度才能进入轨道！调整速度曲线让飞船到达空间站！",
+        "en": "The spaceship needs precise speed control to enter orbit! Adjust the speed curve to reach the station!"
+      },
+      "character": "🧑‍🚀",
+      "puzzle_module": "derivative",
+      "puzzle_id": "derivative-l2-brake"
+    },
+    {
+      "id": "s2",
+      "narrative": {
+        "zh": "太空陨石来了！用几何形状搭建防护盾！",
+        "en": "Asteroids incoming! Build a shield with geometric shapes!"
+      },
+      "character": "🧑‍🚀",
+      "puzzle_module": "geometry",
+      "puzzle_id": "geometry-l2-cat"
+    },
+    {
+      "id": "s3",
+      "narrative": {
+        "zh": "导航系统出故障了！通过概率实验判断哪条路线最安全！",
+        "en": "Navigation system malfunction! Use probability experiments to find the safest route!"
+      },
+      "character": "🧑‍🚀",
+      "puzzle_module": "probability",
+      "puzzle_id": "probability-l2-lucky-streak"
+    }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28"
+  }
+}

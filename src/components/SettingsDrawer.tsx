@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from './LanguageSwitcher'
 
 interface Settings {
-  language: 'zh' | 'en'
   sound: boolean
   haptic: boolean
 }
 
-const DEFAULT_SETTINGS: Settings = { language: 'zh', sound: true, haptic: true }
+const DEFAULT_SETTINGS: Settings = { sound: true, haptic: true }
 
 function loadSettings(): Settings {
   try {
@@ -28,6 +29,7 @@ interface SettingsDrawerProps {
 
 export default function SettingsDrawer({ open, onClose }: SettingsDrawerProps) {
   const [settings, setSettings] = useState<Settings>(loadSettings)
+  const { t } = useTranslation()
 
   useEffect(() => {
     saveSettings(settings)
@@ -35,10 +37,6 @@ export default function SettingsDrawer({ open, onClose }: SettingsDrawerProps) {
 
   const toggle = (key: 'sound' | 'haptic') => {
     setSettings((prev) => ({ ...prev, [key]: !prev[key] }))
-  }
-
-  const toggleLang = () => {
-    setSettings((prev) => ({ ...prev, language: prev.language === 'zh' ? 'en' : 'zh' }))
   }
 
   return (
@@ -59,11 +57,12 @@ export default function SettingsDrawer({ open, onClose }: SettingsDrawerProps) {
         <div className="p-6">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-lg font-bold text-gray-800">
-              {'\u2699\ufe0f'} {settings.language === 'zh' ? '\u8bbe\u7f6e' : 'Settings'}
+              {'\u2699\ufe0f'} {t('settings.title')}
             </h2>
             <button
               onClick={onClose}
               className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
+              aria-label={t('a11y.closeDrawer')}
             >
               {'\u2715'}
             </button>
@@ -72,19 +71,14 @@ export default function SettingsDrawer({ open, onClose }: SettingsDrawerProps) {
           {/* Language toggle */}
           <div className="mb-6">
             <label className="text-sm text-gray-500 mb-2 block">
-              {settings.language === 'zh' ? '\u8bed\u8a00 / Language' : 'Language / \u8bed\u8a00'}
+              {t('settings.language')}
             </label>
-            <button
-              onClick={toggleLang}
-              className="w-full py-3 rounded-xl border-2 border-gray-200 hover:border-blue-300 text-sm font-medium transition-colors"
-            >
-              {settings.language === 'zh' ? '\u4e2d\u6587 \u2192 English' : 'English \u2192 \u4e2d\u6587'}
-            </button>
+            <LanguageSwitcher />
           </div>
 
           {/* Sound toggle */}
           <ToggleRow
-            label={settings.language === 'zh' ? '\u97f3\u6548 / Sound' : 'Sound / \u97f3\u6548'}
+            label={t('settings.sound')}
             icon={'\ud83d\udd0a'}
             enabled={settings.sound}
             onToggle={() => toggle('sound')}
@@ -92,7 +86,7 @@ export default function SettingsDrawer({ open, onClose }: SettingsDrawerProps) {
 
           {/* Haptic toggle */}
           <ToggleRow
-            label={settings.language === 'zh' ? '\u632f\u52a8 / Haptic' : 'Haptic / \u632f\u52a8'}
+            label={t('settings.haptic')}
             icon={'\ud83d\udcf3'}
             enabled={settings.haptic}
             onToggle={() => toggle('haptic')}

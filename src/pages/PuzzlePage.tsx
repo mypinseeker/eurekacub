@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import TaskBar from '../components/TaskBar'
 import HintButton from '../components/HintButton'
 import FeedbackToast from '../components/FeedbackToast'
@@ -10,6 +11,7 @@ import { getRenderer } from '../renderers/registry'
 export default function PuzzlePage() {
   const { moduleId, levelId } = useParams<{ moduleId: string; levelId: string }>()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const level = levelId ?? 'L1'
 
   const [toast, setToast] = useState<{
@@ -24,11 +26,11 @@ export default function PuzzlePage() {
   const RendererComponent = rendererEntry?.component
 
   const handleCorrect = () => {
-    setToast({ message: '\uD83C\uDF1F \u771F\u68D2\uFF01Correct!', type: 'success', visible: true })
+    setToast({ message: `\uD83C\uDF1F ${t('puzzle.correct')}`, type: 'success', visible: true })
   }
 
   const handleError = () => {
-    setToast({ message: '\uD83E\uDD14 \u518D\u60F3\u60F3\u770B... Try again!', type: 'error', visible: true })
+    setToast({ message: `\uD83E\uDD14 ${t('feedback.tryAgain')}`, type: 'error', visible: true })
   }
 
   const handleAha = () => {
@@ -36,15 +38,15 @@ export default function PuzzlePage() {
   }
 
   const handleComplete = () => {
-    setToast({ message: '\uD83C\uDF89 \u5168\u90E8\u5B8C\u6210\uFF01All done!', type: 'success', visible: true })
+    setToast({ message: `\uD83C\uDF89 ${t('puzzle.allDone')}`, type: 'success', visible: true })
     setTimeout(() => navigate(`/module/${moduleId}`), 2000)
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 flex flex-col">
       <TaskBar
-        title={`\u7B2C ${level.replace('L', '')} \u5173`}
-        subtitle={`Module ${moduleId} - Level ${level}`}
+        title={t('puzzle.stageTitle', { num: level.replace('L', '') })}
+        subtitle={`${t('module.label')} ${moduleId} - ${t('level.' + level)}`}
         onBack={() => navigate(`/module/${moduleId}`)}
       />
 
@@ -73,15 +75,15 @@ export default function PuzzlePage() {
               {'\uD83D\uDEA7'}
             </motion.div>
             <h2 className="text-xl font-extrabold text-gray-700 mb-2">
-              {'\u5373\u5C06\u5F00\u653E!'} Coming soon!
+              {t('puzzle.comingSoon')}
             </h2>
             <p className="text-sm text-gray-400 mb-6">
-              {'\u8FD9\u4E2A\u6A21\u5757\u6B63\u5728\u5EFA\u9020\u4E2D...'} This module is being built...
+              {t('puzzle.building')}
             </p>
             <div className="inline-flex gap-2 items-center px-4 py-2 bg-white/60 rounded-xl text-xs text-gray-500 border border-gray-200">
-              <span>Module: {moduleId}</span>
+              <span>{t('module.label')}: {moduleId}</span>
               <span className="text-gray-300">|</span>
-              <span>Level: {level}</span>
+              <span>{t('level.' + level)}</span>
             </div>
           </motion.div>
         )}
@@ -91,9 +93,9 @@ export default function PuzzlePage() {
       <div className="p-4 pb-8">
         <HintButton
           hints={[
-            { zh: '\u4ED4\u7EC6\u89C2\u5BDF\u89C4\u5F8B', en: 'Look for the pattern' },
-            { zh: '\u8BD5\u8BD5\u4ECE\u7B80\u5355\u7684\u5F00\u59CB', en: 'Start with something simple' },
-            { zh: '\u6BD4\u8F83\u524D\u540E\u7684\u53D8\u5316', en: 'Compare the changes' },
+            { zh: t('hint.observe'), en: t('hint.observe') },
+            { zh: t('hint.startSimple'), en: t('hint.startSimple') },
+            { zh: t('hint.compare'), en: t('hint.compare') },
           ]}
         />
       </div>

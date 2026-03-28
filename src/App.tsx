@@ -4,6 +4,9 @@ import { useState } from 'react'
 import HomePage from './pages/HomePage'
 import ModulePage from './pages/ModulePage'
 import PuzzlePage from './pages/PuzzlePage'
+import AdventurePage from './pages/AdventurePage'
+import AdventurePlayPage from './pages/AdventurePlayPage'
+import ParentPanel from './pages/ParentPanel'
 import SettingsDrawer from './components/SettingsDrawer'
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -75,8 +78,10 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/module/:moduleId" element={<ModulePage />} />
           <Route path="/module/:moduleId/play/:levelId?" element={<PuzzlePage />} />
-          <Route path="/adventures" element={<PlaceholderPage title={'\u5192\u9669\u6A21\u5F0F Adventures'} icon={'\uD83C\uDFD5\uFE0F'} />} />
-          <Route path="/parent" element={<PlaceholderPage title={'\u5BB6\u957F\u9762\u677F Parent Panel'} icon={'\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67'} />} />
+          <Route path="/adventures" element={<AdventurePage />} />
+          <Route path="/adventure/:adventureId" element={<AdventurePlayPage />} />
+          <Route path="/adventure/:adventureId/stage/:stageId" element={<AdventurePlayPage />} />
+          <Route path="/parent" element={<ParentPanel />} />
         </Routes>
       </AnimatePresence>
     </Layout>

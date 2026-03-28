@@ -1,10 +1,24 @@
 # EurekaCub Code Owners
 # These owners will be automatically requested for review on PRs.
 
-# Content — puzzles and adventures
+# Global fallback
+* @mypinseeker
+
+# Content — puzzles and adventures (community contributions welcome)
 content/puzzles/ @mypinseeker
 content/adventures/ @mypinseeker
+content/feedback/ @mypinseeker
+content/schema/ @mypinseeker
 
 # Core source code
 src/renderers/ @mypinseeker
 src/engine/ @mypinseeker
+src/api/ @mypinseeker
+src/cache/ @mypinseeker
+src/pages/ @mypinseeker
+
+# Infrastructure
+.github/ @mypinseeker
+supabase/ @mypinseeker
+vercel.json @mypinseeker
+scripts/ @mypinseeker

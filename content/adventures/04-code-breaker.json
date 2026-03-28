@@ -1,0 +1,46 @@
+{
+  "id": "adv-04-code-breaker",
+  "title": { "zh": "密码破解者", "en": "Code Breaker" },
+  "category": "challenger",
+  "icon": "🔐",
+  "difficulty": 4,
+  "age_target": "9+",
+  "modules_used": ["sequence", "matrix", "equation"],
+  "unlock_condition": "complete_3_life",
+  "stages": [
+    {
+      "id": "s1",
+      "narrative": {
+        "zh": "一封神秘的密码信！数字序列隐藏了秘密信息——破解它！",
+        "en": "A mysterious coded letter! The number sequence hides a secret message — crack it!"
+      },
+      "character": "🕵️",
+      "puzzle_module": "sequence",
+      "puzzle_id": "sequence-l2-fibonacci"
+    },
+    {
+      "id": "s2",
+      "narrative": {
+        "zh": "密码的第二层是矩阵变换！把密码表旋转90度才能读出真正的信息！",
+        "en": "The second layer uses matrix transforms! Rotate the cipher grid 90° to reveal the message!"
+      },
+      "character": "🕵️",
+      "puzzle_module": "matrix",
+      "puzzle_id": "matrix-l2-combo-transform"
+    },
+    {
+      "id": "s3",
+      "narrative": {
+        "zh": "最后一关！用天平方程解出密码的最后一个数字！",
+        "en": "Final level! Solve the balance equation to find the last digit of the code!"
+      },
+      "character": "🕵️",
+      "puzzle_module": "equation",
+      "puzzle_id": "equation-l2-two-unknowns"
+    }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28"
+  }
+}

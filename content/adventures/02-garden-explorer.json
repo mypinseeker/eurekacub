@@ -1,0 +1,46 @@
+{
+  "id": "adv-02-garden-explorer",
+  "title": { "zh": "花园探险家", "en": "Garden Explorer" },
+  "category": "life",
+  "icon": "🌻",
+  "difficulty": 2,
+  "age_target": "6+",
+  "modules_used": ["symmetry", "sequence"],
+  "unlock_condition": null,
+  "stages": [
+    {
+      "id": "s1",
+      "narrative": {
+        "zh": "花园里开满了花！小熊发现蝴蝶的翅膀是对称的——帮它画出另一半翅膀！",
+        "en": "The garden is full of flowers! Bear noticed butterfly wings are symmetrical — draw the other half!"
+      },
+      "character": "🦋",
+      "puzzle_module": "symmetry",
+      "puzzle_id": "symmetry-l1-butterfly-wings"
+    },
+    {
+      "id": "s2",
+      "narrative": {
+        "zh": "向日葵的种子排列有神秘的规律！1, 1, 2, 3, 5, 8... 这是什么数列？",
+        "en": "Sunflower seeds have a mysterious pattern! 1, 1, 2, 3, 5, 8... What sequence is this?"
+      },
+      "character": "🌻",
+      "puzzle_module": "sequence",
+      "puzzle_id": "sequence-l2-fibonacci"
+    },
+    {
+      "id": "s3",
+      "narrative": {
+        "zh": "雪花落在花园里！每一片雪花都是完美对称的——来画一片吧！",
+        "en": "Snow falls in the garden! Every snowflake is perfectly symmetrical — draw one!"
+      },
+      "character": "❄️",
+      "puzzle_module": "symmetry",
+      "puzzle_id": "symmetry-l1-snowflake"
+    }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28"
+  }
+}
