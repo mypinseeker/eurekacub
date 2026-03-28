@@ -1,0 +1,26 @@
+{
+  "id": "fraction-l2-chocolate-five",
+  "module": "fraction",
+  "level": "L2",
+  "difficulty": 6,
+  "renderer": "pizza-cutter",
+  "tags": ["daily-life", "food", "challenge"],
+  "task": {
+    "zh": "这块巧克力蛋糕要分给5个人！5等份可不容易哦！",
+    "en": "This chocolate cake needs to be shared among 5 people! 5 equal parts is tricky!"
+  },
+  "data": {
+    "targetSlices": 5,
+    "showGuides": false,
+    "tolerance": 14
+  },
+  "hints": [
+    { "zh": "5份的每份角度是72度", "en": "Each of 5 pieces is 72 degrees" },
+    { "zh": "想想五角星的五个角", "en": "Think of the five points of a star" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

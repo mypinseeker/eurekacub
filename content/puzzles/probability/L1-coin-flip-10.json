@@ -1,0 +1,29 @@
+{
+  "id": "probability-l1-coin-flip-10",
+  "module": "probability",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "coin-flip",
+  "tags": ["coins", "experiment"],
+  "task": {
+    "zh": "抛10次硬币！你觉得正面会出现几次？先猜一猜，再实验看看！",
+    "en": "Flip a coin 10 times! How many heads do you think? Guess first, then experiment!"
+  },
+  "data": {
+    "totalFlips": 10,
+    "type": "coin",
+    "question": {
+      "zh": "你觉得10次抛硬币，正面会出现几次？",
+      "en": "How many heads do you think will appear in 10 flips?"
+    }
+  },
+  "hints": [
+    { "zh": "硬币有两面，每次都是一半一半的机会", "en": "A coin has 2 sides — it's a 50-50 chance each time" },
+    { "zh": "10次的话，大概5次正面，但不是每次都刚好", "en": "In 10 flips, roughly 5 heads — but not always exact" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

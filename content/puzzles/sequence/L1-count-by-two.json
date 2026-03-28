@@ -1,0 +1,27 @@
+{
+  "id": "sequence-l1-count-by-two",
+  "module": "sequence",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "number-train",
+  "tags": ["counting", "patterns"],
+  "task": {
+    "zh": "数字火车出发啦！每节车厢比前一节多2，填上缺少的数字！",
+    "en": "Number train departing! Each carriage is 2 more than the last. Fill in the missing numbers!"
+  },
+  "data": {
+    "sequence": [2, 4, 6, -1, 10, 12],
+    "blanks": [3],
+    "rule": "+2",
+    "options": [5, 7, 8, 9]
+  },
+  "hints": [
+    { "zh": "看看相邻的数字差了多少", "en": "Look at the difference between neighboring numbers" },
+    { "zh": "2, 4, 6, ... 每次加2", "en": "2, 4, 6, ... adding 2 each time" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

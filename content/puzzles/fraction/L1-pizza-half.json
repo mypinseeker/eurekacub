@@ -1,0 +1,26 @@
+{
+  "id": "fraction-l1-pizza-half",
+  "module": "fraction",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "pizza-cutter",
+  "tags": ["daily-life", "food"],
+  "task": {
+    "zh": "小熊和好朋友要分享一个大披萨！帮它们平均分成2份吧！",
+    "en": "Bear and friend want to share a big pizza! Cut it into 2 equal pieces!"
+  },
+  "data": {
+    "targetSlices": 2,
+    "showGuides": true,
+    "tolerance": 20
+  },
+  "hints": [
+    { "zh": "2份只需要切1刀哦", "en": "You only need 1 cut for 2 pieces" },
+    { "zh": "从中间切一条直线", "en": "Cut a straight line through the center" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

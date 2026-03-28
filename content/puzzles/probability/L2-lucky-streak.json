@@ -1,0 +1,31 @@
+{
+  "id": "probability-l2-lucky-streak",
+  "module": "probability",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "coin-flip",
+  "tags": ["coins", "streaks", "misconceptions"],
+  "task": {
+    "zh": "连续抛了5次正面！下一次一定是反面吗？很多人都没想到答案！实验看看！",
+    "en": "5 heads in a row! Must the next be tails? The answer may surprise you! Experiment!"
+  },
+  "data": {
+    "totalFlips": 30,
+    "type": "coin",
+    "question": {
+      "zh": "如果连续出了5次正面，下一次是反面的概率是多少？",
+      "en": "If you got 5 heads in a row, what's the probability of tails next?"
+    }
+  },
+  "hints": [
+    { "zh": "硬币没有记忆！每次抛都是独立的", "en": "Coins have no memory! Each flip is independent" },
+    { "zh": "不管之前抛了什么，下一次永远是50%", "en": "No matter what happened before, the next flip is always 50%" },
+    { "zh": "这叫做'赌徒谬误'——你发现了吗？", "en": "This is called the 'Gambler's Fallacy' — did you spot it?" }
+  ],
+  "aha_condition": "sees_independence",
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

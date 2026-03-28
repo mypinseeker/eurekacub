@@ -1,0 +1,26 @@
+{
+  "id": "fraction-l1-pizza-six",
+  "module": "fraction",
+  "level": "L1",
+  "difficulty": 4,
+  "renderer": "pizza-cutter",
+  "tags": ["daily-life", "food", "party"],
+  "task": {
+    "zh": "派对时间！6个小动物来了，帮忙把披萨分成6等份！",
+    "en": "Party time! 6 animals are here. Cut the pizza into 6 equal slices!"
+  },
+  "data": {
+    "targetSlices": 6,
+    "showGuides": false,
+    "tolerance": 15
+  },
+  "hints": [
+    { "zh": "先切成3份，再每份切一半", "en": "First cut into 3, then cut each in half" },
+    { "zh": "6份的每份角度是60度", "en": "Each of 6 pieces is 60 degrees" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

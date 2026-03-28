@@ -1,0 +1,27 @@
+{
+  "id": "sequence-l2-triangular",
+  "module": "sequence",
+  "level": "L2",
+  "difficulty": 6,
+  "renderer": "number-train",
+  "tags": ["triangular", "patterns", "geometry"],
+  "task": {
+    "zh": "三角数列车：每次多加的数也在增加！1, 3, 6, 10, ...你发现规律了吗？",
+    "en": "Triangular number train: the increment grows each time! 1, 3, 6, 10, ... see the pattern?"
+  },
+  "data": {
+    "sequence": [1, 3, 6, -1, 15, -1],
+    "blanks": [3, 5],
+    "rule": "triangular",
+    "options": [8, 10, 12, 18, 21, 24]
+  },
+  "hints": [
+    { "zh": "看看每次增加了多少：+2, +3, +4, +?", "en": "Look at the increments: +2, +3, +4, +?" },
+    { "zh": "这些数可以排成三角形！", "en": "These numbers can form triangles!" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

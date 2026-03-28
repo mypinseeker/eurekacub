@@ -1,0 +1,27 @@
+{
+  "id": "symmetry-l2-horizontal-tree",
+  "module": "symmetry",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "mirror-canvas",
+  "tags": ["nature", "trees"],
+  "task": {
+    "zh": "湖面上的树倒影！用水平镜像画出水中的倒影！",
+    "en": "A tree's reflection in the lake! Draw the horizontal mirror image!"
+  },
+  "data": {
+    "mirrorAxis": "horizontal",
+    "targetShape": "tree-top",
+    "tolerance": 20,
+    "freeDrawMode": false
+  },
+  "hints": [
+    { "zh": "水平对称——上面是树，下面是倒影", "en": "Horizontal symmetry — tree above, reflection below" },
+    { "zh": "倒影是上下翻转的，不是左右", "en": "The reflection is upside down, not left-right" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

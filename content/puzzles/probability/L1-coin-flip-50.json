@@ -1,0 +1,29 @@
+{
+  "id": "probability-l1-coin-flip-50",
+  "module": "probability",
+  "level": "L1",
+  "difficulty": 3,
+  "renderer": "coin-flip",
+  "tags": ["coins", "experiment", "large-numbers"],
+  "task": {
+    "zh": "超级实验！抛50次硬币！用快速抛功能看看大数定律有多神奇！",
+    "en": "Super experiment! Flip 50 times! Use quick-flip to see the Law of Large Numbers!"
+  },
+  "data": {
+    "totalFlips": 50,
+    "type": "coin",
+    "question": {
+      "zh": "50次实验后，正面的比例是多少？和10次的时候比，更接近50%了吗？",
+      "en": "After 50 flips, what's the heads ratio? Closer to 50% than after 10?"
+    }
+  },
+  "hints": [
+    { "zh": "用'快速抛'按钮可以一次抛10个！", "en": "Use the 'Quick Flip' button to flip 10 at once!" },
+    { "zh": "随着次数增加，柱状图会越来越平", "en": "As flips increase, the bars will get more even" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

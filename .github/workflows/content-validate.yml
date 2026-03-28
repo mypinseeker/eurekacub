@@ -1,3 +1,5 @@
+# Legacy workflow — content validation is now part of ci.yml.
+# This file triggers only on content/-scoped PRs for fast feedback.
 name: Content Validation
 
 on:
@@ -9,19 +11,11 @@ jobs:
   validate:
     name: Validate Content
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Validate content schemas and education principles
-        run: npm run validate-content
+          cache: npm
+      - run: npm ci
+      - run: npm run validate-content

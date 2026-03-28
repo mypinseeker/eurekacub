@@ -1,0 +1,29 @@
+{
+  "id": "probability-l1-coin-flip-20",
+  "module": "probability",
+  "level": "L1",
+  "difficulty": 2,
+  "renderer": "coin-flip",
+  "tags": ["coins", "experiment", "large-numbers"],
+  "task": {
+    "zh": "加倍实验！抛20次硬币，正面和反面的比例会更接近一半吗？",
+    "en": "Double the experiment! Flip 20 times — will heads and tails get closer to half?"
+  },
+  "data": {
+    "totalFlips": 20,
+    "type": "coin",
+    "question": {
+      "zh": "抛20次硬币后，正面的比例更接近50%了吗？",
+      "en": "After 20 flips, is the heads ratio closer to 50%?"
+    }
+  },
+  "hints": [
+    { "zh": "实验次数越多，结果越接近一半一半", "en": "More experiments → results get closer to 50-50" },
+    { "zh": "这就是大数定律的力量！", "en": "This is the power of the Law of Large Numbers!" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

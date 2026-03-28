@@ -1,0 +1,28 @@
+{
+  "id": "symmetry-l1-butterfly-wings",
+  "module": "symmetry",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "mirror-canvas",
+  "tags": ["nature", "animals"],
+  "task": {
+    "zh": "蝴蝶只有一边翅膀！在镜子的另一边画出对称的翅膀吧！",
+    "en": "The butterfly only has one wing! Draw the matching wing on the other side of the mirror!"
+  },
+  "data": {
+    "mirrorAxis": "vertical",
+    "targetShape": "butterfly-wing",
+    "tolerance": 30,
+    "freeDrawMode": true
+  },
+  "hints": [
+    { "zh": "看看左边的形状，右边要画出一模一样的", "en": "Look at the shape on the left — draw the same thing on the right" },
+    { "zh": "虚线就是镜子，两边要对称哦", "en": "The dashed line is the mirror — both sides should match" },
+    { "zh": "先画轮廓，再画细节", "en": "Draw the outline first, then add details" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "probability-l2-coin-100",
+  "module": "probability",
+  "level": "L2",
+  "difficulty": 4,
+  "renderer": "coin-flip",
+  "tags": ["coins", "statistics", "large-numbers"],
+  "task": {
+    "zh": "终极挑战：抛100次硬币！预测最终正面的百分比，看看你能猜多准！",
+    "en": "Ultimate challenge: Flip 100 times! Predict the final heads percentage — how close can you get?"
+  },
+  "data": {
+    "totalFlips": 100,
+    "type": "coin",
+    "question": {
+      "zh": "100次抛硬币后，正面的百分比会是多少？（在40%-60%之间猜一个数）",
+      "en": "After 100 flips, what will the heads percentage be? (Guess between 40%-60%)"
+    }
+  },
+  "hints": [
+    { "zh": "次数越多越接近50%，但很少刚好是50%", "en": "More flips → closer to 50%, but rarely exactly 50%" },
+    { "zh": "100次的话，正面大概在45-55个之间", "en": "With 100 flips, heads is usually between 45-55" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

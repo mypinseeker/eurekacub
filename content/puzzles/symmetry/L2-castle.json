@@ -1,0 +1,28 @@
+{
+  "id": "symmetry-l2-castle",
+  "module": "symmetry",
+  "level": "L2",
+  "difficulty": 4,
+  "renderer": "mirror-canvas",
+  "tags": ["architecture", "fantasy"],
+  "task": {
+    "zh": "城堡只建了一半！在镜子的另一边画出对称的城堡！",
+    "en": "The castle is only half built! Draw the symmetrical other half!"
+  },
+  "data": {
+    "mirrorAxis": "vertical",
+    "targetShape": "castle-half",
+    "tolerance": 20,
+    "freeDrawMode": false
+  },
+  "hints": [
+    { "zh": "城堡的塔楼要在对称的位置", "en": "The tower should be in the mirrored position" },
+    { "zh": "窗户和门也需要对称哦", "en": "Windows and doors need to be symmetrical too" },
+    { "zh": "从上到下，一层一层画", "en": "Draw from top to bottom, layer by layer" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fraction-l1-pizza-three",
+  "module": "fraction",
+  "level": "L1",
+  "difficulty": 3,
+  "renderer": "pizza-cutter",
+  "tags": ["daily-life", "food"],
+  "task": {
+    "zh": "三只小熊要分披萨！帮它们平均分成3份！这可比分2份难一点哦！",
+    "en": "Three bears want pizza! Cut it into 3 equal pieces! A bit harder than 2!"
+  },
+  "data": {
+    "targetSlices": 3,
+    "showGuides": true,
+    "tolerance": 18
+  },
+  "hints": [
+    { "zh": "3份需要切3刀，像Y的形状", "en": "3 pieces need 3 cuts, like a Y shape" },
+    { "zh": "每一份的角度是120度", "en": "Each piece has an angle of 120 degrees" },
+    { "zh": "想想时钟上12点、4点、8点的位置", "en": "Think about 12, 4, and 8 o'clock positions" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

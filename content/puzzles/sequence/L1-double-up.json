@@ -1,0 +1,27 @@
+{
+  "id": "sequence-l1-double-up",
+  "module": "sequence",
+  "level": "L1",
+  "difficulty": 3,
+  "renderer": "number-train",
+  "tags": ["multiplication", "patterns"],
+  "task": {
+    "zh": "神奇的翻倍火车！每节车厢是前一节的2倍！",
+    "en": "The magical doubling train! Each carriage is double the last!"
+  },
+  "data": {
+    "sequence": [1, 2, 4, -1, 16, 32],
+    "blanks": [3],
+    "rule": "x2",
+    "options": [6, 8, 10, 12]
+  },
+  "hints": [
+    { "zh": "1变2，2变4，4变...？", "en": "1 becomes 2, 2 becomes 4, 4 becomes...?" },
+    { "zh": "每次都乘以2", "en": "Multiply by 2 each time" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

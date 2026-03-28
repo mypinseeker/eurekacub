@@ -1,0 +1,27 @@
+{
+  "id": "symmetry-l1-snowflake",
+  "module": "symmetry",
+  "level": "L1",
+  "difficulty": 2,
+  "renderer": "mirror-canvas",
+  "tags": ["nature", "winter"],
+  "task": {
+    "zh": "雪花有完美的对称！画出雪花的另一半吧！",
+    "en": "Snowflakes have perfect symmetry! Draw the other half!"
+  },
+  "data": {
+    "mirrorAxis": "vertical",
+    "targetShape": "snowflake-half",
+    "tolerance": 25,
+    "freeDrawMode": true
+  },
+  "hints": [
+    { "zh": "雪花的每一条分支都是对称的", "en": "Each branch of the snowflake is symmetrical" },
+    { "zh": "先画最长的线，再加上小分支", "en": "Draw the longest line first, then add small branches" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

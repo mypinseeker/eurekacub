@@ -1,0 +1,27 @@
+{
+  "id": "fraction-l2-pizza-eight",
+  "module": "fraction",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "pizza-cutter",
+  "tags": ["daily-life", "food", "party"],
+  "task": {
+    "zh": "大聚会！8个朋友来了。把披萨精准地分成8等份！",
+    "en": "Big party! 8 friends are here. Cut the pizza precisely into 8 equal slices!"
+  },
+  "data": {
+    "targetSlices": 8,
+    "showGuides": false,
+    "tolerance": 12
+  },
+  "hints": [
+    { "zh": "先切十字（4份），再每份切一半", "en": "First cut a cross (4 pieces), then halve each" },
+    { "zh": "每份的角度是45度", "en": "Each piece is 45 degrees" },
+    { "zh": "像时钟的12、1:30、3、4:30、6、7:30、9、10:30的位置", "en": "Like clock positions: 12, 1:30, 3, 4:30, 6, 7:30, 9, 10:30" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

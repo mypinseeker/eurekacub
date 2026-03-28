@@ -1,0 +1,29 @@
+{
+  "id": "sequence-l2-fibonacci",
+  "module": "sequence",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "number-train",
+  "tags": ["fibonacci", "nature", "patterns"],
+  "task": {
+    "zh": "斐波那契密码列车！每节车厢等于前两节车厢的和！",
+    "en": "Fibonacci code train! Each carriage equals the sum of the previous two!"
+  },
+  "data": {
+    "sequence": [1, 1, 2, 3, -1, 8, -1],
+    "blanks": [4, 6],
+    "rule": "fibonacci",
+    "options": [4, 5, 7, 13, 11]
+  },
+  "hints": [
+    { "zh": "看看规律：1+1=2, 1+2=3, 2+3=?", "en": "See the pattern: 1+1=2, 1+2=3, 2+3=?" },
+    { "zh": "把前面两个数加起来就是下一个数", "en": "Add the two previous numbers to get the next one" },
+    { "zh": "这个神奇的数列在大自然中到处都是——向日葵、松果、贝壳！", "en": "This magical sequence is everywhere in nature — sunflowers, pinecones, shells!" }
+  ],
+  "aha_condition": "first_blank_correct",
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

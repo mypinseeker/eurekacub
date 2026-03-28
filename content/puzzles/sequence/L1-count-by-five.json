@@ -1,0 +1,27 @@
+{
+  "id": "sequence-l1-count-by-five",
+  "module": "sequence",
+  "level": "L1",
+  "difficulty": 2,
+  "renderer": "number-train",
+  "tags": ["counting", "patterns"],
+  "task": {
+    "zh": "这列火车5个5个地跳！找到缺少的站点！",
+    "en": "This train jumps by 5! Find the missing stops!"
+  },
+  "data": {
+    "sequence": [5, 10, -1, 20, 25, -1],
+    "blanks": [2, 5],
+    "rule": "+5",
+    "options": [12, 15, 22, 30, 35]
+  },
+  "hints": [
+    { "zh": "每次加5，像数手指一样", "en": "Add 5 each time, like counting on your hand" },
+    { "zh": "10后面加5是多少？", "en": "What is 10 plus 5?" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

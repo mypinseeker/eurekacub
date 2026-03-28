@@ -1,0 +1,27 @@
+{
+  "id": "symmetry-l1-happy-face",
+  "module": "symmetry",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "mirror-canvas",
+  "tags": ["daily-life", "faces"],
+  "task": {
+    "zh": "笑脸只有一半！在镜子线的另一边画出另一半笑脸吧！",
+    "en": "Only half a smiley face! Draw the other half on the mirror side!"
+  },
+  "data": {
+    "mirrorAxis": "vertical",
+    "targetShape": "smiley-half",
+    "tolerance": 35,
+    "freeDrawMode": true
+  },
+  "hints": [
+    { "zh": "半边脸有一只眼睛，另一边也需要一只", "en": "Half the face has one eye — the other side needs one too" },
+    { "zh": "嘴巴是弯弯的弧线", "en": "The mouth is a curved line" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}
