@@ -1,0 +1,28 @@
+{
+  "id": "equation-l2-multiply",
+  "module": "equation",
+  "level": "L2",
+  "difficulty": 6,
+  "renderer": "balance-scale",
+  "tags": ["multiplication", "advanced"],
+  "task": {
+    "zh": "左边有3个一样的砝码（每个重?），右边有15。每个?重多少？",
+    "en": "Left has 3 identical weights (?), right has 15. How heavy is each ?"
+  },
+  "data": {
+    "leftSide": [],
+    "rightSide": [15],
+    "unknown": 5,
+    "unknownSide": "left",
+    "options": [3, 4, 5, 6, 7]
+  },
+  "hints": [
+    { "zh": "3×?=15, ?是多少？", "en": "3×?=15, what is ?" },
+    { "zh": "15除以3等于几？", "en": "What is 15 divided by 3?" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "geometry-l1-square-house",
+  "module": "geometry",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "tangram",
+  "tags": ["shapes", "house", "simple"],
+  "task": {
+    "zh": "用三角形和正方形拼出一栋小房子！",
+    "en": "Use triangles and a square to build a little house!"
+  },
+  "data": {
+    "targetShape": "house",
+    "targetOutline": "M100,250 L100,150 L200,50 L300,150 L300,250 Z",
+    "pieces": 3,
+    "difficulty": 1,
+    "showOutline": true
+  },
+  "hints": [
+    { "zh": "正方形做房子的墙壁", "en": "The square makes the walls" },
+    { "zh": "三角形做屋顶", "en": "The triangle makes the roof" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

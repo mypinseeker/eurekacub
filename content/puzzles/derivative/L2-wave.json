@@ -1,0 +1,26 @@
+{
+  "id": "derivative-l2-wave",
+  "module": "derivative",
+  "level": "L2",
+  "difficulty": 6,
+  "renderer": "speed-controller",
+  "tags": ["speed", "oscillation", "advanced"],
+  "task": {
+    "zh": "波浪驾驶！让小车的位置像波浪一样起伏——加速、减速、再加速！",
+    "en": "Wave driving! Make the car's position go up and down like a wave!"
+  },
+  "data": {
+    "targetCurve": [0, 15, 40, 60, 65, 55, 40, 30, 35, 55],
+    "duration": 10,
+    "finishLine": 55
+  },
+  "hints": [
+    { "zh": "上升 = 前进（正速度），下降 = 后退（负速度）", "en": "Rising = forward (positive speed), falling = backward (negative speed)" },
+    { "zh": "曲线最高点的速度是零——就像抛球到最高点的瞬间", "en": "Speed is zero at the peak — like a ball at the top of its throw" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

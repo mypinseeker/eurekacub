@@ -1,0 +1,47 @@
+{
+  "id": "matrix-l2-combo-transform",
+  "module": "matrix",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "pixel-art",
+  "tags": ["combo", "transform", "challenge"],
+  "task": {
+    "zh": "组合变换挑战！用旋转和翻转把图案变成目标样式，最少步数获得三星！",
+    "en": "Combo challenge! Use rotate and flip to match the target in minimum steps!"
+  },
+  "data": {
+    "initialGrid": [
+      [2,2,0,0,0,0,0,0],
+      [2,2,2,0,0,0,0,0],
+      [0,2,2,2,0,0,0,0],
+      [0,0,2,2,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0]
+    ],
+    "targetGrid": [
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,2,2,0,0],
+      [0,0,0,2,2,2,0,0],
+      [0,0,0,2,2,2,0,0],
+      [0,0,0,0,2,2,0,0]
+    ],
+    "allowedTransforms": ["rotate90", "flipH", "flipV", "transpose"],
+    "maxSteps": 5
+  },
+  "hints": [
+    { "zh": "试试先旋转再翻转，或者反过来", "en": "Try rotating then flipping, or vice versa" },
+    { "zh": "变换的顺序很重要——不同顺序结果不同", "en": "Order matters — different orders give different results" },
+    { "zh": "这就是矩阵乘法不满足交换律的原因", "en": "This is why matrix multiplication is not commutative" }
+  ],
+  "aha_condition": "order_matters",
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

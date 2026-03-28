@@ -1,0 +1,45 @@
+{
+  "id": "matrix-l2-transpose-letter",
+  "module": "matrix",
+  "level": "L2",
+  "difficulty": 4,
+  "renderer": "pixel-art",
+  "tags": ["transpose", "transform"],
+  "task": {
+    "zh": "矩阵转置！行变成列，列变成行，看看字母L会变成什么样？",
+    "en": "Matrix transpose! Rows become columns. What happens to the letter L?"
+  },
+  "data": {
+    "initialGrid": [
+      [0,3,0,0,0,0,0,0],
+      [0,3,0,0,0,0,0,0],
+      [0,3,0,0,0,0,0,0],
+      [0,3,0,0,0,0,0,0],
+      [0,3,0,0,0,0,0,0],
+      [0,3,3,3,3,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0]
+    ],
+    "targetGrid": [
+      [0,0,0,0,0,0,0,0],
+      [3,3,3,3,3,3,0,0],
+      [0,0,0,0,0,3,0,0],
+      [0,0,0,0,0,3,0,0],
+      [0,0,0,0,0,3,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0]
+    ],
+    "allowedTransforms": ["transpose"],
+    "maxSteps": 3
+  },
+  "hints": [
+    { "zh": "转置就是把行和列互换——第1行变成第1列", "en": "Transpose swaps rows and columns — row 1 becomes column 1" },
+    { "zh": "注意L字母竖线变成了横线", "en": "Notice how the vertical line of L becomes horizontal" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

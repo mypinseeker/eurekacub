@@ -1,0 +1,30 @@
+{
+  "id": "equation-l2-two-unknowns",
+  "module": "equation",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "balance-scale",
+  "tags": ["algebra", "challenge"],
+  "task": {
+    "zh": "左边有?和3，右边有2和?。两个?是同一个数！它是多少？",
+    "en": "Left has ? and 3, right has 2 and ?. Both ? are the same! What is it?"
+  },
+  "data": {
+    "leftSide": [3],
+    "rightSide": [2],
+    "unknown": 0,
+    "unknownSide": "left",
+    "options": [0, 1, 2, 3, 5]
+  },
+  "hints": [
+    { "zh": "如果两边都有?，它们可以抵消", "en": "If both sides have ?, they cancel out" },
+    { "zh": "去掉两边的?后，剩下3=2+?", "en": "Remove ? from both sides: 3=2+?" },
+    { "zh": "这就是代数的基本技巧——两边做同样的操作", "en": "This is basic algebra — do the same thing to both sides" }
+  ],
+  "aha_condition": "cancel_insight",
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "equation-l1-find-missing",
+  "module": "equation",
+  "level": "L1",
+  "difficulty": 2,
+  "renderer": "balance-scale",
+  "tags": ["missing-number", "balance"],
+  "task": {
+    "zh": "天平左边有?和4，右边有10。?是多少才能平衡？",
+    "en": "Left side has ? and 4, right side has 10. What is ? to balance?"
+  },
+  "data": {
+    "leftSide": [4],
+    "rightSide": [10],
+    "unknown": 6,
+    "unknownSide": "left",
+    "options": [4, 5, 6, 7, 8]
+  },
+  "hints": [
+    { "zh": "?+4=10, 所以?=10-4", "en": "?+4=10, so ?=10-4" },
+    { "zh": "想想看，还差多少才能到10", "en": "Think about how much more you need to reach 10" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

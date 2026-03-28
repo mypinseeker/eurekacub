@@ -1,0 +1,28 @@
+{
+  "id": "geometry-l1-fish",
+  "module": "geometry",
+  "level": "L1",
+  "difficulty": 3,
+  "renderer": "tangram",
+  "tags": ["shapes", "animals", "fun"],
+  "task": {
+    "zh": "用三角形拼出一条可爱的小鱼！",
+    "en": "Use triangles to make a cute little fish!"
+  },
+  "data": {
+    "targetShape": "fish",
+    "targetOutline": "M80,200 L200,120 L320,200 L200,280 Z M320,200 L380,150 L380,250 Z",
+    "pieces": 4,
+    "difficulty": 3,
+    "showOutline": true
+  },
+  "hints": [
+    { "zh": "鱼的身体像一个菱形", "en": "The fish body is like a diamond shape" },
+    { "zh": "小三角形做鱼尾巴", "en": "Small triangle makes the tail" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

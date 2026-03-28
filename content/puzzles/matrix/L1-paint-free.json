@@ -1,0 +1,45 @@
+{
+  "id": "matrix-l1-paint-free",
+  "module": "matrix",
+  "level": "L2",
+  "difficulty": 1,
+  "renderer": "pixel-art",
+  "tags": ["creative", "painting", "free"],
+  "task": {
+    "zh": "自由像素画！点击格子给它们上色，创造你的像素艺术作品！",
+    "en": "Free pixel art! Click cells to color them and create your masterpiece!"
+  },
+  "data": {
+    "initialGrid": [
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0]
+    ],
+    "targetGrid": [
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0]
+    ],
+    "allowedTransforms": ["rotate90", "flipH", "flipV", "transpose"],
+    "maxSteps": 99
+  },
+  "hints": [
+    { "zh": "点击格子可以换颜色，有6种颜色可选", "en": "Click cells to cycle through 6 colors" },
+    { "zh": "试试画完后用变换按钮看看效果", "en": "Try the transform buttons after painting to see the effect" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

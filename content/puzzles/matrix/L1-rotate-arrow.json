@@ -1,0 +1,45 @@
+{
+  "id": "matrix-l1-rotate-arrow",
+  "module": "matrix",
+  "level": "L2",
+  "difficulty": 2,
+  "renderer": "pixel-art",
+  "tags": ["rotation", "transform"],
+  "task": {
+    "zh": "把向右的箭头转成向下的箭头！试试旋转按钮！",
+    "en": "Turn the right-pointing arrow to point down! Try the rotate button!"
+  },
+  "data": {
+    "initialGrid": [
+      [0,0,0,1,0,0,0,0],
+      [0,0,0,1,1,0,0,0],
+      [1,1,1,1,1,1,0,0],
+      [1,1,1,1,1,1,1,0],
+      [1,1,1,1,1,1,0,0],
+      [0,0,0,1,1,0,0,0],
+      [0,0,0,1,0,0,0,0],
+      [0,0,0,0,0,0,0,0]
+    ],
+    "targetGrid": [
+      [0,0,1,1,1,0,0,0],
+      [0,0,1,1,1,0,0,0],
+      [0,0,1,1,1,0,0,0],
+      [0,1,1,1,1,1,0,0],
+      [0,0,1,1,1,0,0,0],
+      [0,0,0,1,0,0,0,0],
+      [0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0]
+    ],
+    "allowedTransforms": ["rotate90"],
+    "maxSteps": 3
+  },
+  "hints": [
+    { "zh": "旋转一次试试看方向变了吗", "en": "Try rotating once and see the direction change" },
+    { "zh": "向右的箭头旋转一次变成向下", "en": "A right arrow becomes a down arrow after one rotation" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "matrix-l1-flip-smiley",
+  "module": "matrix",
+  "level": "L2",
+  "difficulty": 1,
+  "renderer": "pixel-art",
+  "tags": ["flip", "transform", "faces"],
+  "task": {
+    "zh": "笑脸照镜子！用水平翻转让笑脸变成镜像！",
+    "en": "Smiley in the mirror! Use horizontal flip for the mirror image!"
+  },
+  "data": {
+    "initialGrid": [
+      [0,0,0,0,0,0,0,0],
+      [0,0,4,4,4,4,0,0],
+      [0,4,0,0,0,0,4,0],
+      [0,4,0,1,0,1,4,0],
+      [0,4,0,0,0,0,4,0],
+      [0,4,1,0,0,1,4,0],
+      [0,0,4,1,1,4,0,0],
+      [0,0,0,4,4,0,0,0]
+    ],
+    "targetGrid": [
+      [0,0,0,0,0,0,0,0],
+      [0,0,4,4,4,4,0,0],
+      [0,4,0,0,0,0,4,0],
+      [0,4,1,0,1,0,4,0],
+      [0,4,0,0,0,0,4,0],
+      [0,4,1,0,0,1,4,0],
+      [0,0,4,1,1,4,0,0],
+      [0,0,0,4,4,0,0,0]
+    ],
+    "allowedTransforms": ["flipH"],
+    "maxSteps": 3
+  },
+  "hints": [
+    { "zh": "水平翻转就像照镜子——左右交换", "en": "Horizontal flip is like a mirror — left and right swap" },
+    { "zh": "注意眼睛的位置变化", "en": "Watch how the eyes swap positions" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

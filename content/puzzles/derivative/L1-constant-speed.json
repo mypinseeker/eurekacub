@@ -1,0 +1,26 @@
+{
+  "id": "derivative-l1-constant-speed",
+  "module": "derivative",
+  "level": "L2",
+  "difficulty": 1,
+  "renderer": "speed-controller",
+  "tags": ["speed", "motion", "linear"],
+  "task": {
+    "zh": "匀速前进！让小车保持同一个速度行驶，画出一条直线！",
+    "en": "Steady speed! Keep the car at one speed and draw a straight line!"
+  },
+  "data": {
+    "targetCurve": [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
+    "duration": 10,
+    "finishLine": 90
+  },
+  "hints": [
+    { "zh": "匀速意味着速度不变——把速度条固定住", "en": "Constant speed means don't change the slider" },
+    { "zh": "直线 = 每秒前进一样的距离", "en": "Straight line = same distance every second" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

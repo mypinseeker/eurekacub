@@ -1,0 +1,28 @@
+{
+  "id": "equation-l1-simple-add",
+  "module": "equation",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "balance-scale",
+  "tags": ["addition", "balance"],
+  "task": {
+    "zh": "天平左边有3和5，右边放什么能让天平平衡？",
+    "en": "The left side has 3 and 5. What makes the scale balance?"
+  },
+  "data": {
+    "leftSide": [3, 5],
+    "rightSide": [],
+    "unknown": 8,
+    "unknownSide": "right",
+    "options": [5, 6, 7, 8, 9, 10]
+  },
+  "hints": [
+    { "zh": "左边一共有多少？3+5=?", "en": "What's the total on the left? 3+5=?" },
+    { "zh": "天平平衡意味着两边一样重", "en": "Balance means both sides weigh the same" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

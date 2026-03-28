@@ -1,0 +1,26 @@
+{
+  "id": "derivative-l1-speed-up",
+  "module": "derivative",
+  "level": "L2",
+  "difficulty": 3,
+  "renderer": "speed-controller",
+  "tags": ["speed", "acceleration"],
+  "task": {
+    "zh": "越来越快！像火箭发射一样持续加速！",
+    "en": "Faster and faster! Accelerate like a rocket launch!"
+  },
+  "data": {
+    "targetCurve": [0, 1, 4, 9, 16, 25, 36, 49, 64, 81],
+    "duration": 10,
+    "finishLine": 81
+  },
+  "hints": [
+    { "zh": "每一秒都要比上一秒更快一点", "en": "Go a little faster each second than the last" },
+    { "zh": "加速的曲线是弯曲向上的", "en": "An accelerating curve bends upward" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

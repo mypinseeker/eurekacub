@@ -1,0 +1,29 @@
+{
+  "id": "geometry-l2-cat",
+  "module": "geometry",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "tangram",
+  "tags": ["shapes", "animals", "challenge"],
+  "task": {
+    "zh": "七巧板大挑战！用全部7块拼出一只坐着的猫！",
+    "en": "Full tangram challenge! Use all 7 pieces to make a sitting cat!"
+  },
+  "data": {
+    "targetShape": "cat",
+    "targetOutline": "M150,50 L120,100 L180,100 Z M100,100 L100,250 L250,250 L250,100 Z M100,250 L50,350 L150,350 Z M250,250 L350,350 L250,350 Z",
+    "pieces": 7,
+    "difficulty": 5,
+    "showOutline": false
+  },
+  "hints": [
+    { "zh": "先拼猫的身体（用大三角形），再加头和尾巴", "en": "Build the body first (large triangles), then add head and tail" },
+    { "zh": "双击可以旋转形状", "en": "Double-tap to rotate pieces" },
+    { "zh": "正方形和平行四边形可以做猫的腿", "en": "The square and parallelogram can make the legs" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

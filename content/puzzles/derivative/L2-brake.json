@@ -1,0 +1,28 @@
+{
+  "id": "derivative-l2-brake",
+  "module": "derivative",
+  "level": "L2",
+  "difficulty": 5,
+  "renderer": "speed-controller",
+  "tags": ["speed", "deceleration", "challenge"],
+  "task": {
+    "zh": "紧急刹车！让小车先快后慢，最终刚好停在终点线上！",
+    "en": "Emergency brake! Go fast then slow down, stopping exactly at the finish line!"
+  },
+  "data": {
+    "targetCurve": [0, 30, 55, 75, 88, 96, 100, 102, 103, 104],
+    "duration": 10,
+    "finishLine": 104
+  },
+  "hints": [
+    { "zh": "减速时曲线会变平——斜率变小", "en": "When slowing down, the curve flattens — slope decreases" },
+    { "zh": "斜率就是速度！曲线越陡 = 越快", "en": "Slope = speed! Steeper curve = faster" },
+    { "zh": "这就是导数的直觉——变化的快慢", "en": "This is the intuition of derivatives — the rate of change" }
+  ],
+  "aha_condition": "slope_intuition",
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

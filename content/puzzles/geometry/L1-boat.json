@@ -1,0 +1,28 @@
+{
+  "id": "geometry-l1-boat",
+  "module": "geometry",
+  "level": "L1",
+  "difficulty": 2,
+  "renderer": "tangram",
+  "tags": ["shapes", "boat", "simple"],
+  "task": {
+    "zh": "用几何形状拼出一艘小帆船！",
+    "en": "Build a sailboat with geometric shapes!"
+  },
+  "data": {
+    "targetShape": "boat",
+    "targetOutline": "M50,300 L200,300 L350,300 L300,200 L200,100 L100,200 Z",
+    "pieces": 4,
+    "difficulty": 2,
+    "showOutline": true
+  },
+  "hints": [
+    { "zh": "三角形做帆，梯形做船身", "en": "Triangle for the sail, trapezoid for the hull" },
+    { "zh": "先拼船身，再加帆", "en": "Build the hull first, then add the sail" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

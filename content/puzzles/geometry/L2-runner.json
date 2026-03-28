@@ -1,0 +1,28 @@
+{
+  "id": "geometry-l2-runner",
+  "module": "geometry",
+  "level": "L2",
+  "difficulty": 6,
+  "renderer": "tangram",
+  "tags": ["shapes", "people", "advanced"],
+  "task": {
+    "zh": "终极挑战！用7块七巧板拼出一个跑步的人！",
+    "en": "Ultimate challenge! Make a running person with all 7 tangram pieces!"
+  },
+  "data": {
+    "targetShape": "runner",
+    "targetOutline": "M200,50 L170,100 L230,100 Z M180,100 L180,200 L220,200 L220,100 Z M150,200 L100,350 L200,300 Z M220,200 L300,350 L220,300 Z",
+    "pieces": 7,
+    "difficulty": 6,
+    "showOutline": false
+  },
+  "hints": [
+    { "zh": "头是小三角形，身体是大三角形", "en": "Head is a small triangle, body is large triangles" },
+    { "zh": "腿要分开放——一前一后", "en": "Legs should be apart — one forward, one back" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

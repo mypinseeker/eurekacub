@@ -1,0 +1,27 @@
+{
+  "id": "derivative-l1-slow-fast",
+  "module": "derivative",
+  "level": "L2",
+  "difficulty": 2,
+  "renderer": "speed-controller",
+  "tags": ["speed", "motion", "intuition"],
+  "task": {
+    "zh": "让小车先慢后快到达终点！拖动速度条控制小车的速度！",
+    "en": "Make the car go slow then fast to reach the finish! Drag the speed slider!"
+  },
+  "data": {
+    "targetCurve": [0, 2, 5, 10, 18, 30, 46, 68, 95, 130],
+    "duration": 10,
+    "finishLine": 130
+  },
+  "hints": [
+    { "zh": "开始时把速度条放低一些", "en": "Start with the speed slider low" },
+    { "zh": "后半段要加速——把速度条往上拉", "en": "Speed up in the second half — slide it up" },
+    { "zh": "看看图表上你的曲线和目标曲线的差距", "en": "Compare your curve with the target on the graph" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

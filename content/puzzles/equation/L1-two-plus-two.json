@@ -1,0 +1,28 @@
+{
+  "id": "equation-l1-two-plus-two",
+  "module": "equation",
+  "level": "L1",
+  "difficulty": 1,
+  "renderer": "balance-scale",
+  "tags": ["addition", "simple"],
+  "task": {
+    "zh": "最简单的天平！左边有2和2，右边要放多少？",
+    "en": "Easiest balance! Left has 2 and 2, what goes on the right?"
+  },
+  "data": {
+    "leftSide": [2, 2],
+    "rightSide": [],
+    "unknown": 4,
+    "unknownSide": "right",
+    "options": [2, 3, 4, 5]
+  },
+  "hints": [
+    { "zh": "2+2等于几呢？", "en": "What is 2+2?" },
+    { "zh": "数一数手指头", "en": "Count on your fingers" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}
