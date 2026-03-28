@@ -8,6 +8,16 @@ import type {
   DragInfo,
   PieceShape,
 } from './types'
+import {
+  U,
+  SNAP_TOLERANCE_L1,
+  SNAP_TOLERANCE_L2,
+  PIECE_SIZES,
+  pieceCentroid,
+  distToSlot,
+  nextRotation,
+  trySnap as trySnapUtil,
+} from './tangram.utils'
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                         */
@@ -15,13 +25,6 @@ import type {
 
 const VIEW_W = 400
 const VIEW_H = 500
-
-/** Snap distance in SVG units. L1 = generous, L2 = tight. */
-const SNAP_TOLERANCE_L1 = 30
-const SNAP_TOLERANCE_L2 = 20
-
-/** Unit size for piece geometry (one tangram grid unit). */
-const U = 40
 
 /** Vibrant child-friendly palette for pieces. */
 const PIECE_COLORS: Record<PieceShape, string> = {
@@ -45,17 +48,6 @@ const PIECE_POLYGONS: Record<PieceShape, string> = {
   'parallelogram': `0,0 ${U * 2},0 ${U * 3},${U * 2} ${U},${U * 2}`,
 } as const
 
-/** Bounding box sizes for centroid calculation. */
-const PIECE_SIZES: Record<PieceShape, { w: number; h: number }> = {
-  'large-tri-1': { w: U * 4, h: U * 4 },
-  'large-tri-2': { w: U * 4, h: U * 4 },
-  'medium-tri': { w: U * 2, h: U * 2 },
-  'small-tri-1': { w: U * 2, h: U * 2 },
-  'small-tri-2': { w: U * 2, h: U * 2 },
-  'square': { w: U * 2, h: U * 2 },
-  'parallelogram': { w: U * 3, h: U * 2 },
-}
-
 /** Default target: a simple square silhouette (house-like). */
 const DEFAULT_OUTLINE = `M 80 40 L 320 40 L 320 280 L 80 280 Z`
 
@@ -71,7 +63,7 @@ const DEFAULT_SLOTS: TargetSlot[] = [
 ]
 
 /* ------------------------------------------------------------------ */
-/*  Helpers                                                           */
+/*  Local helpers (not extracted — depend on React/DOM or puzzle types)*/
 /* ------------------------------------------------------------------ */
 
 /** Parse and validate puzzle data with sensible defaults. */
@@ -85,31 +77,6 @@ function parsePuzzle(puzzle: Record<string, unknown>): TangramPuzzleData {
     slots: Array.isArray(data.slots) ? data.slots : DEFAULT_SLOTS,
     pieces: Array.isArray(data.pieces) ? data.pieces : undefined,
   }
-}
-
-/** Get the centroid of a piece given its position and shape. */
-function pieceCentroid(piece: TangramPiece): { cx: number; cy: number } {
-  const size = PIECE_SIZES[piece.shape]
-  return {
-    cx: piece.x + size.w / 2,
-    cy: piece.y + size.h / 2,
-  }
-}
-
-/** Check distance between a piece centroid and a slot position centroid. */
-function distToSlot(piece: TangramPiece, slot: TargetSlot): number {
-  const pc = pieceCentroid(piece)
-  const slotSize = PIECE_SIZES[slot.shape]
-  const scx = slot.x + slotSize.w / 2
-  const scy = slot.y + slotSize.h / 2
-  const dx = pc.cx - scx
-  const dy = pc.cy - scy
-  return Math.sqrt(dx * dx + dy * dy)
-}
-
-/** Cycle rotation by 90 degrees. */
-function nextRotation(current: RotationAngle): RotationAngle {
-  return ((current + 90) % 360) as RotationAngle
 }
 
 /** Create initial scattered positions for pieces below the target area. */
@@ -296,20 +263,7 @@ export default function Tangram({
   /* ---- Snap check ---- */
   const trySnap = useCallback(
     (piece: TangramPiece): TangramPiece => {
-      for (const slot of activeSlots) {
-        if (slot.shape !== piece.shape) continue
-        const dist = distToSlot(piece, slot)
-        if (dist <= snapTolerance) {
-          return {
-            ...piece,
-            x: slot.x,
-            y: slot.y,
-            rotation: slot.rotation,
-            snapped: true,
-          }
-        }
-      }
-      return piece
+      return trySnapUtil(piece, activeSlots, snapTolerance)
     },
     [activeSlots, snapTolerance],
   )

@@ -2,7 +2,6 @@ import { useState, useCallback, useRef } from 'react'
 import type { RendererProps } from '../registry'
 import CanvasBase from '../common/CanvasBase'
 import type {
-  ProbabilityPuzzleData,
   FlipResult,
   Phase,
   ConfettiParticle,
@@ -13,56 +12,15 @@ const FLIP_DURATION = 1000 // ms
 const COIN_RADIUS_RATIO = 0.12 // relative to min(w,h)
 const BAR_WIDTH_RATIO = 0.06
 const BAR_MAX_HEIGHT_RATIO = 0.5
-const CONFETTI_COLORS = [
-  '#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
-  '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE',
-]
-
 const PREDICTION_OPTIONS = [0.25, 0.35, 0.45, 0.50, 0.55, 0.65, 0.75]
 
-// ── Helpers ─────────────────────────────────────────────────
-
-function parsePuzzleData(puzzle: Record<string, unknown>): ProbabilityPuzzleData {
-  const d = (puzzle.data ?? puzzle) as Partial<ProbabilityPuzzleData>
-  return {
-    totalFlips: d.totalFlips ?? 20,
-    question: d.question ?? {
-      zh: '你觉得正面会刚好占一半吗？',
-      en: 'Do you think heads will be exactly half?',
-    },
-    type: d.type ?? 'coin',
-  }
-}
-
-function countHeads(history: FlipResult[]): number {
-  return history.filter((r) => r === 'H').length
-}
-
-function headRatio(history: FlipResult[]): number {
-  if (history.length === 0) return 0
-  return countHeads(history) / history.length
-}
-
-function spawnConfetti(cx: number, cy: number, count: number): ConfettiParticle[] {
-  const particles: ConfettiParticle[] = []
-  for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2
-    const speed = 1 + Math.random() * 3
-    particles.push({
-      x: cx,
-      y: cy,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 2,
-      size: 3 + Math.random() * 5,
-      color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
-      life: 1,
-      maxLife: 60 + Math.random() * 60,
-      rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: (Math.random() - 0.5) * 0.2,
-    })
-  }
-  return particles
-}
+// ── Helpers (re-exported from utils for pure-logic testing) ──
+import {
+  parsePuzzleData,
+  countHeads,
+  headRatio,
+  spawnConfetti,
+} from './probability.utils'
 
 // ── Component ───────────────────────────────────────────────
 

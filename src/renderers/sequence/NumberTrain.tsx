@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RendererProps } from '../registry'
 import type { SequencePuzzleData } from './types'
+import { parsePuzzleData as _parsePuzzleData } from './sequence.utils'
 
 /* ------------------------------------------------------------------ */
 /*  Layout constants (viewBox 800 x 500)                              */

@@ -14,22 +14,25 @@ import type { RendererProps } from '../registry'
 import SvgBase from '../common/SvgBase'
 import type { EquationPuzzleData, UnknownSide } from './types'
 import {
-  WEIGHT_COLORS,
   MYSTERY_COLOR,
   ROUNDS_TO_COMPLETE,
-  MAX_TILT_DEG,
-  TILT_PER_UNIT,
 } from './types'
+import {
+  CX,
+  BEAM_Y,
+  BEAM_HALF,
+  sum,
+  colorForValue,
+  calcTiltAngle,
+  rotatedPoint,
+} from './equation.utils'
 
 /* ─── Layout constants (viewBox 400x400) ──────────────────── */
 
 const VW = 400
 const VH = 400
-const CX = VW / 2         // fulcrum center X
 const FULCRUM_TOP = 200    // top of fulcrum triangle
 const FULCRUM_BASE = 280   // bottom of fulcrum triangle
-const BEAM_Y = FULCRUM_TOP // beam rests on fulcrum tip
-const BEAM_HALF = 150      // half-length of beam
 const PAN_WIDTH = 100      // pan width
 const PAN_DEPTH = 20       // pan curve depth
 const CHAIN_LEN = 50       // chain/string length from beam to pan
@@ -44,45 +47,6 @@ const DEFAULT_PUZZLE: EquationPuzzleData = {
   unknown: 8,
   unknownSide: 'right',
   options: [6, 7, 8, 9, 10],
-}
-
-/* ─── Helpers ─────────────────────────────────────────────── */
-
-function clamp(val: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, val))
-}
-
-function sum(arr: number[]): number {
-  return arr.reduce((a, b) => a + b, 0)
-}
-
-/** Assign a color to a weight value deterministically. */
-function colorForValue(value: number, index: number): string {
-  return WEIGHT_COLORS[(value + index) % WEIGHT_COLORS.length]
-}
-
-/**
- * Calculate beam tilt angle in degrees from weight difference.
- * Positive = tilts right-heavy (clockwise).
- */
-function calcTiltAngle(leftTotal: number, rightTotal: number): number {
-  const diff = leftTotal - rightTotal
-  return clamp(diff * TILT_PER_UNIT, -MAX_TILT_DEG, MAX_TILT_DEG)
-}
-
-/**
- * Compute the position of a point on the beam after rotation.
- * The beam rotates around (CX, BEAM_Y).
- */
-function rotatedPoint(
-  offsetX: number,
-  angle: number,
-): { x: number; y: number } {
-  const rad = (angle * Math.PI) / 180
-  return {
-    x: CX + offsetX * Math.cos(rad),
-    y: BEAM_Y + offsetX * Math.sin(rad),
-  }
 }
 
 /* ─── Confetti particle ───────────────────────────────────── */
