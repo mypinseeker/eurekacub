@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "EurekaCub",
+    "tagline": "A Cub's Journey of Discovery",
+    "explorer": "🌱 Explorer",
+    "challenger": "🚀 Challenger",
+    "shared": "🌟 Shared Modules",
+    "explorerDesc": "Ages 6+ · Start your journey of discovery here",
+    "challengerDesc": "Ages 9+ · Ready for a bigger challenge?",
+    "back": "Back",
+    "settings": "Settings",
+    "comingSoon": "Coming Soon",
+    "adventures": "Adventures",
+    "parent": "Parent Panel"
+  },
+  "module": {
+    "symmetry": "Symmetry",
+    "fraction": "Fractions",
+    "geometry": "Geometry",
+    "derivative": "Derivatives",
+    "equation": "Equations",
+    "matrix": "Matrix",
+    "sequence": "Sequences",
+    "probability": "Probability"
+  },
+  "level": {
+    "L1": "Level 1",
+    "L2": "Level 2",
+    "L3": "Level 3",
+    "age6": "Ages 6+",
+    "age9": "Ages 9+",
+    "ageAll": "All Ages",
+    "play": "Start Exploring",
+    "stars": "{{count}} stars"
+  },
+  "puzzle": {
+    "hint": "Need a hint?",
+    "tryAgain": "Try again",
+    "great": "Great job!",
+    "next": "Next puzzle"
+  },
+  "settings": {
+    "title": "Settings",
+    "sound": "Sound Effects",
+    "haptic": "Haptic Feedback",
+    "language": "Language",
+    "on": "On",
+    "off": "Off"
+  }
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "category": "correct",
+    "context": "first-correct",
+    "message": {
+      "zh": "太棒了！你一次就做对了！🌟",
+      "en": "Amazing! You got it on the first try! 🌟"
+    }
+  },
+  {
+    "category": "correct",
+    "context": "retry-correct",
+    "message": {
+      "zh": "坚持就是胜利！你做到了！💪",
+      "en": "Persistence pays off! You did it! 💪"
+    }
+  },
+  {
+    "category": "correct",
+    "context": "hint-used-correct",
+    "message": {
+      "zh": "用提示也很棒，重要的是你理解了！🎯",
+      "en": "Using hints is great too, what matters is you understood! 🎯"
+    }
+  },
+  {
+    "category": "encourage",
+    "context": "error-first",
+    "message": {
+      "zh": "没关系，再试一次！每次尝试都在进步哦～",
+      "en": "No worries, try again! Every attempt is progress~"
+    }
+  },
+  {
+    "category": "encourage",
+    "context": "error-retry",
+    "message": {
+      "zh": "换个思路试试看？你离答案很近了！",
+      "en": "Try a different approach? You're very close!"
+    }
+  },
+  {
+    "category": "aha",
+    "context": "aha-moment",
+    "message": {
+      "zh": "叮！灵感来了！你发现了一个新规律！✨",
+      "en": "Ding! Inspiration struck! You found a new pattern! ✨"
+    }
+  },
+  {
+    "category": "hint",
+    "context": "hint-offer",
+    "message": {
+      "zh": "需要一点小提示吗？点这里看看～",
+      "en": "Need a little hint? Tap here~"
+    }
+  }
+]

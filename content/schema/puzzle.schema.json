@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "puzzle.schema.json",
+  "title": "EurekaCub Puzzle Schema",
+  "type": "object",
+  "required": ["id", "module", "level", "difficulty", "renderer", "task", "data", "hints", "meta"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique puzzle identifier (lowercase alphanumeric + hyphens)"
+    },
+    "module": {
+      "type": "string",
+      "enum": ["symmetry", "fraction", "geometry", "derivative", "equation", "matrix", "sequence", "probability"]
+    },
+    "level": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3"],
+      "description": "L1=Explorer(5-7), L2=Adventurer(8-10), L3=Thinker(11-13)"
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "renderer": {
+      "type": "string",
+      "description": "Component name for rendering this puzzle"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "task": {
+      "type": "object",
+      "required": ["zh", "en"],
+      "properties": {
+        "zh": { "type": "string", "minLength": 1 },
+        "en": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "data": {
+      "type": "object",
+      "description": "Puzzle-specific data payload (varies by renderer)"
+    },
+    "hints": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["zh", "en"],
+        "properties": {
+          "zh": { "type": "string" },
+          "en": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "aha_condition": {
+      "type": "string",
+      "description": "Condition expression that triggers the aha-moment animation"
+    },
+    "meta": {
+      "type": "object",
+      "required": ["author"],
+      "properties": {
+        "author": { "type": "string" },
+        "created": { "type": "string" },
+        "reviewed": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* EurekaCub kid-friendly theme */
+:root {
+  --color-primary: #f59e0b;
+  --color-primary-light: #fef3c7;
+  --color-secondary: #8b5cf6;
+  --color-accent: #ec4899;
+  --color-bg-warm: #fffbeb;
+  --color-text: #451a03;
+  --font-display: 'Nunito', system-ui, -apple-system, sans-serif;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-display);
+  background: var(--color-bg-warm);
+  color: var(--color-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove default button focus outlines, use custom */
+button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Fun selection color */
+::selection {
+  background: #fde68a;
+  color: #92400e;
+}
+
+/* Bounce keyframe for custom use */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 2s ease-in-out infinite;
+}

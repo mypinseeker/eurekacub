@@ -1,0 +1,10 @@
+# EurekaCub Code Owners
+# These owners will be automatically requested for review on PRs.
+
+# Content — puzzles and adventures
+content/puzzles/ @mypinseeker
+content/adventures/ @mypinseeker
+
+# Core source code
+src/renderers/ @mypinseeker
+src/engine/ @mypinseeker

@@ -1,0 +1,27 @@
+{
+  "id": "fraction-l1-pizza-quarter",
+  "module": "fraction",
+  "level": "L1",
+  "difficulty": 2,
+  "renderer": "pizza-cutter",
+  "tags": ["daily-life", "food"],
+  "task": {
+    "zh": "小熊过生日！4个朋友来了，帮它把披萨平均分成4份吧！",
+    "en": "Bear's birthday! 4 friends came. Cut the pizza into 4 equal pieces!"
+  },
+  "data": {
+    "target_pieces": 4,
+    "target_fraction": "1/4",
+    "allow_unequal": false
+  },
+  "hints": [
+    { "zh": "想想看，4份需要切几刀？", "en": "How many cuts for 4 pieces?" },
+    { "zh": "试试从中间画一条线", "en": "Try drawing a line through the center" },
+    { "zh": "一条竖线+一条横线=十字切法", "en": "One vertical + one horizontal = cross cut" }
+  ],
+  "meta": {
+    "author": "eurekacub-team",
+    "created": "2026-03-28",
+    "reviewed": true
+  }
+}

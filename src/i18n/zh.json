@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "EurekaCub",
+    "tagline": "小科学家的发现之旅",
+    "explorer": "🌱 探索者",
+    "challenger": "🚀 挑战者",
+    "shared": "🌟 共享模块",
+    "explorerDesc": "6岁+ · 从这里开始你的发现之旅",
+    "challengerDesc": "9岁+ · 准备好接受更大的挑战了吗？",
+    "back": "返回",
+    "settings": "设置",
+    "comingSoon": "即将到来",
+    "adventures": "冒险",
+    "parent": "家长面板"
+  },
+  "module": {
+    "symmetry": "对称",
+    "fraction": "分数",
+    "geometry": "几何",
+    "derivative": "导数",
+    "equation": "方程",
+    "matrix": "矩阵",
+    "sequence": "数列",
+    "probability": "概率"
+  },
+  "level": {
+    "L1": "Level 1",
+    "L2": "Level 2",
+    "L3": "Level 3",
+    "age6": "6岁+",
+    "age9": "9岁+",
+    "ageAll": "全年龄",
+    "play": "开始探索",
+    "stars": "{{count}} 颗星"
+  },
+  "puzzle": {
+    "hint": "需要提示吗？",
+    "tryAgain": "再试试看",
+    "great": "太棒了！",
+    "next": "下一题"
+  },
+  "settings": {
+    "title": "设置",
+    "sound": "音效",
+    "haptic": "震动反馈",
+    "language": "语言",
+    "on": "开",
+    "off": "关"
+  }
+}
