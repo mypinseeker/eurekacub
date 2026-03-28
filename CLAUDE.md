@@ -28,7 +28,7 @@
 - **设计理念**: 超越年龄但可理解，不教公式而是玩着理解本质；开源社区共建
 - **位置**: `~/Workspace/kids-math/`
 - **GitHub**: `mypinseeker/eurekacub`
-- **状态**: ✅ GATE-2 通过 (2026-03-28) → GATE-3 开发中 (Iter 0)
+- **状态**: ✅ **v1.0.0 发布** (2026-03-28) — 4 迭代全部完成，GATE-4 交付
 - **PRD**: `docs/PRD-kids-math-v1.md` (v1.1, 8 模块 + 17 冒险 + 7 附录 + 开源架构 + 审核机制)
 - **技术栈**: React 19 + Vite + TypeScript 5 + Canvas/SVG + Tailwind + Framer Motion + Supabase
 - **架构**: 插件化渲染器 + 标准化内容格式(JSON/YAML) + CI审核管线 + Supabase内容热更新
