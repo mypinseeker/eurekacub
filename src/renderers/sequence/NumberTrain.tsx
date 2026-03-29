@@ -36,7 +36,7 @@ const OPTION_SELECTED = '#ffd54f'
 
 export default function NumberTrain({ puzzle, onCorrect, onError, onAha, onComplete }: RendererProps) {
   const data = (puzzle.data ?? puzzle) as unknown as SequencePuzzleData
-  const { sequence, blanks, options } = data
+  const { sequence = [], blanks = [], options = [] } = data ?? {}
 
   /* ---- state ---- */
   const [filled, setFilled] = useState<Map<number, number>>(new Map())
@@ -100,6 +100,15 @@ export default function NumberTrain({ puzzle, onCorrect, onError, onAha, onCompl
     },
     [complete, blanksSet, filled, selectedOption, sequence, correctCount, blanks.length, usedOptions, onCorrect, onError, onAha, onComplete],
   )
+
+  // Guard: if puzzle data is missing/malformed, show placeholder (after all hooks)
+  if (!sequence.length) {
+    return (
+      <div className="flex items-center justify-center h-64 text-gray-400">
+        <p>🚧 Puzzle data not available</p>
+      </div>
+    )
+  }
 
   /* ---- wheel spin keyframes (CSS) ---- */
   const wheelSpinStyle = `
