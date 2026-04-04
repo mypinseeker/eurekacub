@@ -115,6 +115,9 @@ export const ADVENTURES: Adventure[] = [
           targetCurve: [0, 5, 12, 21, 32, 44, 55, 64, 72, 79, 85, 90, 94, 97, 99, 100],
           duration: 8,
           finishLine: 100,
+          theme: 'plant',
+          yAxisLabel: 'Height (cm)',
+          xAxisLabel: 'Days',
         },
       },
     ],
@@ -306,6 +309,9 @@ export const ADVENTURES: Adventure[] = [
           targetCurve: [10, 12, 16, 22, 30, 42, 56, 68, 78, 86, 92, 96, 98, 100],
           duration: 12,
           finishLine: 100,
+          theme: 'stock',
+          yAxisLabel: 'Price ($)',
+          xAxisLabel: 'Time',
         },
       },
       {
@@ -361,6 +367,9 @@ export const ADVENTURES: Adventure[] = [
           targetCurve: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100],
           duration: 10,
           finishLine: 100,
+          theme: 'rocket',
+          yAxisLabel: 'Altitude (km)',
+          xAxisLabel: 'Time (s)',
         },
       },
       {
@@ -383,6 +392,7 @@ export const ADVENTURES: Adventure[] = [
             { id: 's6', shape: 'square', x: 200, y: 200, rotation: 0 },
             { id: 's7', shape: 'parallelogram', x: 120, y: 240, rotation: 0 },
           ],
+          pieces: ['large-tri-1', 'large-tri-2', 'medium-tri', 'small-tri-1', 'small-tri-2', 'square', 'parallelogram'],
         },
       },
       {
@@ -468,6 +478,9 @@ export const ADVENTURES: Adventure[] = [
           targetCurve: [20, 23, 27, 32, 38, 45, 53, 62, 72, 83, 95, 100],
           duration: 12,
           finishLine: 100,
+          theme: 'plant',
+          yAxisLabel: 'Population',
+          xAxisLabel: 'Years',
         },
       },
       {
@@ -595,6 +608,9 @@ export const ADVENTURES: Adventure[] = [
           targetCurve: [0, 18, 34, 48, 60, 70, 78, 84, 88, 92, 95, 97, 99, 100],
           duration: 6,
           finishLine: 100,
+          theme: 'ball',
+          yAxisLabel: 'Speed (m/s)',
+          xAxisLabel: 'Time (s)',
         },
       },
     ],
@@ -693,6 +709,7 @@ export const ADVENTURES: Adventure[] = [
           targetCurve: [100, 96, 88, 76, 62, 48, 36, 26, 18, 12, 8, 5, 3, 2],
           duration: 8,
           finishLine: 100,
+          theme: 'car',
         },
       },
       {
@@ -715,6 +732,7 @@ export const ADVENTURES: Adventure[] = [
             { id: 's6', shape: 'square', x: 200, y: 200, rotation: 0 },
             { id: 's7', shape: 'parallelogram', x: 140, y: 240, rotation: 0 },
           ],
+          pieces: ['large-tri-1', 'large-tri-2', 'medium-tri', 'small-tri-1', 'small-tri-2', 'square', 'parallelogram'],
         },
       },
       {
@@ -789,6 +807,9 @@ export const ADVENTURES: Adventure[] = [
           targetCurve: [0, 2, 8, 18, 32, 50, 68, 82, 92, 98, 100],
           duration: 10,
           finishLine: 100,
+          theme: 'ball',
+          yAxisLabel: 'Speed (m/s)',
+          xAxisLabel: 'Time (s)',
         },
       },
       {
