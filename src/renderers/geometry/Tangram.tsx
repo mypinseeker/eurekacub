@@ -62,11 +62,16 @@ const DEFAULT_SLOTS: TargetSlot[] = [
   { id: 's7', shape: 'parallelogram', x: 160, y: 200, rotation: 0 },
 ]
 
+/** Drag distance threshold: if pointer moves less than this, it's a tap. */
+const TAP_THRESHOLD = 6
+
+/** Long-press time (ms) before entering rotation mode. */
+const LONG_PRESS_MS = 400
+
 /* ------------------------------------------------------------------ */
-/*  Local helpers (not extracted — depend on React/DOM or puzzle types)*/
+/*  Local helpers                                                     */
 /* ------------------------------------------------------------------ */
 
-/** Parse and validate puzzle data with sensible defaults. */
 function parsePuzzle(puzzle: Record<string, unknown>): TangramPuzzleData {
   const data = (puzzle.data ?? puzzle) as Partial<TangramPuzzleData>
   return {
@@ -79,11 +84,7 @@ function parsePuzzle(puzzle: Record<string, unknown>): TangramPuzzleData {
   }
 }
 
-/** Create initial scattered positions for pieces below the target area. */
-function scatterPieces(
-  shapes: PieceShape[],
-  startY: number,
-): TangramPiece[] {
+function scatterPieces(shapes: PieceShape[], startY: number): TangramPiece[] {
   const cols = Math.min(shapes.length, 4)
   const colW = VIEW_W / (cols + 1)
 
@@ -102,7 +103,6 @@ function scatterPieces(
   })
 }
 
-/** Convert pointer event to SVG coordinates. */
 function pointerToSvg(
   e: React.PointerEvent<SVGSVGElement>,
   svgEl: SVGSVGElement,
@@ -114,17 +114,15 @@ function pointerToSvg(
 }
 
 /* ------------------------------------------------------------------ */
-/*  SVG Defs — gradients & filters                                    */
+/*  SVG Defs                                                          */
 /* ------------------------------------------------------------------ */
 
 function SvgDefs() {
   return (
     <defs>
-      {/* Drop shadow for dragging pieces */}
       <filter id="drag-shadow" x="-20%" y="-20%" width="150%" height="150%">
         <feDropShadow dx="2" dy="4" stdDeviation="4" floodColor="rgba(0,0,0,0.3)" />
       </filter>
-      {/* Glow for snapped pieces */}
       <filter id="snap-glow" x="-30%" y="-30%" width="160%" height="160%">
         <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
         <feFlood floodColor="#FFD700" floodOpacity="0.6" result="color" />
@@ -134,21 +132,12 @@ function SvgDefs() {
           <feMergeNode in="SourceGraphic" />
         </feMerge>
       </filter>
-      {/* Subtle gradient for each piece color */}
       {Object.entries(PIECE_COLORS).map(([shape, color]) => (
-        <linearGradient
-          key={shape}
-          id={`grad-${shape}`}
-          x1="0%"
-          y1="0%"
-          x2="100%"
-          y2="100%"
-        >
+        <linearGradient key={shape} id={`grad-${shape}`} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor={color} stopOpacity="1" />
           <stop offset="100%" stopColor={color} stopOpacity="0.75" />
         </linearGradient>
       ))}
-      {/* Paper texture pattern */}
       <pattern id="paper-texture" width="6" height="6" patternUnits="userSpaceOnUse">
         <rect width="6" height="6" fill="#FFF8EE" />
         <circle cx="1" cy="1" r="0.4" fill="rgba(180,160,120,0.08)" />
@@ -159,16 +148,70 @@ function SvgDefs() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Sub-components                                                    */
+/*  Rotate Button (visible overlay)                                   */
+/* ------------------------------------------------------------------ */
+
+interface RotateButtonProps {
+  x: number
+  y: number
+  rotation: RotationAngle
+  onClick: () => void
+}
+
+/** A small circular rotate button that appears near each unsnapped piece. */
+function RotateButton({ x, y, rotation, onClick }: RotateButtonProps) {
+  return (
+    <g
+      transform={`translate(${x}, ${y})`}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick()
+      }}
+      onPointerDown={(e) => e.stopPropagation()}
+      style={{ cursor: 'pointer' }}
+    >
+      {/* Button circle */}
+      <circle r="14" fill="white" stroke="#ddd" strokeWidth="1.5" opacity="0.92" />
+      {/* Rotate arrow icon */}
+      <g transform={`rotate(${rotation})`}>
+        <path
+          d="M -5 -2 A 7 7 0 1 1 -5 5"
+          fill="none"
+          stroke="#666"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <polygon
+          points="-8,5 -5,8 -2,5"
+          fill="#666"
+        />
+      </g>
+      {/* Rotation degree label */}
+      <text
+        y="22"
+        textAnchor="middle"
+        fontSize="8"
+        fill="#999"
+        fontFamily="system-ui, sans-serif"
+        fontWeight="bold"
+      >
+        {rotation}°
+      </text>
+    </g>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Piece Renderer                                                    */
 /* ------------------------------------------------------------------ */
 
 interface PieceRendererProps {
   piece: TangramPiece
   isDragging: boolean
+  isLongPressRotating: boolean
 }
 
-/** Render a single tangram piece as an SVG polygon. */
-function PieceRenderer({ piece, isDragging }: PieceRendererProps) {
+function PieceRenderer({ piece, isDragging, isLongPressRotating }: PieceRendererProps) {
   const size = PIECE_SIZES[piece.shape]
   const cx = size.w / 2
   const cy = size.h / 2
@@ -178,7 +221,7 @@ function PieceRenderer({ piece, isDragging }: PieceRendererProps) {
       data-piece-id={piece.id}
       transform={`translate(${piece.x}, ${piece.y})`}
       style={{
-        cursor: piece.snapped ? 'default' : 'grab',
+        cursor: piece.snapped ? 'default' : isDragging ? 'grabbing' : 'grab',
         transition: piece.snapped ? 'transform 0.2s ease-out' : 'none',
       }}
     >
@@ -186,8 +229,8 @@ function PieceRenderer({ piece, isDragging }: PieceRendererProps) {
         <polygon
           points={PIECE_POLYGONS[piece.shape]}
           fill={`url(#grad-${piece.shape})`}
-          stroke="#333"
-          strokeWidth={1.5}
+          stroke={isLongPressRotating ? '#FFB627' : '#333'}
+          strokeWidth={isLongPressRotating ? 3 : 1.5}
           strokeLinejoin="round"
           filter={
             piece.snapped
@@ -199,9 +242,33 @@ function PieceRenderer({ piece, isDragging }: PieceRendererProps) {
           transform={isDragging ? `scale(1.08)` : undefined}
           style={{
             transformOrigin: `${cx}px ${cy}px`,
+            transition: isLongPressRotating ? 'stroke 0.2s, stroke-width 0.2s' : undefined,
           }}
         />
       </g>
+
+      {/* Long-press rotation indicator: pulsing ring */}
+      {isLongPressRotating && (
+        <circle
+          cx={cx}
+          cy={cy}
+          r={Math.max(size.w, size.h) / 2 + 8}
+          fill="none"
+          stroke="#FFB627"
+          strokeWidth="2"
+          strokeDasharray="6 4"
+          opacity="0.6"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from={`0 ${cx} ${cy}`}
+            to={`360 ${cx} ${cy}`}
+            dur="2s"
+            repeatCount="indefinite"
+          />
+        </circle>
+      )}
     </g>
   )
 }
@@ -211,11 +278,15 @@ function PieceRenderer({ piece, isDragging }: PieceRendererProps) {
 /* ------------------------------------------------------------------ */
 
 /**
- * Tangram — Geometry puzzle renderer for children.
+ * Tangram — Geometry puzzle renderer.
  *
- * Children drag and rotate tangram pieces to fill a target silhouette.
- * Pieces snap into place when positioned close enough. Double-tap
- * rotates a piece by 90 degrees.
+ * Interaction modes:
+ * 1. **Drag** — touch/click and move to reposition a piece
+ * 2. **Tap rotate button** — each unsnapped piece has a visible ↻ button
+ * 3. **Tap the piece** — quick tap (no drag) also rotates the piece 90°
+ * 4. **Long-press** — hold 400ms+ to enter rotation mode, then drag to rotate
+ *
+ * Pieces snap when close enough to their target slot.
  */
 export default function Tangram({
   puzzle,
@@ -231,7 +302,6 @@ export default function Tangram({
   const activeShapes = useMemo(() => {
     if (config.pieces && config.pieces.length > 0) return config.pieces
     if (config.difficulty <= 1) {
-      // L1: fewer pieces
       return ['large-tri-1', 'medium-tri', 'square', 'small-tri-1'] as PieceShape[]
     }
     return Object.keys(PIECE_COLORS) as PieceShape[]
@@ -248,13 +318,16 @@ export default function Tangram({
     scatterPieces(activeShapes, 320),
   )
 
-  /* ---- Drag state (ref for pointer move perf) ---- */
+  /* ---- Drag state ---- */
   const dragRef = useRef<DragInfo | null>(null)
   const [draggingId, setDraggingId] = useState<string | null>(null)
   const svgRef = useRef<SVGSVGElement>(null)
 
-  /* ---- Double-tap tracking ---- */
-  const lastTapRef = useRef<{ id: string; time: number } | null>(null)
+  /* ---- Long-press & tap detection ---- */
+  const pointerStartRef = useRef<{ x: number; y: number; time: number; pieceId: string } | null>(null)
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [longPressId, setLongPressId] = useState<string | null>(null)
+  const didDragRef = useRef(false)
 
   /* ---- Completion tracking ---- */
   const hasFiredAha = useRef(false)
@@ -273,22 +346,39 @@ export default function Tangram({
     (updatedPieces: TangramPiece[]) => {
       const snappedCount = updatedPieces.filter((p) => p.snapped).length
 
-      // First snap triggers onAha
       if (snappedCount >= 1 && !hasFiredAha.current) {
         hasFiredAha.current = true
         onAha()
       }
 
-      // All pieces snapped
       if (snappedCount === updatedPieces.length && !hasFiredComplete.current) {
         hasFiredComplete.current = true
         onCorrect()
-        // Small delay before onComplete for the animation to play
         setTimeout(() => onComplete(), 1200)
       }
     },
     [onAha, onCorrect, onComplete],
   )
+
+  /* ---- Rotate a specific piece ---- */
+  const rotatePiece = useCallback((pieceId: string) => {
+    setPieces((prev) =>
+      prev.map((p) =>
+        p.id === pieceId && !p.snapped
+          ? { ...p, rotation: nextRotation(p.rotation) }
+          : p,
+      ),
+    )
+  }, [])
+
+  /* ---- Clear long-press timer ---- */
+  const clearLongPress = useCallback(() => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current)
+      longPressTimerRef.current = null
+    }
+    setLongPressId(null)
+  }, [])
 
   /* ---- Pointer handlers ---- */
   const handlePointerDown = useCallback(
@@ -298,7 +388,7 @@ export default function Tangram({
 
       const { x, y } = pointerToSvg(e, svg)
 
-      // Find topmost piece under pointer (iterate in reverse for z-order)
+      // Find topmost piece under pointer
       let hitPiece: TangramPiece | null = null
       for (let i = pieces.length - 1; i >= 0; i--) {
         const p = pieces[i]
@@ -312,22 +402,19 @@ export default function Tangram({
 
       if (!hitPiece) return
 
-      // Double-tap detection for rotation
-      const now = Date.now()
-      const lastTap = lastTapRef.current
-      if (lastTap && lastTap.id === hitPiece.id && now - lastTap.time < 400) {
-        // Double tap — rotate
-        lastTapRef.current = null
-        setPieces((prev) =>
-          prev.map((p) =>
-            p.id === hitPiece!.id
-              ? { ...p, rotation: nextRotation(p.rotation) }
-              : p,
-          ),
-        )
-        return
-      }
-      lastTapRef.current = { id: hitPiece.id, time: now }
+      // Record pointer start for tap vs drag detection
+      pointerStartRef.current = { x, y, time: Date.now(), pieceId: hitPiece.id }
+      didDragRef.current = false
+
+      // Start long-press timer
+      const pid = hitPiece.id
+      longPressTimerRef.current = setTimeout(() => {
+        if (!didDragRef.current) {
+          // Long press detected — rotate and show indicator
+          setLongPressId(pid)
+          rotatePiece(pid)
+        }
+      }, LONG_PRESS_MS)
 
       // Start drag
       ;(e.target as SVGElement).setPointerCapture?.(e.pointerId)
@@ -338,7 +425,7 @@ export default function Tangram({
       }
       setDraggingId(hitPiece.id)
 
-      // Move dragged piece to top (end of array)
+      // Move dragged piece to top
       setPieces((prev) => {
         const idx = prev.findIndex((p) => p.id === hitPiece!.id)
         if (idx === -1 || idx === prev.length - 1) return prev
@@ -348,17 +435,54 @@ export default function Tangram({
         return updated
       })
     },
-    [pieces],
+    [pieces, rotatePiece],
   )
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       const drag = dragRef.current
       const svg = svgRef.current
+      const start = pointerStartRef.current
       if (!drag || !svg) return
 
       const { x, y } = pointerToSvg(e, svg)
 
+      // Check if we've exceeded tap threshold
+      if (start) {
+        const dx = x - start.x
+        const dy = y - start.y
+        if (Math.sqrt(dx * dx + dy * dy) > TAP_THRESHOLD) {
+          didDragRef.current = true
+          // Cancel long-press if we started dragging
+          if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current)
+            longPressTimerRef.current = null
+          }
+          setLongPressId(null)
+        }
+      }
+
+      // If in long-press mode, rotate instead of drag
+      if (longPressId === drag.pieceId) {
+        // Calculate rotation based on pointer angle from piece center
+        const piece = pieces.find((p) => p.id === drag.pieceId)
+        if (piece) {
+          const size = PIECE_SIZES[piece.shape]
+          const cx = piece.x + size.w / 2
+          const cy = piece.y + size.h / 2
+          const angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI)
+          // Snap to nearest 90°
+          const snappedAngle = ((Math.round(angle / 90) * 90 % 360) + 360) % 360 as RotationAngle
+          setPieces((prev) =>
+            prev.map((p) =>
+              p.id === drag.pieceId ? { ...p, rotation: snappedAngle } : p,
+            ),
+          )
+        }
+        return
+      }
+
+      // Normal drag
       setPieces((prev) =>
         prev.map((p) =>
           p.id === drag.pieceId
@@ -367,46 +491,72 @@ export default function Tangram({
         ),
       )
     },
-    [],
+    [longPressId, pieces],
   )
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       const drag = dragRef.current
+      const start = pointerStartRef.current
+      const wasLongPress = longPressId !== null
+
+      // Clear all state
+      clearLongPress()
+
       if (!drag) return
 
       dragRef.current = null
       setDraggingId(null)
+      pointerStartRef.current = null
 
+      // If it was a long-press rotation, just finalize — don't snap
+      if (wasLongPress) {
+        return
+      }
+
+      // If pointer didn't move much, it's a TAP → rotate
+      if (!didDragRef.current && start) {
+        rotatePiece(start.pieceId)
+        return
+      }
+
+      // Normal drag end — try snap
       setPieces((prev) => {
         const updated = prev.map((p) =>
           p.id === drag.pieceId ? trySnap(p) : p,
         )
 
-        // Check if snapped piece was newly snapped
         const draggedBefore = prev.find((p) => p.id === drag.pieceId)
         const draggedAfter = updated.find((p) => p.id === drag.pieceId)
         if (draggedAfter?.snapped && !draggedBefore?.snapped) {
-          // Successfully snapped — defer completion check
           setTimeout(() => checkCompletion(updated), 50)
         } else if (!draggedAfter?.snapped) {
-          // Missed snap — subtle error feedback
           onError()
         }
 
         return updated
       })
     },
-    [trySnap, checkCompletion, onError],
+    [trySnap, checkCompletion, onError, rotatePiece, longPressId, clearLongPress],
   )
 
-  /* ---- Compute completion state for visual feedback ---- */
+  /* ---- Compute completion state ---- */
   const snappedCount = pieces.filter((p) => p.snapped).length
   const allSnapped = snappedCount === pieces.length
 
   /* ---- Render ---- */
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <div className="relative w-full h-full flex flex-col items-center justify-center">
+      {/* Interaction hint */}
+      <div className="text-center mb-2 px-4">
+        <p className="text-[11px] text-gray-400 font-medium">
+          {'🔄 点击旋转 · 拖动移动 · 长按自由旋转'}
+        </p>
+        <p className="text-[10px] text-gray-300">
+          {'Tap to rotate · Drag to move · Long-press to free rotate'}
+        </p>
+      </div>
+
       <svg
         ref={svgRef}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -419,13 +569,8 @@ export default function Tangram({
       >
         <SvgDefs />
 
-        {/* Background with paper texture */}
-        <rect
-          width={VIEW_W}
-          height={VIEW_H}
-          fill="url(#paper-texture)"
-          rx="8"
-        />
+        {/* Background */}
+        <rect width={VIEW_W} height={VIEW_H} fill="url(#paper-texture)" rx="8" />
 
         {/* Target silhouette */}
         <path
@@ -437,18 +582,14 @@ export default function Tangram({
           opacity={config.showOutline ? 0.8 : 0.4}
         />
 
-        {/* Slot outlines (guides) — only in L1 or when showOutline is true */}
+        {/* Slot outlines (guides) */}
         {config.showOutline &&
           activeSlots.map((slot) => {
             const size = PIECE_SIZES[slot.shape]
             const cx = size.w / 2
             const cy = size.h / 2
             return (
-              <g
-                key={slot.id}
-                transform={`translate(${slot.x}, ${slot.y})`}
-                opacity={0.25}
-              >
+              <g key={slot.id} transform={`translate(${slot.x}, ${slot.y})`} opacity={0.25}>
                 <g transform={`rotate(${slot.rotation}, ${cx}, ${cy})`}>
                   <polygon
                     points={PIECE_POLYGONS[slot.shape]}
@@ -468,8 +609,29 @@ export default function Tangram({
             key={piece.id}
             piece={piece}
             isDragging={draggingId === piece.id}
+            isLongPressRotating={longPressId === piece.id}
           />
         ))}
+
+        {/* Rotate buttons — shown near each unsnapped piece */}
+        {pieces.map((piece) => {
+          if (piece.snapped || draggingId === piece.id) return null
+          const size = PIECE_SIZES[piece.shape]
+          const btnX = piece.x + size.w + 4
+          const btnY = piece.y - 4
+          // Keep button within SVG bounds
+          const clampedX = Math.min(btnX, VIEW_W - 20)
+          const clampedY = Math.max(btnY, 20)
+          return (
+            <RotateButton
+              key={`btn-${piece.id}`}
+              x={clampedX}
+              y={clampedY}
+              rotation={piece.rotation}
+              onClick={() => rotatePiece(piece.id)}
+            />
+          )
+        })}
 
         {/* Progress indicator */}
         <text
@@ -484,48 +646,20 @@ export default function Tangram({
           {snappedCount}/{pieces.length}
         </text>
 
-        {/* Completion celebration overlay */}
+        {/* Completion celebration */}
         {allSnapped && (
           <g>
-            <rect
-              width={VIEW_W}
-              height={VIEW_H}
-              fill="rgba(255,215,0,0.1)"
-              rx="8"
-            >
-              <animate
-                attributeName="opacity"
-                values="0;0.3;0"
-                dur="1.5s"
-                repeatCount="3"
-              />
+            <rect width={VIEW_W} height={VIEW_H} fill="rgba(255,215,0,0.1)" rx="8">
+              <animate attributeName="opacity" values="0;0.3;0" dur="1.5s" repeatCount="3" />
             </rect>
-            {/* Rainbow pulse on all pieces */}
             {pieces.map((piece) => {
               const size = PIECE_SIZES[piece.shape]
               const cx = piece.x + size.w / 2
               const cy = piece.y + size.h / 2
               return (
-                <circle
-                  key={`celebrate-${piece.id}`}
-                  cx={cx}
-                  cy={cy}
-                  r="5"
-                  fill="#FFD700"
-                  opacity="0"
-                >
-                  <animate
-                    attributeName="r"
-                    values="5;25;5"
-                    dur="1s"
-                    repeatCount="3"
-                  />
-                  <animate
-                    attributeName="opacity"
-                    values="0.8;0;0.8"
-                    dur="1s"
-                    repeatCount="3"
-                  />
+                <circle key={`celebrate-${piece.id}`} cx={cx} cy={cy} r="5" fill="#FFD700" opacity="0">
+                  <animate attributeName="r" values="5;25;5" dur="1s" repeatCount="3" />
+                  <animate attributeName="opacity" values="0.8;0;0.8" dur="1s" repeatCount="3" />
                 </circle>
               )
             })}
@@ -539,6 +673,7 @@ export default function Tangram({
         onClick={() => {
           hasFiredAha.current = false
           hasFiredComplete.current = false
+          clearLongPress()
           setPieces(scatterPieces(activeShapes, 320))
         }}
         className="absolute bottom-4 right-4 px-4 py-2 rounded-full
