@@ -7,6 +7,7 @@ import HintButton from '../components/HintButton'
 import FeedbackToast from '../components/FeedbackToast'
 import AhaPopup from '../components/AhaPopup'
 import { getRenderer } from '../renderers/registry'
+import { getRandomPuzzle } from '../renderers/geometry/tangram.puzzles'
 
 /* Map moduleId (m1-m8) → renderer registry id */
 const MODULE_RENDERER_MAP: Record<string, string> = {
@@ -35,11 +36,7 @@ const PUZZLE_CONFIGS: Record<string, Record<string, Record<string, unknown>>> = 
     L2: { targetSlices: 4, showGuides: true, tolerance: 15 },
     L3: { targetSlices: 6, showGuides: false, tolerance: 10 },
   },
-  geometry: {
-    L1: { pieceCount: 4, snapTolerance: 30, showOutline: true },
-    L2: { pieceCount: 5, snapTolerance: 20, showOutline: true },
-    L3: { pieceCount: 7, snapTolerance: 15, showOutline: false },
-  },
+  geometry: {}, // geometry uses tangram.puzzles.ts — handled specially below
   derivative: {
     L1: { maxSpeed: 3, duration: 8, curveType: 'linear' },
     L2: { maxSpeed: 5, duration: 10, curveType: 'quadratic' },
@@ -86,6 +83,19 @@ export default function PuzzlePage() {
 
   // Build puzzle config based on renderer + level
   const puzzleConfig = useMemo(() => {
+    // Geometry uses pre-designed tangram puzzles
+    if (rendererId === 'geometry') {
+      const preset = getRandomPuzzle(level)
+      return {
+        targetOutline: preset.outline,
+        slots: preset.slots,
+        pieces: preset.pieces,
+        difficulty: level === 'L1' ? 1 : level === 'L2' ? 2 : 3,
+        showOutline: level !== 'L3',
+        puzzleName: preset.name,
+        puzzleIcon: preset.icon,
+      }
+    }
     const configs = PUZZLE_CONFIGS[rendererId]
     return configs?.[level] ?? configs?.L1 ?? {}
   }, [rendererId, level])

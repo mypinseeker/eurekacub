@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useMemo } from 'react'
 import CanvasBase from '../common/CanvasBase'
+import PuzzleIntro from '../common/PuzzleIntro'
 import type { RendererProps } from '../registry'
 import type {
   Grid,
@@ -332,6 +333,32 @@ export default function PixelArt({
   onAha,
   onComplete,
 }: RendererProps) {
+  const [showIntro, setShowIntro] = useState(true)
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon="🧱"
+        title={{ zh: '矩阵变换', en: 'Matrix Transform' }}
+        goal={{
+          zh: '用旋转、翻转等变换操作，把左边的图案变成右上角的目标图案',
+          en: 'Use rotate, flip, and other transforms to change the pattern into the target shown in the top-right corner',
+        }}
+        howTo={[
+          { zh: '看右上角的"TARGET"小图——那是你的目标', en: 'Look at the small "TARGET" grid in the top-right — that\'s your goal' },
+          { zh: '点击底部按钮来变换图案：旋转(↻)、水平翻转(↔)、垂直翻转(↕)、转置(⤡)', en: 'Use buttons at bottom: Rotate(↻), Flip H(↔), Flip V(↕), Transpose(⤡)' },
+          { zh: '也可以点击格子直接换颜色', en: 'You can also tap cells to cycle colors' },
+          { zh: '用最少的步骤完成变换！', en: 'Complete the transform in as few steps as possible!' },
+        ]}
+        insight={{
+          zh: '旋转、翻转、转置——这些都是矩阵运算！矩阵是线性代数的基础，用来描述图形的变换和数据的组织。',
+          en: 'Rotate, flip, transpose — these are all matrix operations! Matrices are the foundation of linear algebra, used to describe transformations and organize data.',
+        }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   /* ---- Puzzle config ---- */
   const config = useMemo(() => parsePuzzle(puzzle), [puzzle])
   const initialGrid = useMemo(

@@ -87,5 +87,8 @@ export function parsePuzzleData(puzzle: Record<string, unknown>): DerivativePuzz
     targetCurve: Array.isArray(d.targetCurve) ? d.targetCurve : generateDefaultCurve(),
     duration: typeof d.duration === 'number' ? d.duration : 10,
     finishLine: typeof d.finishLine === 'number' ? d.finishLine : 100,
+    theme: (typeof d.theme === 'string' ? d.theme : 'car') as DerivativePuzzleData['theme'],
+    yAxisLabel: typeof d.yAxisLabel === 'string' ? d.yAxisLabel : undefined,
+    xAxisLabel: typeof d.xAxisLabel === 'string' ? d.xAxisLabel : undefined,
   }
 }

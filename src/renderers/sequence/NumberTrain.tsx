@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RendererProps } from '../registry'
 import type { SequencePuzzleData } from './types'
+import PuzzleIntro from '../common/PuzzleIntro'
 import { parsePuzzleData as _parsePuzzleData } from './sequence.utils'
 
 /* ------------------------------------------------------------------ */
@@ -35,6 +36,25 @@ const OPTION_BORDER = '#ccc'
 const OPTION_SELECTED = '#ffd54f'
 
 export default function NumberTrain({ puzzle, onCorrect, onError, onAha, onComplete }: RendererProps) {
+  const [showIntro, setShowIntro] = useState(true)
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon="🔢"
+        title={{ zh: '数列火车', en: 'Number Train' }}
+        goal={{ zh: '找出数字规律，填上火车车厢里缺少的数字！', en: 'Find the pattern and fill in the missing numbers on the train!' }}
+        howTo={[
+          { zh: '观察火车上已有的数字，找出规律', en: 'Look at the numbers on the train and find the pattern' },
+          { zh: '空白车厢就是要填的位置', en: 'Empty carriages are where you need to fill in' },
+          { zh: '从下方选择正确数字，点击空白车厢放入', en: 'Select the correct number from options below and tap the empty carriage' },
+        ]}
+        insight={{ zh: '数列就是按规律排列的数字。比如 2,4,6,8... 每次加2！发现规律就能预测下一个数。', en: 'A sequence is numbers arranged by a rule. Like 2,4,6,8... adding 2 each time! Finding the rule lets you predict the next number.' }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   const data = (puzzle.data ?? puzzle) as unknown as SequencePuzzleData
   const { sequence = [], blanks = [], options = [] } = data ?? {}
 

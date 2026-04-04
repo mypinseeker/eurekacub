@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef } from 'react'
 import type { RendererProps } from '../registry'
 import CanvasBase from '../common/CanvasBase'
-import type { PositionSample, Phase } from './types'
+import PuzzleIntro from '../common/PuzzleIntro'
+import type { PositionSample, Phase, DerivativeTheme } from './types'
 import {
   MAX_SPEED,
   MATCH_THRESHOLD,
@@ -11,6 +12,114 @@ import {
   computeScore,
   parsePuzzleData,
 } from './derivative.utils'
+
+/* ── Theme metadata for intro & axis labels ─────────────────── */
+
+interface ThemeMeta {
+  icon: string
+  title: { zh: string; en: string }
+  goal: { zh: string; en: string }
+  yLabel: string
+  xLabel: string
+  sliderLabel: { zh: string; en: string }
+  insight: { zh: string; en: string }
+  howTo: { zh: string; en: string }[]
+  /** Top-area background color */
+  topBg: string
+}
+
+const THEME_META: Record<DerivativeTheme, ThemeMeta> = {
+  car: {
+    icon: '🏎️',
+    title: { zh: '速度控制器', en: 'Speed Controller' },
+    goal: { zh: '调整赛车速度，让你画出的橙色曲线尽量贴合蓝色目标曲线', en: 'Adjust car speed so your orange curve matches the blue target curve' },
+    yLabel: 'Position',
+    xLabel: 'Time',
+    sliderLabel: { zh: '速度', en: 'Speed' },
+    insight: { zh: '速度就是位置的变化率——速度越快，曲线越陡。这就是"导数"的概念！', en: 'Speed is the rate of change of position — faster speed means steeper curve. This is the concept of a derivative!' },
+    howTo: [
+      { zh: '点击"开始"让赛车出发', en: 'Press Start to launch the car' },
+      { zh: '拖动底部滑块调整速度', en: 'Drag the slider to adjust speed' },
+      { zh: '观察你的橙色曲线，让它贴合蓝色虚线', en: 'Watch your orange curve and match the blue dashed line' },
+    ],
+    topBg: '#e8f5e9',
+  },
+  plant: {
+    icon: '🌱',
+    title: { zh: '植物生长观察', en: 'Plant Growth Observer' },
+    goal: { zh: '调整浇水量，让植物的生长曲线贴合目标曲线', en: 'Adjust watering to match the target growth curve' },
+    yLabel: 'Height (cm)',
+    xLabel: 'Days',
+    sliderLabel: { zh: '浇水量', en: 'Water' },
+    insight: { zh: '浇水多→长得快→曲线变陡。生长速率就是高度对时间的导数！', en: 'More water → faster growth → steeper curve. Growth rate is the derivative of height over time!' },
+    howTo: [
+      { zh: '点击"开始"播种', en: 'Press Start to plant the seed' },
+      { zh: '拖动滑块调整每天的浇水量', en: 'Drag the slider to adjust daily watering' },
+      { zh: '让你的生长曲线贴合目标', en: 'Match your growth curve to the target' },
+    ],
+    topBg: '#e8f5e9',
+  },
+  rocket: {
+    icon: '🚀',
+    title: { zh: '火箭发射控制', en: 'Rocket Launch Control' },
+    goal: { zh: '控制推力大小，让火箭按照目标轨迹飞行', en: 'Control thrust to match the target flight path' },
+    yLabel: 'Altitude (km)',
+    xLabel: 'Time (s)',
+    sliderLabel: { zh: '推力', en: 'Thrust' },
+    insight: { zh: '推力越大→加速越快→高度变化越快。加速度是速度的导数，速度是高度的导数！', en: 'More thrust → faster acceleration → quicker altitude change. Acceleration is the derivative of velocity!' },
+    howTo: [
+      { zh: '点击"开始"发射火箭', en: 'Press Start to launch' },
+      { zh: '拖动滑块控制火箭推力', en: 'Drag the slider to control thrust' },
+      { zh: '让火箭沿着蓝色目标轨迹飞', en: 'Follow the blue target trajectory' },
+    ],
+    topBg: '#e3f2fd',
+  },
+  stock: {
+    icon: '📈',
+    title: { zh: '股价走势模拟', en: 'Stock Price Simulator' },
+    goal: { zh: '调整买卖力度，让股价走势贴合目标曲线', en: 'Adjust trading intensity to match the target price curve' },
+    yLabel: 'Price ($)',
+    xLabel: 'Time',
+    sliderLabel: { zh: '买入力度', en: 'Buy Force' },
+    insight: { zh: '股价上涨速度就是变化率——涨得越快，曲线越陡。这就是趋势的"导数"！', en: 'Rate of price increase is the derivative — steeper curve means faster growth!' },
+    howTo: [
+      { zh: '点击"开始"进入交易', en: 'Press Start to begin trading' },
+      { zh: '拖动滑块调整买卖力度', en: 'Drag the slider to adjust trading force' },
+      { zh: '让股价曲线贴合蓝色目标', en: 'Match the price curve to the blue target' },
+    ],
+    topBg: '#fef3c7',
+  },
+  ball: {
+    icon: '⚽',
+    title: { zh: '自由落体实验', en: 'Free Fall Experiment' },
+    goal: { zh: '控制初速度，让球的运动轨迹贴合目标', en: 'Control initial velocity to match the target trajectory' },
+    yLabel: 'Speed (m/s)',
+    xLabel: 'Time (s)',
+    sliderLabel: { zh: '初速度', en: 'Velocity' },
+    insight: { zh: '球越落越快——重力让速度不断增加。加速度就是速度的变化率（导数）！', en: 'The ball falls faster and faster — gravity increases speed constantly. This acceleration is the derivative of velocity!' },
+    howTo: [
+      { zh: '点击"开始"释放球', en: 'Press Start to release the ball' },
+      { zh: '拖动滑块调整初始速度', en: 'Drag the slider to set initial velocity' },
+      { zh: '观察速度如何随时间变化', en: 'Observe how speed changes over time' },
+    ],
+    topBg: '#f0fdf4',
+  },
+  swim: {
+    icon: '🏊',
+    title: { zh: '游泳训练计划', en: 'Swimming Training' },
+    goal: { zh: '调整游泳速度，让你的距离曲线贴合训练目标', en: 'Adjust swimming speed to match the training distance target' },
+    yLabel: 'Distance (m)',
+    xLabel: 'Time (min)',
+    sliderLabel: { zh: '游速', en: 'Pace' },
+    insight: { zh: '游得越快，单位时间内距离增加越多。速度就是距离对时间的导数！', en: 'Faster swimming = more distance per time unit. Speed is the derivative of distance over time!' },
+    howTo: [
+      { zh: '点击"开始"跳入泳池', en: 'Press Start to dive in' },
+      { zh: '拖动滑块调整游泳速度', en: 'Drag the slider to adjust swimming pace' },
+      { zh: '让距离曲线匹配蓝色训练目标', en: 'Match your distance curve to the blue target' },
+    ],
+    topBg: '#e0f7fa',
+  },
+}
 
 /** How often (in seconds) we sample position for the drawn curve. */
 const SAMPLE_INTERVAL = 0.05
@@ -85,12 +194,32 @@ export default function SpeedController({
   onComplete,
 }: RendererProps) {
   const puzzleData = parsePuzzleData(puzzle)
-  const { targetCurve, duration, finishLine } = puzzleData
+  const { targetCurve, duration, finishLine, theme } = puzzleData
+  const themeMeta = THEME_META[theme] ?? THEME_META.car
+
+  // Custom axis labels from puzzle data override theme defaults
+  const yAxisLabel = puzzleData.yAxisLabel ?? themeMeta.yLabel
+  const xAxisLabel = puzzleData.xAxisLabel ?? themeMeta.xLabel
 
   // ── State ─────────────────────────────────────────────────
+  const [showIntro, setShowIntro] = useState(true)
   const [phase, setPhase] = useState<Phase>('ready')
   const [speed, setSpeed] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
+
+  // Show intro overlay before game
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon={themeMeta.icon}
+        title={themeMeta.title}
+        goal={themeMeta.goal}
+        howTo={themeMeta.howTo}
+        insight={themeMeta.insight}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
 
   // Refs for values accessed in the rAF draw loop
   const phaseRef = useRef<Phase>('ready')
@@ -249,7 +378,7 @@ export default function SpeedController({
       const gaugeH = graphH
 
       // ── Background ──
-      ctx.fillStyle = '#e8f5e9'
+      ctx.fillStyle = themeMeta.topBg
       ctx.fillRect(0, 0, w, h)
 
       // ── Road section ──
@@ -413,14 +542,14 @@ export default function SpeedController({
       ctx.font = `${Math.max(11, w * 0.016)}px sans-serif`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
-      ctx.fillText('Time', graphL + graphW / 2, graphB + 6)
+      ctx.fillText(xAxisLabel, graphL + graphW / 2, graphB + 6)
 
       ctx.save()
       ctx.translate(graphL - 30, graphT + graphH / 2)
       ctx.rotate(-Math.PI / 2)
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.fillText('Position', 0, 0)
+      ctx.fillText(yAxisLabel, 0, 0)
       ctx.restore()
 
       // Tick labels

@@ -14,10 +14,26 @@
  * - `duration`: total time for the challenge in seconds
  * - `finishLine`: the x-position the car must reach
  */
+/**
+ * Visual theme for the animation area.
+ * - 'car': racing car on road (default)
+ * - 'plant': growing plant/flower
+ * - 'rocket': rocket launching
+ * - 'stock': stock chart rising
+ * - 'ball': falling/bouncing ball
+ * - 'swim': swimmer in pool lane
+ */
+export type DerivativeTheme = 'car' | 'plant' | 'rocket' | 'stock' | 'ball' | 'swim'
+
 export interface DerivativePuzzleData {
   targetCurve: number[]
   duration: number
   finishLine: number
+  theme: DerivativeTheme
+  /** Y-axis label override (e.g., "Height", "Price") */
+  yAxisLabel?: string
+  /** X-axis label override (e.g., "Days", "Time") */
+  xAxisLabel?: string
 }
 
 /** A single sample in the position history. */

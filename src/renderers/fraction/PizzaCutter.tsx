@@ -11,6 +11,7 @@ import { useState, useCallback, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RendererProps } from '../registry'
 import SvgBase from '../common/SvgBase'
+import PuzzleIntro from '../common/PuzzleIntro'
 import type { FractionPuzzleData, Cut } from './types'
 import { SLICE_COLORS } from './types'
 import {
@@ -100,6 +101,25 @@ export default function PizzaCutter({
   onError,
   onComplete,
 }: RendererProps) {
+  const [showIntro, setShowIntro] = useState(true)
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon="🍕"
+        title={{ zh: '分数切割', en: 'Fraction Cutter' }}
+        goal={{ zh: '把披萨切成均匀的几份！在边缘点击来放置切割线，让每块大小一样', en: 'Cut the pizza into equal slices! Tap on the edge to place cut lines so each slice is the same size' }}
+        howTo={[
+          { zh: '看题目要求切成几份（比如4份）', en: 'Check how many slices are needed (e.g., 4)' },
+          { zh: '在披萨边缘点击放置切割线', en: 'Tap on the pizza edge to place cut lines' },
+          { zh: '切割线要均匀分布，让每块一样大', en: 'Space cuts evenly so each slice is equal' },
+        ]}
+        insight={{ zh: '把一个整体分成相等的几份，每份就是一个分数。切成4份，每份就是1/4！', en: 'Dividing a whole into equal parts gives us fractions. Cut into 4 pieces, each piece is 1/4!' }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   // Parse puzzle data with defaults
   const puzzleData = useMemo<FractionPuzzleData>(() => {
     const raw = (puzzle.data ?? puzzle) as Partial<FractionPuzzleData>

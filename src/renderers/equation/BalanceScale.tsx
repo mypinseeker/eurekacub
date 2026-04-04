@@ -12,6 +12,7 @@ import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RendererProps } from '../registry'
 import SvgBase from '../common/SvgBase'
+import PuzzleIntro from '../common/PuzzleIntro'
 import type { EquationPuzzleData, UnknownSide } from './types'
 import {
   MYSTERY_COLOR,
@@ -333,6 +334,25 @@ export default function BalanceScale({
   onError,
   onComplete,
 }: RendererProps) {
+  const [showIntro, setShowIntro] = useState(true)
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon="⚖️"
+        title={{ zh: '天平方程', en: 'Balance Equation' }}
+        goal={{ zh: '找到"?"代表的数字，让天平两边平衡！', en: 'Find the number that \'?\' represents to balance the scale!' }}
+        howTo={[
+          { zh: '看天平：左边和右边各有一些砝码', en: 'Look at the scale: both sides have weights' },
+          { zh: '"?"是未知数——你需要找到它的值', en: '\'?\' is the unknown — find its value' },
+          { zh: '从下方选择正确的数字，放到"?"的位置', en: 'Choose the correct number from the options below' },
+        ]}
+        insight={{ zh: '等号就像天平——两边必须相等。找未知数就是解方程！5 + ? = 8，那么 ? = 3', en: 'An equation is like a balance — both sides must be equal. Finding the unknown is solving an equation! 5 + ? = 8, so ? = 3' }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   /* ── Parse puzzle data ──────────────────────────────────── */
   const puzzleData = useMemo<EquationPuzzleData>(() => {
     const raw = (puzzle.data ?? puzzle) as Partial<EquationPuzzleData>

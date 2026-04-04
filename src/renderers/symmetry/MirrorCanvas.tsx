@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useMemo } from 'react'
 import CanvasBase from '../common/CanvasBase'
 import type { RendererProps } from '../registry'
+import PuzzleIntro from '../common/PuzzleIntro'
 import type { Point, Stroke, MirrorAxis } from './types'
 import {
   ROUNDS_TO_COMPLETE,
@@ -221,6 +222,25 @@ export default function MirrorCanvas({
   onAha,
   onComplete,
 }: RendererProps) {
+  const [showIntro, setShowIntro] = useState(true)
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon="🪞"
+        title={{ zh: '镜像对称', en: 'Mirror Symmetry' }}
+        goal={{ zh: '在镜像线的一侧画画，另一侧会自动出现对称图形。让两边匹配目标形状！', en: 'Draw on one side of the mirror line — the other side mirrors automatically. Match the target shape!' }}
+        howTo={[
+          { zh: '金色虚线是镜像轴——它把画布分成两半', en: 'The golden dashed line is the mirror axis — it splits the canvas in half' },
+          { zh: '在一侧画线条，另一侧会自动对称出现', en: 'Draw on one side, the mirror appears automatically on the other' },
+          { zh: '让你的画匹配目标形状', en: 'Match your drawing to the target shape' },
+        ]}
+        insight={{ zh: '对称无处不在——蝴蝶的翅膀、人的脸、雪花的图案。对称是数学中"变换不变性"的体现！', en: "Symmetry is everywhere — butterfly wings, faces, snowflakes. Symmetry represents 'invariance under transformation' in mathematics!" }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   /* ---- Puzzle config ---- */
   const config = useMemo(() => parsePuzzle(puzzle), [puzzle])
 

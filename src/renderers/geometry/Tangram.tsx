@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useMemo } from 'react'
 import type { RendererProps } from '../registry'
+import PuzzleIntro from '../common/PuzzleIntro'
 import type {
   TangramPiece,
   TangramPuzzleData,
@@ -72,8 +73,13 @@ const LONG_PRESS_MS = 400
 /*  Local helpers                                                     */
 /* ------------------------------------------------------------------ */
 
-function parsePuzzle(puzzle: Record<string, unknown>): TangramPuzzleData {
-  const data = (puzzle.data ?? puzzle) as Partial<TangramPuzzleData>
+interface ParsedPuzzle extends TangramPuzzleData {
+  puzzleName?: { zh: string; en: string }
+  puzzleIcon?: string
+}
+
+function parsePuzzle(puzzle: Record<string, unknown>): ParsedPuzzle {
+  const data = (puzzle.data ?? puzzle) as Partial<ParsedPuzzle>
   return {
     targetShape: typeof data.targetShape === 'string' ? data.targetShape : 'square',
     targetOutline: typeof data.targetOutline === 'string' ? data.targetOutline : DEFAULT_OUTLINE,
@@ -81,6 +87,8 @@ function parsePuzzle(puzzle: Record<string, unknown>): TangramPuzzleData {
     showOutline: data.showOutline !== false,
     slots: Array.isArray(data.slots) ? data.slots : DEFAULT_SLOTS,
     pieces: Array.isArray(data.pieces) ? data.pieces : undefined,
+    puzzleName: data.puzzleName as { zh: string; en: string } | undefined,
+    puzzleIcon: typeof data.puzzleIcon === 'string' ? data.puzzleIcon : undefined,
   }
 }
 
@@ -295,6 +303,26 @@ export default function Tangram({
   onAha,
   onComplete,
 }: RendererProps) {
+  const [showIntro, setShowIntro] = useState(true)
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon="🔺"
+        title={{ zh: '七巧板', en: 'Tangram' }}
+        goal={{ zh: '把彩色拼图块拖动到正确位置，拼出目标图形！', en: 'Drag colorful puzzle pieces into position to form the target shape!' }}
+        howTo={[
+          { zh: '虚线轮廓就是目标形状', en: 'The dashed outline is the target shape' },
+          { zh: '拖动拼图块移动位置', en: 'Drag pieces to move them' },
+          { zh: '单击拼图块旋转90°，或点击旁边的 ↻ 按钮', en: 'Tap a piece to rotate 90°, or use the ↻ button nearby' },
+          { zh: '把拼图块放到正确位置附近，它会自动吸附！', en: 'Place pieces near the correct position and they\'ll snap into place!' },
+        ]}
+        insight={{ zh: '用简单的几何形状可以拼出各种图案——这就是几何学的魅力。面积、角度、空间关系都在拼图中！', en: "Simple geometric shapes can form complex patterns — that's the beauty of geometry. Area, angles, and spatial relationships are all in the puzzle!" }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   const config = useMemo(() => parsePuzzle(puzzle), [puzzle])
   const snapTolerance = config.difficulty <= 1 ? SNAP_TOLERANCE_L1 : SNAP_TOLERANCE_L2
 
@@ -547,13 +575,17 @@ export default function Tangram({
   /* ---- Render ---- */
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center">
-      {/* Interaction hint */}
+      {/* Puzzle name + interaction hint */}
       <div className="text-center mb-2 px-4">
+        {config.puzzleName && (
+          <p className="text-sm font-bold text-gray-700 mb-1">
+            {config.puzzleIcon && <span className="mr-1">{config.puzzleIcon}</span>}
+            {config.puzzleName.zh}
+            <span className="text-gray-400 font-medium ml-1.5 text-xs">{config.puzzleName.en}</span>
+          </p>
+        )}
         <p className="text-[11px] text-gray-400 font-medium">
           {'🔄 点击旋转 · 拖动移动 · 长按自由旋转'}
-        </p>
-        <p className="text-[10px] text-gray-300">
-          {'Tap to rotate · Drag to move · Long-press to free rotate'}
         </p>
       </div>
 

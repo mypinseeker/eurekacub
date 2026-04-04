@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react'
 import type { RendererProps } from '../registry'
 import CanvasBase from '../common/CanvasBase'
+import PuzzleIntro from '../common/PuzzleIntro'
 import type {
   FlipResult,
   Phase,
@@ -25,6 +26,25 @@ import {
 // ── Component ───────────────────────────────────────────────
 
 export default function CoinFlip({ puzzle, onCorrect, onError, onAha, onComplete }: RendererProps) {
+  const [showIntro, setShowIntro] = useState(true)
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon="🎲"
+        title={{ zh: '概率实验', en: 'Probability Lab' }}
+        goal={{ zh: '多次抛硬币，观察正反面出现的比例，然后预测概率！', en: 'Flip coins many times, observe the ratio of heads vs tails, then predict the probability!' }}
+        howTo={[
+          { zh: '点击硬币来抛掷', en: 'Tap the coin to flip it' },
+          { zh: '观察柱状图——正面和反面各出现了多少次？', en: 'Watch the bar chart — how many heads vs tails?' },
+          { zh: '抛够次数后，预测正面出现的概率', en: 'After enough flips, predict the probability of heads' },
+        ]}
+        insight={{ zh: '抛得越多，正反比例越接近50:50。这就是"大数定律"——大量重复后，概率趋于稳定！', en: "The more you flip, the closer to 50:50. This is the 'Law of Large Numbers' — with many repetitions, probability stabilizes!" }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   const puzzleData = parsePuzzleData(puzzle)
 
   const [flipHistory, setFlipHistory] = useState<FlipResult[]>([])
