@@ -16,33 +16,41 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-rose-50">
-      {/* Top nav - only show on non-home pages */}
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF5EB] via-[#FFF0E0] to-[#FFE8D0]">
+      {/* Top nav — playful bar on sub-pages */}
       {!isHome && (
-        <nav className="sticky top-0 z-30 w-full px-4 py-3 bg-white/80 backdrop-blur-md border-b border-amber-100 flex items-center justify-between">
-          <button
+        <nav className="sticky top-0 z-30 w-full px-4 py-3 glass border-b border-orange-100/60 flex items-center justify-between">
+          <motion.button
             onClick={() => navigate(-1)}
-            className="w-9 h-9 rounded-full bg-amber-100 hover:bg-amber-200 flex items-center justify-center transition-colors"
+            whileTap={{ scale: 0.9 }}
+            className="w-10 h-10 rounded-2xl bg-white shadow-md shadow-orange-100 flex items-center justify-center"
           >
-            <span className="text-amber-700 text-lg font-bold">{'\u2190'}</span>
-          </button>
+            <span className="text-orange-400 text-xl font-bold">{'\u2190'}</span>
+          </motion.button>
 
           <button
             onClick={() => navigate('/')}
             className="flex items-center gap-1.5"
           >
-            <span className="text-2xl">{'\uD83D\uDC3B'}</span>
-            <span className="text-lg font-extrabold bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
+            <motion.span
+              className="text-2xl"
+              animate={{ rotate: [0, -5, 5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {'\uD83D\uDC3B'}
+            </motion.span>
+            <span className="text-lg font-extrabold bg-gradient-to-r from-[#FF6B6B] via-[#FF8C42] to-[#FFB627] bg-clip-text text-transparent">
               EurekaCub
             </span>
           </button>
 
-          <button
+          <motion.button
             onClick={() => setSettingsOpen(true)}
-            className="w-9 h-9 rounded-full bg-amber-100 hover:bg-amber-200 flex items-center justify-center transition-colors"
+            whileTap={{ scale: 0.9 }}
+            className="w-10 h-10 rounded-2xl bg-white shadow-md shadow-orange-100 flex items-center justify-center"
           >
-            <span className="text-amber-700 text-lg">{'\u2699\uFE0F'}</span>
-          </button>
+            <span className="text-lg">{'\u2699\uFE0F'}</span>
+          </motion.button>
         </nav>
       )}
 
@@ -59,7 +67,7 @@ function PlaceholderPage({ title, icon }: { title: string; icon: string }) {
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 200 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 15 }}
         className="text-7xl mb-6"
       >
         {icon}

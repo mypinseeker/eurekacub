@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { motion } from 'framer-motion'
 
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation()
@@ -10,29 +11,31 @@ export default function LanguageSwitcher() {
   }
 
   return (
-    <div className="inline-flex rounded-xl border border-gray-200 overflow-hidden">
-      <button
+    <div className="inline-flex rounded-2xl border-2 border-orange-200 overflow-hidden bg-white">
+      <motion.button
         onClick={() => switchTo('zh')}
-        className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+        whileTap={{ scale: 0.95 }}
+        className={`px-4 py-2 text-sm font-bold transition-all duration-200 ${
           current === 'zh'
-            ? 'bg-amber-500 text-white'
-            : 'bg-white text-gray-600 hover:bg-gray-50'
+            ? 'bg-gradient-to-r from-[#FF6B6B] to-[#FF8C42] text-white'
+            : 'text-gray-500 hover:bg-orange-50'
         }`}
         aria-label="Switch to Chinese"
       >
         🇨🇳 中文
-      </button>
-      <button
+      </motion.button>
+      <motion.button
         onClick={() => switchTo('en')}
-        className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+        whileTap={{ scale: 0.95 }}
+        className={`px-4 py-2 text-sm font-bold transition-all duration-200 ${
           current === 'en'
-            ? 'bg-amber-500 text-white'
-            : 'bg-white text-gray-600 hover:bg-gray-50'
+            ? 'bg-gradient-to-r from-[#4E7CFF] to-[#7C5CFC] text-white'
+            : 'text-gray-500 hover:bg-blue-50'
         }`}
         aria-label="Switch to English"
       >
         🇺🇸 EN
-      </button>
+      </motion.button>
     </div>
   )
 }

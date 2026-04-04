@@ -11,16 +11,16 @@ export default function AdventurePage() {
       {/* Hero header */}
       <div className="px-4 pt-6 pb-4 text-center">
         <motion.div
-          className="text-5xl mb-2"
-          animate={{ y: [0, -6, 0] }}
+          className="text-6xl mb-2 drop-shadow-lg"
+          animate={{ y: [0, -8, 0], rotate: [0, -3, 3, 0] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
         >
           {'\uD83C\uDFD5\uFE0F'}
         </motion.div>
-        <h1 className="text-2xl font-extrabold bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
+        <h1 className="text-2xl font-extrabold bg-gradient-to-r from-[#4E7CFF] via-[#7C5CFC] to-[#FF6B9D] bg-clip-text text-transparent">
           {'\u5192\u9669\u6A21\u5F0F'}
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-500 mt-1 font-medium">
           Adventure Mode — {'\u7528\u6570\u5B66\u89E3\u5F00\u6545\u4E8B\u7684\u8C1C\u9898'}
         </p>
       </div>
@@ -35,14 +35,14 @@ export default function AdventurePage() {
           <section key={catKey} className="mb-6 px-4">
             {/* Category header */}
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg">{meta.icon}</span>
+              <span className="text-xl">{meta.icon}</span>
               <div>
-                <h2 className="text-sm font-bold text-gray-700 leading-tight">
+                <h2 className="text-sm font-extrabold text-gray-700 leading-tight">
                   {meta.label_zh}
                 </h2>
                 <p className="text-[11px] text-gray-400">{meta.label_en}</p>
               </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-gray-200 to-transparent ml-2" />
+              <div className="flex-1 h-px bg-gradient-to-r from-orange-200 to-transparent ml-2" />
             </div>
 
             {/* Horizontal scroll of adventure cards */}

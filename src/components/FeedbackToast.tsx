@@ -9,15 +9,9 @@ interface FeedbackToastProps {
 }
 
 const toastStyles = {
-  success: 'bg-green-500 text-white',
-  error: 'bg-red-400 text-white',
-  info: 'bg-blue-400 text-white',
-}
-
-const toastIcons = {
-  success: '\ud83c\udf1f',
-  error: '\ud83e\udd14',
-  info: '\ud83d\udcad',
+  success: 'bg-gradient-to-r from-emerald-400 to-green-500 text-white shadow-emerald-200/60',
+  error: 'bg-gradient-to-r from-red-400 to-rose-500 text-white shadow-red-200/60',
+  info: 'bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow-sky-200/60',
 }
 
 export default function FeedbackToast({
@@ -34,7 +28,7 @@ export default function FeedbackToast({
       setShow(true)
       const timer = setTimeout(() => {
         setShow(false)
-        setTimeout(onHide, 300) // wait for exit animation
+        setTimeout(onHide, 300)
       }, duration)
       return () => clearTimeout(timer)
     }
@@ -52,8 +46,7 @@ export default function FeedbackToast({
         ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
       `}
     >
-      <span className="text-lg mr-2">{toastIcons[type]}</span>
-      <span className="font-medium">{message}</span>
+      <span className="font-bold text-sm">{message}</span>
     </div>
   )
 }

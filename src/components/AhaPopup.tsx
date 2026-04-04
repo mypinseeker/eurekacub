@@ -33,23 +33,23 @@ export default function AhaPopup({
         className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${show ? 'opacity-100' : 'opacity-0'}`}
       />
 
-      {/* Popup */}
+      {/* Popup — fun celebration card */}
       <div
         className={`
           relative pointer-events-auto
           bg-gradient-to-br from-yellow-100 via-amber-50 to-orange-100
-          border-4 border-yellow-300 rounded-3xl shadow-2xl
+          border-4 border-yellow-300 rounded-[28px] shadow-2xl shadow-orange-200/40
           px-8 py-10 mx-4 max-w-sm text-center
           transition-all duration-500
           ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}
         `}
       >
         {/* Celebration emoji */}
-        <div className="text-6xl mb-4 animate-bounce">{'\ud83c\udf1f'}</div>
+        <div className="text-6xl mb-4 animate-bounce drop-shadow-lg">{'\ud83c\udf1f'}</div>
 
         {/* Aha text */}
-        <h2 className="text-2xl font-extrabold text-amber-800 mb-2">Aha!</h2>
-        <p className="text-base text-amber-700 leading-relaxed">{message}</p>
+        <h2 className="text-3xl font-extrabold bg-gradient-to-r from-[#FF6B6B] to-[#FFB627] bg-clip-text text-transparent mb-2">Aha!</h2>
+        <p className="text-base text-amber-800 leading-relaxed font-medium">{message}</p>
 
         {/* Sparkles decoration */}
         <div className="absolute -top-3 -left-3 text-2xl animate-spin" style={{ animationDuration: '3s' }}>
@@ -58,7 +58,7 @@ export default function AhaPopup({
         <div className="absolute -top-3 -right-3 text-2xl animate-spin" style={{ animationDuration: '2s' }}>
           {'\u2728'}
         </div>
-        <div className="absolute -bottom-3 left-1/2 text-2xl animate-pulse">{'\ud83c\udf89'}</div>
+        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-2xl animate-pulse">{'\ud83c\udf89'}</div>
       </div>
     </div>
   )

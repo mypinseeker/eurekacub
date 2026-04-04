@@ -78,7 +78,6 @@ export default function AdventurePlayPage() {
     if (currentStageIndex < totalStages - 1) {
       goToStage(currentStageIndex + 1)
     } else {
-      // Adventure complete
       setToast({ message: '\uD83C\uDF89 \u5192\u9669\u5B8C\u6210\uFF01Adventure Complete!', type: 'success', visible: true })
       setTimeout(() => navigate('/adventures'), 2000)
     }
@@ -88,15 +87,23 @@ export default function AdventurePlayPage() {
   if (!adventure || !stage) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8">
-        <span className="text-6xl mb-4">{'\uD83D\uDE45'}</span>
-        <h2 className="text-xl font-bold text-gray-700 mb-2">{'\u627E\u4E0D\u5230\u8FD9\u4E2A\u5192\u9669'}</h2>
-        <p className="text-gray-400 text-sm mb-4">Adventure not found</p>
-        <button
-          onClick={() => navigate('/adventures')}
-          className="px-6 py-2 rounded-xl bg-amber-500 text-white font-bold hover:bg-amber-600 transition-colors"
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300 }}
+          className="w-20 h-20 rounded-full bg-gradient-to-br from-red-300 to-orange-400 flex items-center justify-center mb-4 shadow-lg"
         >
-          {'\u8FD4\u56DE\u5192\u9669\u5217\u8868'} Back to Adventures
-        </button>
+          <span className="text-4xl">{'\uD83D\uDE45'}</span>
+        </motion.div>
+        <h2 className="text-xl font-extrabold text-gray-700 mb-2">{'\u627E\u4E0D\u5230\u8FD9\u4E2A\u5192\u9669'}</h2>
+        <p className="text-gray-400 text-sm mb-4">Adventure not found</p>
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate('/adventures')}
+          className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#FF6B6B] to-[#FF8C42] text-white font-bold shadow-lg shadow-orange-200/50 hover:shadow-xl transition-shadow"
+        >
+          {'\u8FD4\u56DE\u5192\u9669\u5217\u8868'}
+        </motion.button>
       </div>
     )
   }
@@ -111,21 +118,21 @@ export default function AdventurePlayPage() {
           <div className="flex items-center gap-2">
             <span className="text-xl">{adventure.icon}</span>
             <div>
-              <h1 className="text-sm font-bold text-gray-800 leading-tight">
+              <h1 className="text-sm font-extrabold text-gray-800 leading-tight">
                 {adventure.title_zh}
               </h1>
               <p className="text-[11px] text-gray-400">{adventure.title_en}</p>
             </div>
           </div>
-          <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
-            {currentStageIndex + 1} / {totalStages}
+          <span className="text-xs font-bold text-white bg-gradient-to-r from-[#FF6B6B] to-[#FF8C42] px-2.5 py-1 rounded-full shadow-sm">
+            {currentStageIndex + 1}/{totalStages}
           </span>
         </div>
 
         {/* Progress bar */}
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="w-full h-2.5 bg-orange-100 rounded-full overflow-hidden">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-500"
+            className="h-full rounded-full bg-gradient-to-r from-[#FFB627] via-[#FF8C42] to-[#FF6B6B]"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -147,15 +154,15 @@ export default function AdventurePlayPage() {
         >
           <div className="flex items-start gap-3">
             {/* Character avatar */}
-            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-2xl border-2 border-amber-200">
+            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-yellow-300 to-orange-400 shadow-md flex items-center justify-center text-2xl border-3 border-white">
               {stage.character}
             </div>
 
             {/* Speech bubble */}
-            <div className="relative flex-1 bg-white rounded-2xl rounded-tl-sm p-4 shadow-sm border border-gray-100">
+            <div className="relative flex-1 bg-white rounded-3xl rounded-tl-lg p-4 shadow-md border-2 border-orange-100">
               {/* Bubble tail */}
-              <div className="absolute -left-2 top-3 w-3 h-3 bg-white border-l border-b border-gray-100 rotate-45" />
-              <p className="text-sm text-gray-700 leading-relaxed relative z-10">
+              <div className="absolute -left-2 top-3 w-3 h-3 bg-white border-l-2 border-b-2 border-orange-100 rotate-45" />
+              <p className="text-sm text-gray-700 leading-relaxed relative z-10 font-medium">
                 {stage.narrative_zh}
               </p>
               <p className="text-[11px] text-gray-400 mt-1 relative z-10">
@@ -180,9 +187,9 @@ export default function AdventurePlayPage() {
             className="w-full max-w-lg"
           >
             {RendererComponent ? (
-              <div className="bg-white/60 rounded-2xl p-4 border border-gray-100 shadow-sm">
+              <div className="bg-white/80 rounded-3xl p-4 border-2 border-orange-100 shadow-md">
                 <div className="flex items-center gap-1.5 mb-3">
-                  <span className="text-xs font-semibold text-gray-400">
+                  <span className="text-xs font-bold text-gray-400">
                     {rendererEntry?.name.zh}
                   </span>
                   <span className="text-[10px] text-gray-300">|</span>
@@ -200,9 +207,15 @@ export default function AdventurePlayPage() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <span className="text-4xl block mb-2">{'\uD83D\uDEA7'}</span>
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="text-4xl mb-2"
+                >
+                  {'\uD83D\uDEA7'}
+                </motion.div>
                 <p className="text-sm text-gray-400">
-                  {'\u6E32\u67D3\u5668'} <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded">{stage.renderer_id}</code> {'\u52A0\u8F7D\u4E2D...'}
+                  {'\u6E32\u67D3\u5668'} <code className="text-xs bg-orange-50 px-1.5 py-0.5 rounded-lg border border-orange-100">{stage.renderer_id}</code> {'\u52A0\u8F7D\u4E2D...'}
                 </p>
               </div>
             )}
@@ -214,7 +227,8 @@ export default function AdventurePlayPage() {
       <div className="px-4 py-4 pb-8">
         <div className="flex justify-between items-center">
           {/* Back button */}
-          <button
+          <motion.button
+            whileTap={{ scale: 0.93 }}
             onClick={() => {
               if (currentStageIndex > 0) {
                 goToStage(currentStageIndex - 1)
@@ -222,10 +236,10 @@ export default function AdventurePlayPage() {
                 navigate('/adventures')
               }
             }}
-            className="px-4 py-2.5 rounded-xl bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-colors"
+            className="px-4 py-2.5 rounded-2xl bg-white text-gray-600 text-sm font-bold border-2 border-gray-100 shadow-sm hover:shadow-md transition-all"
           >
             {currentStageIndex > 0 ? '\u2190 \u4E0A\u4E00\u5173' : '\u2190 \u8FD4\u56DE'}
-          </button>
+          </motion.button>
 
           {/* Stage dots */}
           <div className="flex gap-1.5">
@@ -236,9 +250,9 @@ export default function AdventurePlayPage() {
                 className={`
                   w-2.5 h-2.5 rounded-full transition-all duration-300
                   ${i === currentStageIndex
-                    ? 'bg-amber-500 scale-125'
+                    ? 'bg-[#FF6B6B] scale-125 shadow-sm shadow-red-200'
                     : i < currentStageIndex
-                      ? 'bg-amber-300'
+                      ? 'bg-[#FFB627]'
                       : 'bg-gray-200'
                   }
                 `}
@@ -249,12 +263,13 @@ export default function AdventurePlayPage() {
           {/* Next / Complete button */}
           <motion.button
             onClick={handleNext}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.93 }}
+            whileHover={puzzleSolved ? { scale: 1.05 } : undefined}
             className={`
-              px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300
+              px-5 py-2.5 rounded-2xl text-sm font-bold transition-all duration-300
               ${puzzleSolved
-                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-200/50 hover:shadow-xl'
-                : 'bg-amber-100 text-amber-400 cursor-default'
+                ? 'bg-gradient-to-r from-[#FF6B6B] to-[#FF8C42] text-white shadow-lg shadow-orange-200/50 hover:shadow-xl'
+                : 'bg-gray-100 text-gray-300 cursor-default'
               }
             `}
             disabled={!puzzleSolved}
@@ -267,7 +282,6 @@ export default function AdventurePlayPage() {
         </div>
       </div>
 
-      {/* Feedback toast */}
       <FeedbackToast
         message={toast.message}
         type={toast.type}

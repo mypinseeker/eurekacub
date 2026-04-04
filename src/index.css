@@ -1,63 +1,112 @@
 @import "tailwindcss";
 
-/* EurekaCub kid-friendly theme */
+/* EurekaCub — Bright & Playful Kids Theme */
 :root {
-  --color-primary: #f59e0b;
-  --color-primary-light: #fef3c7;
-  --color-secondary: #8b5cf6;
-  --color-accent: #ec4899;
-  --color-bg-warm: #fffbeb;
-  --color-text: #451a03;
+  /* 🎨 Kids-friendly vibrant palette */
+  --color-coral: #FF6B6B;
+  --color-orange: #FF8C42;
+  --color-yellow: #FFB627;
+  --color-green: #00C48C;
+  --color-teal: #2EC4B6;
+  --color-sky: #00B4D8;
+  --color-blue: #4E7CFF;
+  --color-purple: #7C5CFC;
+  --color-pink: #FF6B9D;
+  --color-red: #FF5757;
+
+  /* Background & surface */
+  --color-bg: #FFF5EB;
+  --color-bg-warm: #FFF0E0;
+  --color-surface: #FFFFFF;
+  --color-text: #2D2D3A;
+  --color-text-soft: #8E8EA0;
+  --color-border: #F0E6DB;
+
   --font-display: 'Nunito', system-ui, -apple-system, sans-serif;
 }
 
 html {
   -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-display);
-  background: var(--color-bg-warm);
+  background: var(--color-bg);
   color: var(--color-text);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Remove default button focus outlines, use custom */
+/* Fun focus ring */
 button:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--color-coral);
   outline-offset: 2px;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
-/* Fun selection color */
+/* Fun selection */
 ::selection {
-  background: #fde68a;
-  color: #92400e;
+  background: #FFE0B2;
+  color: #E65100;
 }
 
-/* Bounce keyframe for custom use */
+/* ── Playful keyframes ─────────────────────────── */
 @keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-3deg); }
-  75% { transform: rotate(3deg); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes rainbow-border {
+  0% { border-color: var(--color-coral); }
+  25% { border-color: var(--color-yellow); }
+  50% { border-color: var(--color-green); }
+  75% { border-color: var(--color-purple); }
+  100% { border-color: var(--color-coral); }
 }
 
 .animate-wiggle {
-  animation: wiggle 1s ease-in-out infinite;
+  animation: wiggle 0.8s ease-in-out infinite;
 }
 
 .animate-float {
   animation: float 2s ease-in-out infinite;
+}
+
+.animate-pop {
+  animation: pop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 245, 235, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Scrollbar hide */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
