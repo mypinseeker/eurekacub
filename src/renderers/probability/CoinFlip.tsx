@@ -25,7 +25,13 @@ import {
 
 // ── Component ───────────────────────────────────────────────
 
-export default function CoinFlip({ puzzle, onCorrect, onError, onAha, onComplete }: RendererProps) {
+export default function CoinFlip(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // CoinFlipInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks
+  // than during the previous render" the instant a child pressed Start — every puzzle
+  // white-screened. This wrapper has exactly one unconditional hook, so an early return
+  // here is safe and CoinFlipInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
   if (showIntro) {
@@ -44,6 +50,11 @@ export default function CoinFlip({ puzzle, onCorrect, onError, onAha, onComplete
       />
     )
   }
+
+  return <CoinFlipInner {...props} />
+}
+
+function CoinFlipInner({ puzzle, onCorrect, onError, onAha, onComplete }: RendererProps) {
 
   const puzzleData = parsePuzzleData(puzzle)
 

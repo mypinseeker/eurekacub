@@ -4,8 +4,8 @@
 > Don't teach formulas — let kids understand concepts through play.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-513%20passed-brightgreen.svg)](#testing)
-[![i18n](https://img.shields.io/badge/i18n-5%20languages-blue.svg)](#internationalization)
+[![Tests](https://img.shields.io/badge/tests-534%20unit-brightgreen.svg)](#testing)
+[![i18n](https://img.shields.io/badge/i18n-2%20languages-blue.svg)](#internationalization)
 
 EurekaCub 是一个**开源儿童互动科学探索平台**，让 6-12 岁的小朋友通过动手操作来理解数学与科学的本质——对称、分数、几何、导数、方程、矩阵、序列、概率。
 
@@ -99,7 +99,7 @@ npm run preview   # 预览构建结果
 ## <a name="testing"></a>🧪 Testing
 
 ```bash
-# 单元测试（434 tests, 20 suites）
+# 单元测试（534 tests, 22 suites）
 npm run test
 
 # E2E 测试（79 tests, 5 suites）
@@ -111,13 +111,15 @@ npm run test && npm run test:e2e
 
 ### 测试覆盖
 
-| 类型 | 数量 | 框架 |
-|------|------|------|
-| Unit tests | 434 | Vitest |
-| E2E tests | 79 | Playwright (Chromium) |
-| **Total** | **513** | — |
+| 类型 | 数量 | 状态 | 框架 |
+|------|------|------|------|
+| Unit tests | 534 | ✅ 全绿（2026-09-07 实测） | Vitest |
+| E2E tests | 79 | ⚠️ 部分失败，修复中 | Playwright (Chromium) |
 
-所有测试用例均追溯到 PRD 需求编号 (FR-xx / NFR-xx)，详见 `docs/TEST_CHECKLIST.md`。
+大部分测试用例追溯到 PRD 需求编号 (FR-xx / NFR-xx)，详见 `docs/TEST_CHECKLIST.md`。
+
+> ℹ️ E2E 目前并非全绿。README 曾长期标称 "513 passed"，但那个数字没有对应任何一次实际运行结果。
+> 这里只写实际跑出来的数字；E2E 的具体失败项见 `docs/PRD-content-gaps-v1.md` 附录。
 
 ---
 
@@ -156,7 +158,7 @@ eurekacub/
 │   ├── components/       # 通用 UI 组件
 │   ├── hooks/            # React hooks
 │   ├── engine/           # 业务逻辑 (进度、反馈、难度调节)
-│   ├── i18n/             # 5 语言翻译文件
+│   ├── i18n/             # UI 翻译文件 (zh / en)
 │   └── api/              # Supabase 接口
 ├── content/
 │   ├── puzzles/          # 8 模块的 puzzle JSON 文件
@@ -172,17 +174,21 @@ eurekacub/
 
 ## <a name="internationalization"></a>🌍 Internationalization
 
-EurekaCub 支持 5 种语言：
+EurekaCub 目前支持 **2 种语言**：
 
 | 语言 | 代码 | 状态 |
 |------|------|------|
 | 🇨🇳 中文 | `zh` | ✅ 默认语言 |
 | 🇺🇸 English | `en` | ✅ 完整 |
-| 🇪🇸 Español | `es` | ✅ 完整 |
-| 🇫🇷 Français | `fr` | ✅ 完整 |
-| 🇩🇪 Deutsch | `de` | ✅ 完整 |
+| 🇪🇸 Español | `es` | 📋 计划中 |
+| 🇫🇷 Français | `fr` | 📋 计划中 |
+| 🇩🇪 Deutsch | `de` | 📋 计划中 |
 
 在设置中一键切换，或在家长面板的语言下拉菜单中选择。
+
+> ℹ️ **说明**：UI 层翻译位于 `src/i18n/`（当前仅 `zh.json` / `en.json`）；
+> 内容层（puzzle 的 `task`/`hints`、adventure 的 `narrative`）为 `{zh, en}` 结构。
+> 新增一种语言需要同时补 UI 层与内容层。西班牙语为下一个目标语言。
 
 ---
 
@@ -275,10 +281,10 @@ EurekaCub 的设计基于 10 大教育心理学理论：
 
 **Key features:**
 - 8 interactive modules (Symmetry, Fractions, Geometry, Derivatives, Equations, Matrices, Sequences, Probability)
-- 17 story-driven adventures linking modules into narratives
+- 17 story-driven adventures planned, **6 currently implemented**
 - Parent panel with learning insights (no scores, no rankings)
-- 5 languages (Chinese, English, Spanish, French, German)
-- 513 automated tests (434 unit + 79 E2E)
+- 2 languages (Chinese, English) — Spanish, French, German planned
+- 534 unit tests passing; 79 E2E tests (some currently failing — see Testing)
 - Zero-anxiety design: no timers, no punishments, no competitive pressure
 
 **Quick start:**

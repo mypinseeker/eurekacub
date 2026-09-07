@@ -6,19 +6,19 @@
   "renderer": "balance-scale",
   "tags": ["multiplication", "advanced"],
   "task": {
-    "zh": "左边有3个一样的砝码（每个重?），右边有15。每个?重多少？",
-    "en": "Left has 3 identical weights (?), right has 15. How heavy is each ?"
+    "zh": "左边已经有两个5，再放上第三个一样重的砝码就能和右边的15平衡。这个?有多重？",
+    "en": "Left already has two 5s. Add a third weight of the same size to balance the 15 on the right. How heavy is ?"
   },
   "data": {
-    "leftSide": [],
+    "leftSide": [5, 5],
     "rightSide": [15],
     "unknown": 5,
     "unknownSide": "left",
     "options": [3, 4, 5, 6, 7]
   },
   "hints": [
-    { "zh": "3×?=15, ?是多少？", "en": "3×?=15, what is ?" },
-    { "zh": "15除以3等于几？", "en": "What is 15 divided by 3?" }
+    { "zh": "三个一样的砝码合起来是15，一个是多少？", "en": "Three identical weights make 15 — how much is one?" },
+    { "zh": "5和5已经是10了，还差多少才到15？", "en": "5 and 5 make 10 — how much more to reach 15?" }
   ],
   "meta": {
     "author": "eurekacub-team",

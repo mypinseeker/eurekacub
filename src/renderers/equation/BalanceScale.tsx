@@ -328,12 +328,13 @@ function Pan({
 
 /* ─── Main component ──────────────────────────────────────── */
 
-export default function BalanceScale({
-  puzzle,
-  onCorrect,
-  onError,
-  onComplete,
-}: RendererProps) {
+export default function BalanceScale(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // BalanceScaleInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks
+  // than during the previous render" the instant a child pressed Start — every puzzle
+  // white-screened. This wrapper has exactly one unconditional hook, so an early return
+  // here is safe and BalanceScaleInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
   if (showIntro) {
@@ -352,6 +353,16 @@ export default function BalanceScale({
       />
     )
   }
+
+  return <BalanceScaleInner {...props} />
+}
+
+function BalanceScaleInner({
+  puzzle,
+  onCorrect,
+  onError,
+  onComplete,
+}: RendererProps) {
 
   /* ── Parse puzzle data ──────────────────────────────────── */
   const puzzleData = useMemo<EquationPuzzleData>(() => {

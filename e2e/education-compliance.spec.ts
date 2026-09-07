@@ -12,6 +12,7 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { dismissPuzzleIntro } from './helpers'
 import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
@@ -39,6 +40,10 @@ test.describe('10.1 P1 Concrete-first: no formulas on initial render', () => {
       await page.goto(`/module/${modId}/play/L1`)
       // Wait for content to load
       await page.waitForLoadState('networkidle')
+
+      // Since commit 05a9878 every renderer opens with a PuzzleIntro instructions screen.
+      // The "concrete-first" assertions below are about the *interactive* view, so get past it.
+      await dismissPuzzleIntro(page)
 
       // The puzzle area should be present
       const puzzleArea = page.locator('.flex-1.flex')

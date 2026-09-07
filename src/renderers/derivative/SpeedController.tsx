@@ -186,7 +186,35 @@ function roundRect(
 
 // ── Component ───────────────────────────────────────────────
 
-export default function SpeedController({
+export default function SpeedController(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // SpeedControllerInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks than
+  // during the previous render" the instant a child pressed Start — every puzzle white-screened.
+  // This wrapper has exactly one unconditional hook, so an early return here is safe and
+  // SpeedControllerInner always mounts with a stable hook order.
+  const [showIntro, setShowIntro] = useState(true)
+
+  // Pure re-derivation (no hooks) — only what the intro screen needs.
+  const themeMeta = THEME_META[parsePuzzleData(props.puzzle).theme] ?? THEME_META.car
+
+  if (showIntro) {
+    return (
+      <PuzzleIntro
+        icon={themeMeta.icon}
+        title={themeMeta.title}
+        goal={themeMeta.goal}
+        howTo={themeMeta.howTo}
+        insight={themeMeta.insight}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
+  return <SpeedControllerInner {...props} />
+}
+
+function SpeedControllerInner({
   puzzle,
   onCorrect,
   onError,
@@ -202,24 +230,9 @@ export default function SpeedController({
   const xAxisLabel = puzzleData.xAxisLabel ?? themeMeta.xLabel
 
   // ── State ─────────────────────────────────────────────────
-  const [showIntro, setShowIntro] = useState(true)
   const [phase, setPhase] = useState<Phase>('ready')
   const [speed, setSpeed] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
-
-  // Show intro overlay before game
-  if (showIntro) {
-    return (
-      <PuzzleIntro
-        icon={themeMeta.icon}
-        title={themeMeta.title}
-        goal={themeMeta.goal}
-        howTo={themeMeta.howTo}
-        insight={themeMeta.insight}
-        onStart={() => setShowIntro(false)}
-      />
-    )
-  }
 
   // Refs for values accessed in the rAF draw loop
   const phaseRef = useRef<Phase>('ready')

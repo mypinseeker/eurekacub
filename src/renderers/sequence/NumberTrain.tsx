@@ -35,7 +35,13 @@ const OPTION_BG = '#fff'
 const OPTION_BORDER = '#ccc'
 const OPTION_SELECTED = '#ffd54f'
 
-export default function NumberTrain({ puzzle, onCorrect, onError, onAha, onComplete }: RendererProps) {
+export default function NumberTrain(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // NumberTrainInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks
+  // than during the previous render" the instant a child pressed Start — every puzzle
+  // white-screened. This wrapper has exactly one unconditional hook, so an early return
+  // here is safe and NumberTrainInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
   if (showIntro) {
@@ -54,6 +60,11 @@ export default function NumberTrain({ puzzle, onCorrect, onError, onAha, onCompl
       />
     )
   }
+
+  return <NumberTrainInner {...props} />
+}
+
+function NumberTrainInner({ puzzle, onCorrect, onError, onAha, onComplete }: RendererProps) {
 
   const data = (puzzle.data ?? puzzle) as unknown as SequencePuzzleData
   const { sequence = [], blanks = [], options = [] } = data ?? {}

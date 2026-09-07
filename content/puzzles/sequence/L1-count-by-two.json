@@ -10,7 +10,7 @@
     "en": "Number train departing! Each carriage is 2 more than the last. Fill in the missing numbers!"
   },
   "data": {
-    "sequence": [2, 4, 6, -1, 10, 12],
+    "sequence": [2, 4, 6, 8, 10, 12],
     "blanks": [3],
     "rule": "+2",
     "options": [5, 7, 8, 9]

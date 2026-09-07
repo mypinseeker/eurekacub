@@ -10,7 +10,7 @@
     "en": "Fibonacci code train! Each carriage equals the sum of the previous two!"
   },
   "data": {
-    "sequence": [1, 1, 2, 3, -1, 8, -1],
+    "sequence": [1, 1, 2, 3, 5, 8, 13],
     "blanks": [4, 6],
     "rule": "fibonacci",
     "options": [4, 5, 7, 13, 11]

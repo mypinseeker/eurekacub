@@ -216,12 +216,13 @@ function drawCelebration(
  * reflected in real-time on the other side, building intuition for
  * line symmetry.
  */
-export default function MirrorCanvas({
-  puzzle,
-  onCorrect,
-  onAha,
-  onComplete,
-}: RendererProps) {
+export default function MirrorCanvas(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // MirrorCanvasInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks
+  // than during the previous render" the instant a child pressed Start — every puzzle
+  // white-screened. This wrapper has exactly one unconditional hook, so an early return
+  // here is safe and MirrorCanvasInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
   if (showIntro) {
@@ -240,6 +241,16 @@ export default function MirrorCanvas({
       />
     )
   }
+
+  return <MirrorCanvasInner {...props} />
+}
+
+function MirrorCanvasInner({
+  puzzle,
+  onCorrect,
+  onAha,
+  onComplete,
+}: RendererProps) {
 
   /* ---- Puzzle config ---- */
   const config = useMemo(() => parsePuzzle(puzzle), [puzzle])

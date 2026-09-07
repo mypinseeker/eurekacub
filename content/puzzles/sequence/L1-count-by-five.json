@@ -10,7 +10,7 @@
     "en": "This train jumps by 5! Find the missing stops!"
   },
   "data": {
-    "sequence": [5, 10, -1, 20, 25, -1],
+    "sequence": [5, 10, 15, 20, 25, 30],
     "blanks": [2, 5],
     "rule": "+5",
     "options": [12, 15, 22, 30, 35]

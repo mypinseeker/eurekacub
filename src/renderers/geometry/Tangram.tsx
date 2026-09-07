@@ -296,13 +296,13 @@ function PieceRenderer({ piece, isDragging, isLongPressRotating }: PieceRenderer
  *
  * Pieces snap when close enough to their target slot.
  */
-export default function Tangram({
-  puzzle,
-  onCorrect,
-  onError,
-  onAha,
-  onComplete,
-}: RendererProps) {
+export default function Tangram(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // TangramInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks
+  // than during the previous render" the instant a child pressed Start — every puzzle
+  // white-screened. This wrapper has exactly one unconditional hook, so an early return
+  // here is safe and TangramInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
   if (showIntro) {
@@ -322,6 +322,17 @@ export default function Tangram({
       />
     )
   }
+
+  return <TangramInner {...props} />
+}
+
+function TangramInner({
+  puzzle,
+  onCorrect,
+  onError,
+  onAha,
+  onComplete,
+}: RendererProps) {
 
   const config = useMemo(() => parsePuzzle(puzzle), [puzzle])
   const snapTolerance = config.difficulty <= 1 ? SNAP_TOLERANCE_L1 : SNAP_TOLERANCE_L2

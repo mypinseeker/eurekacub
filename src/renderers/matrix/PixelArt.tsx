@@ -326,13 +326,13 @@ function drawHUD(
  * transformations (rotate, flip, transpose) to match a target pattern,
  * building intuition for linear algebra concepts.
  */
-export default function PixelArt({
-  puzzle,
-  onCorrect,
-  onError,
-  onAha,
-  onComplete,
-}: RendererProps) {
+export default function PixelArt(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // PixelArtInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks
+  // than during the previous render" the instant a child pressed Start — every puzzle
+  // white-screened. This wrapper has exactly one unconditional hook, so an early return
+  // here is safe and PixelArtInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
   if (showIntro) {
@@ -358,6 +358,17 @@ export default function PixelArt({
       />
     )
   }
+
+  return <PixelArtInner {...props} />
+}
+
+function PixelArtInner({
+  puzzle,
+  onCorrect,
+  onError,
+  onAha,
+  onComplete,
+}: RendererProps) {
 
   /* ---- Puzzle config ---- */
   const config = useMemo(() => parsePuzzle(puzzle), [puzzle])

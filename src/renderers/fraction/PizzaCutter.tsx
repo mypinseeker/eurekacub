@@ -95,12 +95,13 @@ const TOPPINGS = generateToppings()
 
 /* ─── Component ───────────────────────────────────────────── */
 
-export default function PizzaCutter({
-  puzzle,
-  onCorrect,
-  onError,
-  onComplete,
-}: RendererProps) {
+export default function PizzaCutter(props: RendererProps) {
+  // The intro screen deliberately lives in this thin wrapper.
+  // PizzaCutterInner declares many hooks. Returning early from *inside* it (as this file did
+  // before) changed the hook count between renders, so React threw "Rendered more hooks
+  // than during the previous render" the instant a child pressed Start — every puzzle
+  // white-screened. This wrapper has exactly one unconditional hook, so an early return
+  // here is safe and PizzaCutterInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
   if (showIntro) {
@@ -119,6 +120,16 @@ export default function PizzaCutter({
       />
     )
   }
+
+  return <PizzaCutterInner {...props} />
+}
+
+function PizzaCutterInner({
+  puzzle,
+  onCorrect,
+  onError,
+  onComplete,
+}: RendererProps) {
 
   // Parse puzzle data with defaults
   const puzzleData = useMemo<FractionPuzzleData>(() => {

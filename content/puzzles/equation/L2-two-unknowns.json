@@ -6,14 +6,14 @@
   "renderer": "balance-scale",
   "tags": ["algebra", "challenge"],
   "task": {
-    "zh": "左边有?和3，右边有2和?。两个?是同一个数！它是多少？",
-    "en": "Left has ? and 3, right has 2 and ?. Both ? are the same! What is it?"
+    "zh": "两边本来各有一个一样的?，先把它们同时拿掉。现在左边是3，右边是2和?。?是多少？",
+    "en": "Both sides had one identical ? — take them off together. Now left is 3, right is 2 and ?. What is ?"
   },
   "data": {
     "leftSide": [3],
     "rightSide": [2],
-    "unknown": 0,
-    "unknownSide": "left",
+    "unknown": 1,
+    "unknownSide": "right",
     "options": [0, 1, 2, 3, 5]
   },
   "hints": [

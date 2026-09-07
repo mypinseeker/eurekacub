@@ -10,7 +10,7 @@
     "en": "The magical doubling train! Each carriage is double the last!"
   },
   "data": {
-    "sequence": [1, 2, 4, -1, 16, 32],
+    "sequence": [1, 2, 4, 8, 16, 32],
     "blanks": [3],
     "rule": "x2",
     "options": [6, 8, 10, 12]
