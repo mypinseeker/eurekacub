@@ -117,6 +117,11 @@ function ToggleRow({
       </span>
       <button
         onClick={onToggle}
+        // A switch exposes its state to assistive tech — and lets tests assert the state
+        // rather than the colour, which silently broke them during the 097da05 restyle.
+        role="switch"
+        aria-checked={enabled}
+        aria-label={label}
         className={`
           w-12 h-7 rounded-full transition-colors duration-200 relative
           ${enabled ? 'bg-[#00C48C]' : 'bg-gray-300'}

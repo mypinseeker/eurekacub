@@ -121,25 +121,27 @@ test.describe('Parent Panel', () => {
   })
 
   test('8.4.4 — sound toggle can be clicked', async ({ page }) => {
-    // ParentPanel's ToggleRow uses bg-blue-500 (on) / bg-gray-300 (off).
-    // Target the in-page toggle via the blue-500 class to avoid the off-screen SettingsDrawer.
-    const soundToggle = page.locator('button.bg-blue-500, button.bg-gray-300').first()
+    // Target by role and state rather than by colour. The previous selector pinned
+    // `button.bg-blue-500`, which stopped matching anything when 097da05 restyled the toggle to
+    // bg-[#00C48C] — so the test silently started asserting against the wrong element.
+    // ParentPanel renders before the SettingsDrawer in the DOM, so `.first()` is the in-page one.
+    const soundToggle = page.getByRole('switch', { name: /音效|Sound/ }).first()
 
     await soundToggle.scrollIntoViewIfNeeded()
     await expect(soundToggle).toBeVisible()
 
-    // Default is ON (bg-blue-500)
-    await expect(soundToggle).toHaveClass(/bg-blue-500/)
+    // Default is ON
+    await expect(soundToggle).toHaveAttribute('aria-checked', 'true')
 
     // Click to toggle off
     await soundToggle.click()
     await page.waitForTimeout(200)
-    await expect(soundToggle).toHaveClass(/bg-gray-300/)
+    await expect(soundToggle).toHaveAttribute('aria-checked', 'false')
 
     // Click to toggle back on
     await soundToggle.click()
     await page.waitForTimeout(200)
-    await expect(soundToggle).toHaveClass(/bg-blue-500/)
+    await expect(soundToggle).toHaveAttribute('aria-checked', 'true')
   })
 
   test('8.4.4 — language select can be changed', async ({ page }) => {

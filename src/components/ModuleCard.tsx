@@ -51,8 +51,17 @@ export default function ModuleCard({ module, progress = 0 }: ModuleCardProps) {
       </h3>
       <p className="relative text-[11px] text-white/70 font-medium mb-2">{module.name_en}</p>
 
-      {/* Progress bar */}
-      <div className="relative w-full h-1.5 bg-white/25 rounded-full overflow-hidden">
+      {/* Progress bar. The role/aria attributes are what tests and screen readers key off —
+          the bar's height changed from h-2 to h-1.5 in the 097da05 restyle and a selector
+          pinned to the old class silently stopped matching anything. */}
+      <div
+        role="progressbar"
+        aria-valuenow={progress}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`${module.name_en} progress`}
+        className="relative w-full h-1.5 bg-white/25 rounded-full overflow-hidden"
+      >
         <div
           className="h-full rounded-full bg-white/80 transition-all duration-500"
           style={{ width: `${progress}%` }}

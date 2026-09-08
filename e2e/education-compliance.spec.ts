@@ -339,6 +339,8 @@ test.describe('10.8 P10 Visual self-correction: modules use visual feedback', ()
     const l1Button = page.locator('button').filter({ hasText: /L1/ }).first()
     await l1Button.click()
     await page.waitForLoadState('networkidle')
+    // The interactive area sits behind an instructions screen, which has no SVG of its own.
+    await dismissPuzzleIntro(page)
     await page.waitForTimeout(500)
 
     const bodyText = await page.locator('body').innerText()
@@ -375,6 +377,7 @@ test.describe('10.8 P10 Visual self-correction: modules use visual feedback', ()
     const l1Button = page.locator('button').filter({ hasText: /L1/ }).first()
     await l1Button.click()
     await page.waitForLoadState('networkidle')
+    await dismissPuzzleIntro(page)
     await page.waitForTimeout(500)
 
     const bodyText = await page.locator('body').innerText()
@@ -404,6 +407,7 @@ test.describe('10.8 P10 Visual self-correction: modules use visual feedback', ()
     const l1Button = page.locator('button').filter({ hasText: /L1/ }).first()
     await l1Button.click()
     await page.waitForLoadState('networkidle')
+    await dismissPuzzleIntro(page)
     await page.waitForTimeout(500)
 
     const bodyText = await page.locator('body').innerText()
@@ -483,9 +487,19 @@ test.describe('4.5.7 Progress display: stars and completion, not scores or grade
     expect(bodyText).not.toContain('分数：')
     expect(bodyText).not.toContain('得分')
 
-    // Progress bars exist as styled divs (w-full h-2 bg-white/60 rounded-full)
-    const progressBars = page.locator('.h-2.rounded-full')
-    const barCount = await progressBars.count()
-    expect(barCount).toBeGreaterThan(0)
+    // Every module card renders a progress bar. Match on the ARIA role rather than on utility
+    // classes — the bar was h-2 before the 097da05 restyle and h-1.5 after, and pinning the class
+    // made this assertion match zero elements without anyone noticing.
+    //
+    // The homepage shows one track at a time plus the shared modules, so the default
+    // (explorer) view holds 4 cards: m1 + m2 explorer, m7 + m8 shared.
+    const progressBars = page.getByRole('progressbar')
+    await expect.poll(() => progressBars.count()).toBe(4)
+
+    // Switching tracks must not lose the bars — challenger holds m3-m6, plus the same 2 shared.
+    // Poll rather than sleep: the outgoing track is still mounted mid-transition, so a fixed
+    // wait can sample a frame where both sets of cards are on the page.
+    await page.getByRole('button', { name: /🚀/ }).first().click()
+    await expect.poll(() => progressBars.count()).toBe(6)
   })
 })

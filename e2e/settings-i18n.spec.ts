@@ -137,21 +137,22 @@ test.describe('Settings Drawer — Open/Close & Toggles', () => {
     const soundRow = page.locator('div.flex.items-center.justify-between', { hasText: /🔊|音效|Sound/ }).first()
     const soundToggle = soundRow.locator('button')
 
-    // Default is ON (bg-green-400)
-    await expect(soundToggle).toHaveClass(/bg-green-400/)
+    // Default is ON. Assert the switch STATE, not its colour — the palette changed in 097da05
+    // and these tests silently went red because they pinned bg-green-400.
+    await expect(soundToggle).toHaveAttribute('aria-checked', 'true')
 
     // Click to turn off
     await soundToggle.click()
     await page.waitForTimeout(200)
 
-    // Should now be OFF (bg-gray-300)
-    await expect(soundToggle).toHaveClass(/bg-gray-300/)
+    // Should now be OFF
+    await expect(soundToggle).toHaveAttribute('aria-checked', 'false')
 
     // Click again to turn back on
     await soundToggle.click()
     await page.waitForTimeout(200)
 
-    await expect(soundToggle).toHaveClass(/bg-green-400/)
+    await expect(soundToggle).toHaveAttribute('aria-checked', 'true')
   })
 
   test('haptic toggle works', async ({ page }) => {
@@ -164,20 +165,21 @@ test.describe('Settings Drawer — Open/Close & Toggles', () => {
     const hapticRow = page.locator('div.flex.items-center.justify-between', { hasText: /📳|振动|Haptic/ }).first()
     const hapticToggle = hapticRow.locator('button')
 
-    // Default is ON (bg-green-400)
-    await expect(hapticToggle).toHaveClass(/bg-green-400/)
+    // Default is ON. Assert the switch STATE, not its colour — the palette changed in 097da05
+    // and these tests silently went red because they pinned bg-green-400.
+    await expect(hapticToggle).toHaveAttribute('aria-checked', 'true')
 
     // Click to turn off
     await hapticToggle.click()
     await page.waitForTimeout(200)
 
-    // Should now be OFF (bg-gray-300)
-    await expect(hapticToggle).toHaveClass(/bg-gray-300/)
+    // Should now be OFF
+    await expect(hapticToggle).toHaveAttribute('aria-checked', 'false')
 
     // Click again to turn back on
     await hapticToggle.click()
     await page.waitForTimeout(200)
 
-    await expect(hapticToggle).toHaveClass(/bg-green-400/)
+    await expect(hapticToggle).toHaveAttribute('aria-checked', 'true')
   })
 })
