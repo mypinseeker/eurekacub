@@ -4,7 +4,7 @@
 > Don't teach formulas — let kids understand concepts through play.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-534%20unit-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-625%20passed-brightgreen.svg)](#testing)
 [![i18n](https://img.shields.io/badge/i18n-2%20languages-blue.svg)](#internationalization)
 
 EurekaCub 是一个**开源儿童互动科学探索平台**，让 6-12 岁的小朋友通过动手操作来理解数学与科学的本质——对称、分数、几何、导数、方程、矩阵、序列、概率。
@@ -32,13 +32,19 @@ EurekaCub 是一个**开源儿童互动科学探索平台**，让 6-12 岁的小
 
 ### 🏕️ 冒险模式
 
-17 个故事驱动的冒险（已实装 6 个），将多个模块串成叙事：
-- 🧑‍🍳 **厨房科学家** — 跟小熊一起做蛋糕，切面团学分数
-- 🌻 **花园探险家** — 种花发现数列规律
-- 🔐 **密码破译师** — 用矩阵变换解密
-- 🚀 **太空领航员** — 用导数控制飞船速度
-- ⚽ **运动数据家** — 用概率分析足球比赛
-- 🧪 **化学实验室** — 用方程平衡化学反应
+17 个故事驱动的冒险、共 45 个关卡，将多个模块串成叙事。
+开局解锁 5 个（厨房科学家、花园探险家、时间管理大师、密码破解者、足球统计师），其余随进度解锁：
+
+| 冒险 | 串联的模块 |
+|---|---|
+| 🧪 **厨房科学家** | 分数 → 方程 → 对称 |
+| 🌻 **花园探险家** | 序列 → 几何 → 导数 |
+| ⏰ **时间管理大师** | 方程 → 序列 |
+| 🔐 **密码破解者** | 序列 → 矩阵 → 概率 |
+| ⚽ **足球统计师** | 分数 → 概率 |
+
+后续解锁包括建筑设计师、股市小天才、太空导航员、音乐数学家、生态守护者、篮球角度大师、
+游泳计时器、体操对称评分、赛车工程师、化学配方师、物理实验室、基因密码。
 
 ### 👨‍👩‍👧 家长面板
 
@@ -99,7 +105,7 @@ npm run preview   # 预览构建结果
 ## <a name="testing"></a>🧪 Testing
 
 ```bash
-# 单元测试（534 tests, 22 suites）
+# 单元测试（546 tests, 23 suites）
 npm run test
 
 # E2E 测试（79 tests, 5 suites）
@@ -113,13 +119,14 @@ npm run test && npm run test:e2e
 
 | 类型 | 数量 | 状态 | 框架 |
 |------|------|------|------|
-| Unit tests | 534 | ✅ 全绿（2026-09-07 实测） | Vitest |
-| E2E tests | 79 | ⚠️ 部分失败，修复中 | Playwright (Chromium) |
+| Unit tests | 546 | ✅ 全绿（2026-09-09 实测） | Vitest |
+| E2E tests | 79 | ✅ 全绿（2026-09-09 实测） | Playwright (Chromium) |
+| **合计** | **625** | — | — |
 
 大部分测试用例追溯到 PRD 需求编号 (FR-xx / NFR-xx)，详见 `docs/TEST_CHECKLIST.md`。
 
-> ℹ️ E2E 目前并非全绿。README 曾长期标称 "513 passed"，但那个数字没有对应任何一次实际运行结果。
-> 这里只写实际跑出来的数字；E2E 的具体失败项见 `docs/PRD-content-gaps-v1.md` 附录。
+> ℹ️ README 曾长期标称 "513 passed"，但那个数字没有对应任何一次实际运行结果。
+> 这里只写实际跑出来的数字。本轮修复经过详见 `docs/PRD-content-gaps-v1.md` 附录 A。
 
 ---
 
@@ -228,7 +235,12 @@ EurekaCub 采用**三级开源贡献模型**，让不同技能的人都能参与
 
 ### 🟡 L2: 故事家（YAML/JSON 叙事）
 
-编写冒险剧情，把多个 puzzle 串成故事。详见 `content/adventures/` 中的示例。
+编写冒险剧情，把多个 puzzle 串成故事。
+
+> ⚠️ **当前这条路径是断的。** 应用实际读取的是 `src/data/adventures.ts`（17 个冒险 / 45 关）；
+> `content/adventures/*.json` 是一套字段名与之不符、从未被加载的历史数据。
+> 在 L2 贡献流程接通之前，新增冒险需要改 `src/data/adventures.ts`。见
+> `docs/PRD-content-gaps-v1.md` 附录 A.4。
 
 ### 🔴 L3: 开发者（React 组件）
 
@@ -281,10 +293,10 @@ EurekaCub 的设计基于 10 大教育心理学理论：
 
 **Key features:**
 - 8 interactive modules (Symmetry, Fractions, Geometry, Derivatives, Equations, Matrices, Sequences, Probability)
-- 17 story-driven adventures planned, **6 currently implemented**
+- 17 story-driven adventures (45 stages); 5 unlocked from the start, the rest unlock with progress
 - Parent panel with learning insights (no scores, no rankings)
 - 2 languages (Chinese, English) — Spanish, French, German planned
-- 534 unit tests passing; 79 E2E tests (some currently failing — see Testing)
+- 625 automated tests passing (546 unit + 79 E2E)
 - Zero-anxiety design: no timers, no punishments, no competitive pressure
 
 **Quick start:**

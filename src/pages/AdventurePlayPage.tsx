@@ -124,13 +124,25 @@ export default function AdventurePlayPage() {
               <p className="text-[11px] text-gray-400">{adventure.title_en}</p>
             </div>
           </div>
-          <span className="text-xs font-bold text-white bg-gradient-to-r from-[#FF6B6B] to-[#FF8C42] px-2.5 py-1 rounded-full shadow-sm">
+          <span
+            data-testid="stage-counter"
+            className="text-xs font-bold text-white bg-gradient-to-r from-[#FF6B6B] to-[#FF8C42] px-2.5 py-1 rounded-full shadow-sm"
+          >
             {currentStageIndex + 1}/{totalStages}
           </span>
         </div>
 
-        {/* Progress bar */}
-        <div className="w-full h-2.5 bg-orange-100 rounded-full overflow-hidden">
+        {/* Progress bar. role/aria are the stable contract here — the container's colour class
+            changed from bg-gray-100 to bg-orange-100 in the restyle and the E2E selector pinned
+            to the old one silently matched nothing. */}
+        <div
+          role="progressbar"
+          aria-valuenow={currentStageIndex + 1}
+          aria-valuemin={1}
+          aria-valuemax={totalStages}
+          aria-label="Adventure progress"
+          className="w-full h-2.5 bg-orange-100 rounded-full overflow-hidden"
+        >
           <motion.div
             className="h-full rounded-full bg-gradient-to-r from-[#FFB627] via-[#FF8C42] to-[#FF6B6B]"
             initial={{ width: 0 }}
@@ -187,7 +199,11 @@ export default function AdventurePlayPage() {
             className="w-full max-w-lg"
           >
             {RendererComponent ? (
-              <div className="bg-white/80 rounded-3xl p-4 border-2 border-orange-100 shadow-md">
+              <div
+                data-testid="renderer-area"
+                data-renderer-id={stage.renderer_id}
+                className="bg-white/80 rounded-3xl p-4 border-2 border-orange-100 shadow-md"
+              >
                 <div className="flex items-center gap-1.5 mb-3">
                   <span className="text-xs font-bold text-gray-400">
                     {rendererEntry?.name.zh}

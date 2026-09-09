@@ -121,11 +121,11 @@ test.describe('Adventure Mode', () => {
       await page.goto('/adventure/1')
 
       // Stage counter: "1 / 3"
-      await expect(page.locator('text=1 / 3')).toBeVisible()
+      await expect(page.getByTestId('stage-counter')).toHaveText('1/3')
 
-      // Progress bar exists (the gradient bar container)
-      const progressBar = page.locator('.bg-gray-100.rounded-full.overflow-hidden')
-      await expect(progressBar.first()).toBeVisible()
+      // Match the ARIA role, not the container's colour class: it was bg-gray-100 before the
+      // restyle and bg-orange-100 after, and the old selector matched nothing.
+      await expect(page.getByRole('progressbar')).toBeVisible()
     })
 
     test('adventure play page shows stage dots', async ({ page }) => {
@@ -154,7 +154,7 @@ test.describe('Adventure Mode', () => {
       await page.goto('/adventure/1/stage/2')
 
       // Should show stage 2 counter
-      await expect(page.locator('text=2 / 3')).toBeVisible()
+      await expect(page.getByTestId('stage-counter')).toHaveText('2/3')
 
       // Stage 2 narrative mentions weighing ingredients (both zh and en paragraphs match, use .first())
       await expect(page.locator('text=/称量配料|weigh ingredients/i').first()).toBeVisible()
@@ -177,7 +177,7 @@ test.describe('Adventure Mode', () => {
 
       // Click it to go back to stage 1
       await backButton.click()
-      await expect(page.locator('text=1 / 3')).toBeVisible()
+      await expect(page.getByTestId('stage-counter')).toHaveText('1/3')
     })
 
     test('stage dots allow navigation between stages', async ({ page }) => {
@@ -188,7 +188,7 @@ test.describe('Adventure Mode', () => {
       await stageDots.nth(2).click()
 
       // Should show stage 3
-      await expect(page.locator('text=3 / 3')).toBeVisible()
+      await expect(page.getByTestId('stage-counter')).toHaveText('3/3')
     })
 
     test('last stage shows completion button instead of next', async ({ page }) => {
@@ -205,18 +205,19 @@ test.describe('Adventure Mode', () => {
     test('stage 1 of Kitchen Scientist loads fraction renderer', async ({ page }) => {
       await page.goto('/adventure/1')
 
-      // The renderer label area shows the renderer name
-      // fraction renderer should display its name
-      const rendererArea = page.locator('.bg-white\\/60.rounded-2xl')
-      await expect(rendererArea.first()).toBeVisible()
+      // Assert WHICH renderer mounted, not just that some box exists — the old version only
+      // checked for a styled container, so it would have passed with the wrong puzzle loaded.
+      const rendererArea = page.getByTestId('renderer-area')
+      await expect(rendererArea).toBeVisible()
+      await expect(rendererArea).toHaveAttribute('data-renderer-id', 'fraction')
     })
 
     test('stage 2 loads a different renderer (equation)', async ({ page }) => {
       await page.goto('/adventure/1/stage/2')
 
-      // Renderer area should be present for equation renderer
-      const rendererArea = page.locator('.bg-white\\/60.rounded-2xl')
-      await expect(rendererArea.first()).toBeVisible()
+      const rendererArea = page.getByTestId('renderer-area')
+      await expect(rendererArea).toBeVisible()
+      await expect(rendererArea).toHaveAttribute('data-renderer-id', 'equation')
     })
 
     test('adventure 2 (Garden Explorer) loads sequence renderer on stage 1', async ({ page }) => {
@@ -225,9 +226,9 @@ test.describe('Adventure Mode', () => {
       // Garden Explorer, stage 1 uses sequence renderer
       await expect(page.locator('text=花园探险家')).toBeVisible()
 
-      // Renderer container should be present
-      const rendererArea = page.locator('.bg-white\\/60.rounded-2xl')
-      await expect(rendererArea.first()).toBeVisible()
+      const rendererArea = page.getByTestId('renderer-area')
+      await expect(rendererArea).toBeVisible()
+      await expect(rendererArea).toHaveAttribute('data-renderer-id', 'sequence')
     })
 
     test('not-found adventure shows error state', async ({ page }) => {

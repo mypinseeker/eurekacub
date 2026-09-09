@@ -211,7 +211,41 @@ E2E 又只断言「页面有没有东西」，不断言「难度是不是真的�
 已补 `tests/puzzle-configs.test.ts`（76 个用例）作为契约测试，并做过**反向验证**：
 把旧的错字段注入回去 → 6 个用例转红；还原 → 全绿。即该测试确实抓得住这类病。
 
-### A.4 尚未处理
+### A.4 `content/adventures/` 是一套无人使用的平行数据
+
+`AdventurePlayPage` 读的是 `src/data/adventures.ts`（**17 个冒险 / 45 个 stage**，硬编码）。
+`content/adventures/*.json` 只有 6 个冒险 / 18 个 stage，字段名也对不上
+（JSON 用 `puzzle_module` / `puzzle_id`，代码读 `stage.renderer_id`），叙事文本更是两套。
+**它从未被加载过。** CONTRIBUTING.md 却仍指引贡献者往那里写故事——L2「故事家」贡献路径实际是断的。
+
+> ⚠️ **我据此判错过一次，必须留痕。** 我先前把 README 的「17 个冒险」改成「已实装 6 个」，
+> 依据正是数了 `content/adventures/` 里的 6 个 JSON 文件。实测 17 个冒险**逐个访问全部正常加载并挂载渲染器**（17/17），
+> 其中 5 个默认解锁。即我用一份废弃数据去"纠正"了一句本来正确的话。
+> 这是「别信文件里的数字」的变体：**文件存在 ≠ 文件被使用**。已按实测改回。
+
+### A.5 E2E 长期把样式类当契约
+
+修复前 14 个 E2E 失败中，有 **8 个**的根因是选择器写死了 Tailwind 工具类，
+而 UI 改版 commit `097da05` 把类名换了：
+
+| 选择器 | 改版前 | 改版后 |
+|---|---|---|
+| 开关（设置抽屉 / 家长面板） | `bg-green-400` / `bg-blue-500` | `bg-[#00C48C]` |
+| 首页进度条 | `h-2` | `h-1.5` |
+| 冒险进度条容器 | `bg-gray-100` | `bg-orange-100` |
+| 冒险渲染器容器 | `bg-white/60 rounded-2xl` | `bg-white/80 rounded-3xl` |
+| 关卡计数器文本 | `1 / 3` | `1/3` |
+
+家长面板那条最糟：`button.bg-blue-500` 是**选择器**本身，类名一变它就静默改去断言别的灰色按钮。
+
+**处置**：没有去追新类名，而是给控件补上本就该有的语义
+（`role="switch"` + `aria-checked`、`role="progressbar"` + `aria-valuenow`、
+`data-testid="stage-counter"` / `renderer-area"`），测试改断言语义。顺带这些控件对读屏软件也可用了——之前不可用。
+
+同时发现三个「加载 XX 渲染器」的测试**从不验证加载的是哪个渲染器**，只看容器在不在；
+已加 `data-renderer-id` 断言，标题与行为现在一致。
+
+### A.6 尚未处理
 
 - `matrix` 的 `initialGrid`/`targetGrid` 仍用 renderer 内置图案，三关**图案相同**（仅变换数与步数不同）
 - A.2 中新造的 symmetry 图形 / derivative 曲线为**工程占位**，未经孩子实测，
