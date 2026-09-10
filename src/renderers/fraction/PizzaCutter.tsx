@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { RendererProps } from '../registry'
 import SvgBase from '../common/SvgBase'
 import PuzzleIntro from '../common/PuzzleIntro'
+import PizzaEquivalence from './PizzaEquivalence'
 import type { FractionPuzzleData, Cut } from './types'
 import { SLICE_COLORS } from './types'
 import {
@@ -104,6 +105,27 @@ export default function PizzaCutter(props: RendererProps) {
   // here is safe and PizzaCutterInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
+  // `mode: 'equivalence'` (CG-FR-1) is a different game on the same pizza, so it gets its own
+  // intro and its own Inner component. Without a mode, everything below is exactly as before.
+  const isSameAmount = ((props.puzzle.data ?? props.puzzle) as { mode?: unknown }).mode === 'equivalence'
+
+  if (showIntro && isSameAmount) {
+    return (
+      <PuzzleIntro
+        icon="🍕"
+        title={{ zh: '一样多', en: 'Same Amount' }}
+        goal={{ zh: '左边的披萨已经切好、涂好了。把右边的披萨切开，涂出和左边一样多！', en: 'The left pizza is already cut and shaded. Cut the right pizza, then shade the same amount!' }}
+        howTo={[
+          { zh: '在右边披萨的边缘点击，切出一样大的几块', en: "Tap the right pizza's edge to cut equal slices" },
+          { zh: '点一块就涂上颜色，再点一次就取消', en: 'Tap a slice to shade it, tap again to unshade it' },
+          { zh: '觉得两边一样多了，就按「好了」', en: 'When both look the same, press Done' },
+        ]}
+        insight={{ zh: '块数不一样，也可以一样多！切得越细，每块越小，就要多拿几块。', en: 'Different numbers of slices can still be the same amount! Smaller slices means you need more of them.' }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   if (showIntro) {
     return (
       <PuzzleIntro
@@ -121,7 +143,7 @@ export default function PizzaCutter(props: RendererProps) {
     )
   }
 
-  return <PizzaCutterInner {...props} />
+  return isSameAmount ? <PizzaEquivalence {...props} /> : <PizzaCutterInner {...props} />
 }
 
 function PizzaCutterInner({

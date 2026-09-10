@@ -75,6 +75,19 @@ export const PUZZLE_CONFIGS: Record<string, Record<string, Record<string, unknow
     L1: { targetSlices: 2, showGuides: true, tolerance: 20 },
     L2: { targetSlices: 4, showGuides: true, tolerance: 15 },
     L3: { targetSlices: 6, showGuides: false, tolerance: 10 },
+    // "Same amount" (CG-FR-1). The left pizza comes cut and shaded; the child cuts the right one
+    // finer and shades as much. Three rounds, three different pairs — the ones FR-1.2 names:
+    // 1/2 = 2/4, 1/3 = 2/6, 2/4 = 4/8. The game never writes these out.
+    L4: {
+      mode: 'equivalence',
+      rounds: [
+        { given: [1, 2], cutInto: 4 },
+        { given: [1, 3], cutInto: 6 },
+        { given: [2, 4], cutInto: 8 },
+      ],
+      showGuides: true,
+      tolerance: 15,
+    },
   },
   geometry: {}, // geometry uses tangram.puzzles.ts — handled specially below
   // SpeedController reads `{ targetCurve, duration, finishLine, theme }`. `maxSpeed`/`curveType`

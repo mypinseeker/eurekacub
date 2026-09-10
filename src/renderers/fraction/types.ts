@@ -20,6 +20,25 @@ export interface FractionPuzzleData {
   tolerance: number
 }
 
+/**
+ * One round of the "same amount" mode (CG-FR-1).
+ *
+ * The left pizza is shown already cut into `given[1]` slices with `given[0]` of them shaded.
+ * The child cuts the right pizza into `cutInto` slices and shades the same amount — which is
+ * `given[0] * cutInto / given[1]` slices, a number the game never shows.
+ */
+export interface EquivalenceRound {
+  given: [number, number]
+  cutInto: number
+}
+
+/** Puzzle data for `mode: 'equivalence'`. Each round is a different pair of fractions. */
+export interface EquivalencePuzzleData {
+  rounds: EquivalenceRound[]
+  showGuides: boolean
+  tolerance: number
+}
+
 /** A single radial cut placed by the child, stored as an angle in radians. */
 export interface Cut {
   /** Angle in radians from the positive x-axis (0 = 3-o'clock). */
