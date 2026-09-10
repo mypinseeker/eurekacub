@@ -7,7 +7,6 @@ import {
   ROUNDS_TO_COMPLETE,
   parsePuzzle,
   mirrorPoint,
-  strokeLength,
   targetToCanvas,
   checkMatch,
 } from './symmetry.utils'
@@ -263,8 +262,8 @@ function MirrorCanvasInner({
   const hueRef = useRef(0)
 
   // React state only for things that affect the DOM outside canvas
-  const [successCount, setSuccessCount] = useState(0)
-  const [isDrawing, setIsDrawing] = useState(false)
+  const [_successCount, setSuccessCount] = useState(0)
+  const [_isDrawing, setIsDrawing] = useState(false)
 
   /* ---- Pointer handlers ---- */
   const handlePointerDown = useCallback(

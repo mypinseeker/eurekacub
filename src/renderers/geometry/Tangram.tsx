@@ -14,8 +14,6 @@ import {
   SNAP_TOLERANCE_L1,
   SNAP_TOLERANCE_L2,
   PIECE_SIZES,
-  pieceCentroid,
-  distToSlot,
   nextRotation,
   trySnap as trySnapUtil,
 } from './tangram.utils'
@@ -534,7 +532,7 @@ function TangramInner({
   )
 
   const handlePointerUp = useCallback(
-    (e: React.PointerEvent<SVGSVGElement>) => {
+    (_e: React.PointerEvent<SVGSVGElement>) => {
       const drag = dragRef.current
       const start = pointerStartRef.current
       const wasLongPress = longPressId !== null

@@ -413,10 +413,6 @@ function BalanceScaleInner({
   const rightTotal = sum(effectiveRight)
   const tiltAngle = calcTiltAngle(leftTotal, rightTotal)
 
-  // Beam endpoint positions (rotated)
-  const leftEnd = rotatedPoint(-BEAM_HALF, tiltAngle)
-  const rightEnd = rotatedPoint(BEAM_HALF, tiltAngle)
-
   /* ── Handlers ───────────────────────────────────────────── */
 
   /** Select an option weight. */

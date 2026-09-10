@@ -23,7 +23,7 @@ describe('DDA Engine', () => {
   })
 
   it('3 correct in a row increases difficulty', () => {
-    let state = createDDA()
+    const state = createDDA()
     let result = recordAnswer(state, true)
     expect(result.difficultyChanged).toBe('same')
     result = recordAnswer(result.newState, true)
@@ -34,7 +34,7 @@ describe('DDA Engine', () => {
   })
 
   it('2 wrong in a row decreases difficulty and triggers scaffold', () => {
-    let state = createDDA(5)
+    const state = createDDA(5)
     let result = recordAnswer(state, false)
     expect(result.shouldScaffold).toBe(false)
     result = recordAnswer(result.newState, false)
@@ -44,7 +44,7 @@ describe('DDA Engine', () => {
   })
 
   it('difficulty never goes below 1', () => {
-    let state = createDDA(1)
+    const state = createDDA(1)
     let result = recordAnswer(state, false)
     result = recordAnswer(result.newState, false)
     expect(result.newState.difficulty).toBe(1)
@@ -52,7 +52,7 @@ describe('DDA Engine', () => {
   })
 
   it('difficulty never goes above 10', () => {
-    let state = createDDA(10)
+    const state = createDDA(10)
     let result = recordAnswer(state, true)
     result = recordAnswer(result.newState, true)
     result = recordAnswer(result.newState, true)
@@ -61,7 +61,7 @@ describe('DDA Engine', () => {
   })
 
   it('correct answer resets consecutive wrong count', () => {
-    let state = createDDA(5)
+    const state = createDDA(5)
     let result = recordAnswer(state, false)
     expect(result.newState.consecutiveWrong).toBe(1)
     result = recordAnswer(result.newState, true)
@@ -72,7 +72,7 @@ describe('DDA Engine', () => {
   it('success rate calculation is correct', () => {
     expect(getSuccessRate(createDDA())).toBe(0)
 
-    let state = createDDA()
+    const state = createDDA()
     let result = recordAnswer(state, true)
     result = recordAnswer(result.newState, true)
     result = recordAnswer(result.newState, false)
@@ -81,7 +81,7 @@ describe('DDA Engine', () => {
   })
 
   it('tracks totalAttempts and totalCorrect', () => {
-    let state = createDDA()
+    const state = createDDA()
     let result = recordAnswer(state, true)
     result = recordAnswer(result.newState, false)
     result = recordAnswer(result.newState, true)

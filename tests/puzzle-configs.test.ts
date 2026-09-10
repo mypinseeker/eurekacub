@@ -1,5 +1,5 @@
 /**
- * Contract tests for `PUZZLE_CONFIGS` in `src/pages/PuzzlePage.tsx`.
+ * Contract tests for `PUZZLE_CONFIGS` in `src/pages/puzzleConfigs.ts`.
  *
  * WHY THIS FILE EXISTS
  * --------------------
@@ -20,7 +20,7 @@
  * never against the table the app actually ships. These tests close that gap.
  */
 import { describe, it, expect } from 'vitest'
-import { PUZZLE_CONFIGS } from '../src/pages/PuzzlePage'
+import { PUZZLE_CONFIGS } from '../src/pages/puzzleConfigs'
 
 const LEVELS = ['L1', 'L2', 'L3'] as const
 

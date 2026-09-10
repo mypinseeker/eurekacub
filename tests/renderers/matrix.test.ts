@@ -517,7 +517,7 @@ describe('transforms disabled after match (simulated)', () => {
   it('once matched, transform should be blocked', () => {
     const initial = indexGrid()
     const target = cloneGrid(initial) // target = initial means already matched
-    let matched = gridsMatch(initial, target)
+    const matched = gridsMatch(initial, target)
     expect(matched).toBe(true)
 
     // Simulate: if matched, transform is not applied

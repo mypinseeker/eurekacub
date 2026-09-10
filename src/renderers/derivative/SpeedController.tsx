@@ -7,8 +7,6 @@ import {
   MAX_SPEED,
   MATCH_THRESHOLD,
   clamp,
-  generateDefaultCurve,
-  sampleTarget,
   computeScore,
   parsePuzzleData,
 } from './derivative.utils'
