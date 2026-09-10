@@ -34,16 +34,21 @@ export default function AhaPopup({
   if (!visible && !show) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none" data-testid="aha-popup">
       {/* Backdrop */}
       <div
         className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${show ? 'opacity-100' : 'opacity-0'}`}
       />
 
-      {/* Popup — fun celebration card */}
+      {/* Popup — fun celebration card.
+          pointer-events-none on purpose: the card has nothing to click, and it sits over the
+          middle of the play area for ~3.4 s after the first success. With pointer-events-auto
+          it silently swallowed taps there — a child who pressed "Next" and started cutting
+          straight away lost cuts under it (found by e2e/content-gaps.spec.ts, round 2 of the
+          fraction "same amount" level). Taps now fall through to the game. */}
       <div
         className={`
-          relative pointer-events-auto
+          relative pointer-events-none
           bg-gradient-to-br from-yellow-100 via-amber-50 to-orange-100
           border-4 border-yellow-300 rounded-[28px] shadow-2xl shadow-orange-200/40
           px-8 py-10 mx-4 max-w-sm text-center
