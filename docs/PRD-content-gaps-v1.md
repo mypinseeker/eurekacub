@@ -4,7 +4,7 @@
 |---|---|
 | **状态** | 🟡 **GATE-1 待审批**（用户说 "approved/批准" 后方可进 GATE-2） |
 | **提出日期** | 2026-09-05 |
-| **最后更新** | 2026-09-10 —— 附录 A 的缺陷修复已合并到 `main`（`c7fbbb3`）；CI 真实状态见 A.9 |
+| **最后更新** | 2026-09-10 —— 附录 A 的缺陷修复 + CI 修复已合并到 `main`（`23acf87`），**GitHub CI 全绿**；但**尚未部署到线上**，见 A.9 |
 | **依据** | `~/Workspace/ai-think-tank/engagements/2026-09-05-marble-taxonomy-fit/R3/gap_audit_8modules.md` |
 | **方法** | 用 Marble Skill Taxonomy 的 `centrality`（图中心度）做外部参照，反向审计本项目 41 道 puzzle 的覆盖盲区。**只读该数据集的数值，不导入其数据、不复用其文本** → 零许可证风险 |
 | **前置 PRD** | `docs/PRD-kids-math-v1.md` (v1.1) —— 本 PRD 为其增量，不替代 |
@@ -332,9 +332,10 @@ Node 从 v21 起才自带全局 `navigator`。测试写的是 `Object.defineProp
 - 反向验证：把 `tap` 的 10ms 注入改成 11ms → 2 个测试红，报的是 `AssertionError`
   而不是 `ReferenceError`——证明换成 stub 之后测试仍能抓真 bug，没变成空转
 
-> ⏳ 该修复在分支 `fix/ci-node20-navigator`，**尚未进 `main`**。GitHub 上的 CI 转绿要等它合并后
-> 才能确认——上面的「修复后」都是本地 Node 20 的结果，不是 GitHub 的结果。
->
+**GitHub 上已确认**：修复合并到 `main`（`23acf87`）后，CI run `34484896911` **四项全绿**
+——test / lint-and-typecheck / content-validate / build 均 `success`。这是 `main` 自有记录以来
+（最早可查到 2026-03-29）**第一次全绿**；build 也第一次真正执行，而不是因前置失败被跳过。
+
 > **推断，未证实**：旧 CI 的 test 失败很可能也是同一原因（CI 一直是 Node 20）。
 > 但 3–4 月那几次 run 的日志已过期（GitHub 返回 HTTP 410），无法核对。
 
@@ -343,15 +344,36 @@ Node 从 v21 起才自带全局 `navigator`。测试写的是 `Object.defineProp
 **根本没在 CI 的运行时上跑过**，只是拿本机 Node 22 的绿灯去代替 CI 的 Node 20。
 教训：**本地绿 ≠ CI 绿，除非运行时一致**。「按 CI 的命令跑」不够，还得「按 CI 的环境跑」。
 
-**建议（未执行，需用户决定）**：Node 20 已于 2026-04 结束维护，本机开发用的是 22。
-可以把 `ci.yml` / `content-validate.yml` 的 `node-version` 升到 22，让 CI 与开发环境一致。
-这与上面的修复**互相独立**：修复让测试不依赖任何运行时，升级只是消除环境差。
+**已执行（用户批准）**：`ci.yml` / `content-validate.yml` 的 `node-version` 由 20 升到 22
+（`23acf87`），CI 与开发环境一致。这与上面的测试修复**互相独立**：测试修复让测试不依赖任何运行时，
+升级只是消除环境差——所以上面那次全绿**同时**验证了两者。
+
+#### 部署：合并到 `main` ≠ 上线（2026-09-10 调查）
+
+用户确认 EurekaCub 部署在 **Vercel**。调查结论是：**这次合并没有、也不会自动到达线上**。
+
+| 检查项 | 结果 | 含义 |
+|---|---|---|
+| `main` 上的 commit status / check-runs（`c7fbbb3`、`5a35d4d`） | 只有 GitHub Actions，**零个 Vercel 条目** | Vercel 的 GitHub 集成**没有接到这个仓库**——push 不触发部署 |
+| 仓库 webhooks | 空 | 同上 |
+| 仓库内 `.vercel/project.json` | 不存在 | 本机从未 `vercel link` 过这个项目 |
+| 本机 Vercel CLI 凭证 | `auth.json` 只有 3 字节（空对象），自 2026-06-11 起 | **已登出**，无法用 CLI 查询或部署 |
+| `eurekacub.vercel.app` 等 3 个候选地址 | `404 DEPLOYMENT_NOT_FOUND` | 不存在（阴性对照：随机子域名同样 404，探针有效） |
+| `kids-math.vercel.app` | 200，但**不是本项目** | 见下 |
+
+`kids-math.vercel.app` 名字对得上，但**不是 EurekaCub**：线上 bundle 中 `EurekaCub` 出现 **0** 次，
+本地 `23acf87` 的构建产物中出现 **12** 次（阳性对照，证明这个特征字符串检测是有效的）；
+页面标题也不同（线上 `Vite + React`，本项目 `eurekacub-init`）。它是另一个恰好同名的 Vercel 项目。
+
+**结论**：EurekaCub 的线上地址和 Vercel 项目名**目前查不到**。因为 GitHub 集成没接，之前的部署
+（推断，未证实）应该是用 CLI 手动 `vercel --prod` 做的。**附录 A 的全部修复现在只在 `main` 上，孩子
+看到的仍是旧版**，直到有人手动部署一次。
 
 ### A.10 仍未处理
 
-- **CI 修复待合并**：`fix/ci-node20-navigator` → `main`，合并后需确认 GitHub CI 全绿
-- **线上部署渠道未确认**：仓库里没有 `.vercel/`，GitHub 上也没有 environments 或 deployments
-  记录。合并到 `main` 是否已经到达孩子手里的页面，**目前无法判定**
+- **部署到 Vercel**（阻塞于凭证）：需要用户在本机执行 `vercel login`，或告知线上地址 /
+  Vercel 项目名。之后：`vercel link` → `vercel --prod` → 用 bundle 特征字符串核对线上版本 → 真机验收
+- **建议接上 Vercel 的 GitHub 集成**：否则每次都得手动部署，而且「合并了但没上线」会再次悄悄发生
 - **SHIP 未做**：version bump、CHANGELOG、STATUS 都还没更新（`package.json` 版本仍是 `0.0.0`）
 - symmetry / derivative 的难度梯度需 A7 真机验收（工程占位，测试替代不了孩子）
 - `content/adventures/` 字段迁移 + loader（架构级，待批准）
