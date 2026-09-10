@@ -245,14 +245,60 @@ E2E 又只断言「页面有没有东西」，不断言「难度是不是真的�
 同时发现三个「加载 XX 渲染器」的测试**从不验证加载的是哪个渲染器**，只看容器在不在；
 已加 `data-renderer-id` 断言，标题与行为现在一致。
 
-### A.6 尚未处理
+### A.6 原「尚未处理」项的结局
 
-- `matrix` 的 `initialGrid`/`targetGrid` 仍用 renderer 内置图案，三关**图案相同**（仅变换数与步数不同）
-- A.2 中新造的 symmetry 图形 / derivative 曲线为**工程占位**，未经孩子实测，
-  难度梯度是否合理需 A7 真机验收确认
-- `content/puzzles/sequence/*.json` 在空格位填 `-1`，而 `NumberTrain` 以 `sequence[idx]` 为答案键
-  → 该路径（冒险模式）下的数列题**可能同样不可通关**，尚未验证
-- `react-hooks/refs` 13 处告警（`ref.current` 在 render 期间赋值）为既有代码，非本次引入，未处理
+| 原记录 | 结局 | 证据 |
+|---|---|---|
+| `matrix` 三关图案相同 | ✅ 已修，且比原记录**更严重** | 见 A.7 |
+| symmetry 图形 / derivative 曲线为工程占位 | ⏳ 仍未验，需 A7 真机 | 无法用测试替代 |
+| `sequence/*.json` 的 `-1` 可能导致冒险模式不可通关 | ✅ 已修并已验 | `-1` 哨兵已全部替换为真值；`tests/content-winnability.test.ts` 12 项全绿，且 grep 全仓已无残留 |
+| `react-hooks/refs` 13 处告警 | ✅ 已修 | 改 `useLayoutEffect`；lint 45 → 0 |
+
+### A.7 matrix：原记录低估了严重程度
+
+原以为只是「三关图案相同」（体验差但能玩）。用渲染器**自己的** `applyTransform` 做 BFS 后，
+实际结论是三关**没有一关是正常可玩的**：
+
+| 关卡 | 允许变换 | maxSteps | 真实最短解 |
+|---|---|---|---|
+| L1 | rotate90 | 3 | **无解**（转回原样需 4 次，上限 3）|
+| L2 | + flipH | 5 | **1 步**（内置图案左右对称，flipH 是空操作）|
+| L3 | + flipV/transpose | 8 | **1 步** |
+
+根因仍是 A.2 那条「静默回落」：配置两个网格都没给，`parsePuzzle()` 把
+`initialGrid` 和 `targetGrid` **双双**默认成同一张 `DEFAULT_GRID`，于是谜题一加载就已在目标上。
+
+**顺带纠正一个设计错误**：这四个变换构成 8 阶二面体群，任何目标距起点**最多 3 步**，
+所以原来 3/5/8 的 `maxSteps` 阶梯**根本没有在度量难度**——它度量的是一个不存在的深度。
+现在难度改由「分支因子↑（1→2→4）+ 冗余步数↓（2→1→1）」承担。
+
+**留痕**：我第一次写这个可解性证明时，是在测试里**重新实现**了四个变换函数。
+那样证明的是我那份模型的性质，不是游戏的性质——改名 `rotate90` 的语义，测试会继续绿。
+已改为 import 真实 `applyTransform`。这是「文件名不是证据」的同类：**自己写的对照实现也不是证据**。
+
+### A.8 `content/adventures/` 死路径：比「没被使用」更糟
+
+A.4 记录过这 6 个 JSON 从不被加载。本轮补查了一件更关键的事：它们与应用**结构不兼容**。
+
+| | 死 JSON | 应用实际读取（`src/data/adventures.ts` → `AdventurePlayPage`）|
+|---|---|---|
+| 关卡字段 | `puzzle_module` + `puzzle_id` | `renderer_id` + 内联 `puzzle` 对象 |
+| id 类型 | 字符串 `adv-01-kitchen-scientist` | 数字 `1` |
+
+即**接一个 loader 也加载不了**，必须先做字段迁移。这已属架构级改动（3+ 核心文件），
+按 4-Gate 需用户批准，本轮未做。
+
+同时核实并纠正了 `CONTRIBUTING.md` L2 节的三处错误声明：仓库内**不存在任何 YAML 文件**；
+`stages` 是扁平数组、`branch`/`choice`/`next_stage` 全仓零命中，**没有分支路径**；
+该路径也**不通向线上**。已改为明确标注「暂未开放」并说明现状。
+
+已加绊线测试：有人再往 `content/adventures/` 放文件就会变红并指向 CONTRIBUTING，
+避免又一个「PR 合了但什么也没发生」。
+
+### A.9 仍未处理
+
+- symmetry / derivative 的难度梯度需 A7 真机验收（工程占位，测试替代不了孩子）
+- `content/adventures/` 字段迁移 + loader（架构级，待批准）
 
 ---
 

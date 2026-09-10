@@ -8,6 +8,8 @@
  * Also covers TEST_CHECKLIST item 8.3.6 (previously ❌ uncovered).
  */
 import { describe, it, expect } from 'vitest'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { ADVENTURES, CATEGORY_META } from '../src/data/adventures'
 import { getRenderer, getAllRenderers } from '../src/renderers/registry'
 
@@ -383,6 +385,71 @@ describe('Renderer registration quality', () => {
     for (const r of getAllRenderers()) {
       expect(r.author.length).toBeGreaterThan(0)
       expect(r.version.length).toBeGreaterThan(0)
+    }
+  })
+})
+
+/* ================================================================== */
+/*  Tripwire: content/adventures/ is a dead directory                  */
+/* ================================================================== */
+
+describe('content/adventures/ is not a live content source', () => {
+  const DIR = join(__dirname, '..', 'content', 'adventures')
+
+  /**
+   * Every adventure the app ships is TypeScript in src/data/adventures.ts. The JSON files under
+   * content/adventures/ are imported by nothing, and they use a different stage shape than the
+   * app reads (`puzzle_module` + `puzzle_id`, versus `renderer_id` + an inline `puzzle` object),
+   * so wiring them up would not be a one-line change.
+   *
+   * That makes the directory a trap: it looks like the obvious place to add an adventure, and a
+   * contributor who does so gets a green CI run and a file that never loads. These tests are the
+   * tripwire. If you are here because one of them went red, read the L2 section of CONTRIBUTING.md
+   * before doing anything else — most likely someone added an adventure that will not ship.
+   */
+  const KNOWN_DEAD = [
+    '01-kitchen-scientist.json',
+    '02-garden-explorer.json',
+    '04-code-breaker.json',
+    '07-space-navigator.json',
+    '10-football-stats.json',
+    '15-chemistry-lab.json',
+  ]
+
+  it('has not grown new files that would silently do nothing', () => {
+    if (!existsSync(DIR)) return
+    const actual = readdirSync(DIR).filter((f) => f.endsWith('.json')).sort()
+    expect(
+      actual,
+      'A file appeared in content/adventures/. Nothing imports that directory, so this adventure ' +
+        'will not appear in the game. See CONTRIBUTING.md section L2.',
+    ).toEqual([...KNOWN_DEAD].sort())
+  })
+
+  it('still uses the shape the app cannot read, so nobody assumes it works', () => {
+    // If this goes red, the dead files were migrated to the live shape — which probably means a
+    // loader is being built. Delete this tripwire as part of that work rather than editing it.
+    if (!existsSync(DIR)) return
+    for (const file of KNOWN_DEAD) {
+      const path = join(DIR, file)
+      if (!existsSync(path)) continue
+      const stages = (JSON.parse(readFileSync(path, 'utf-8')).stages ?? []) as Record<
+        string,
+        unknown
+      >[]
+      expect(stages.length, `${file} has no stages`).toBeGreaterThan(0)
+      for (const stage of stages) {
+        expect(stage.renderer_id, `${file}: unexpectedly already in the live shape`).toBeUndefined()
+      }
+    }
+  })
+
+  it('does not overlap with the adventures the app actually ships', () => {
+    // The two sets are allowed to describe the same stories, but the live catalogue must never
+    // depend on the dead one — every shipped adventure has to be reachable from ADVENTURES alone.
+    expect(ADVENTURES.length).toBeGreaterThan(0)
+    for (const adv of ADVENTURES) {
+      expect(adv.stages.length, `Adventure "${adv.title_en}" has no stages`).toBeGreaterThan(0)
     }
   })
 })

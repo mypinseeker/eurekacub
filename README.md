@@ -4,7 +4,7 @@
 > Don't teach formulas — let kids understand concepts through play.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-625%20passed-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-641%20passed-brightgreen.svg)](#testing)
 [![i18n](https://img.shields.io/badge/i18n-2%20languages-blue.svg)](#internationalization)
 
 EurekaCub 是一个**开源儿童互动科学探索平台**，让 6-12 岁的小朋友通过动手操作来理解数学与科学的本质——对称、分数、几何、导数、方程、矩阵、序列、概率。
@@ -105,7 +105,7 @@ npm run preview   # 预览构建结果
 ## <a name="testing"></a>🧪 Testing
 
 ```bash
-# 单元测试（546 tests, 23 suites）
+# 单元测试（562 tests, 24 suites）
 npm run test
 
 # E2E 测试（79 tests, 5 suites）
@@ -119,9 +119,9 @@ npm run test && npm run test:e2e
 
 | 类型 | 数量 | 状态 | 框架 |
 |------|------|------|------|
-| Unit tests | 546 | ✅ 全绿（2026-09-09 实测） | Vitest |
-| E2E tests | 79 | ✅ 全绿（2026-09-09 实测） | Playwright (Chromium) |
-| **合计** | **625** | — | — |
+| Unit tests | 562 | ✅ 全绿（2026-09-10 实测） | Vitest |
+| E2E tests | 79 | ✅ 全绿（2026-09-10 实测） | Playwright (Chromium) |
+| **合计** | **641** | — | — |
 
 大部分测试用例追溯到 PRD 需求编号 (FR-xx / NFR-xx)，详见 `docs/TEST_CHECKLIST.md`。
 
@@ -296,7 +296,7 @@ EurekaCub 的设计基于 10 大教育心理学理论：
 - 17 story-driven adventures (45 stages); 5 unlocked from the start, the rest unlock with progress
 - Parent panel with learning insights (no scores, no rankings)
 - 2 languages (Chinese, English) — Spanish, French, German planned
-- 625 automated tests passing (546 unit + 79 E2E)
+- 641 automated tests passing (562 unit + 79 E2E)
 - Zero-anxiety design: no timers, no punishments, no competitive pressure
 
 **Quick start:**

@@ -16,11 +16,22 @@ Anyone can contribute puzzles! Each puzzle is a single JSON file. No programming
 
 任何人都可以贡献题目！每道题是一个 JSON 文件。不需要编程经验——只需要创造力和对数学的热爱。
 
-### L2: Add Adventures (YAML) — Creative Storytelling / 添加冒险故事（YAML）— 创意叙事
+### L2: Add Adventures — ⚠️ not open for contributions yet / 添加冒险故事 — ⚠️ 暂未开放
 
-Adventures chain puzzles into narrative journeys. If you love writing stories that teach, this level is for you. Adventures are defined in YAML with branching paths and narrative elements.
+Adventures chain puzzles into narrative journeys, and we would love outside writers here. **But there is no working contribution path today, so please do not start one expecting it to ship.**
 
-冒险模式将题目串联成叙事旅程。如果你喜欢用故事来教学，这个层级适合你。冒险故事用 YAML 定义，支持分支路径和叙事元素。
+What is actually true right now:
+
+- All 17 shipped adventures live in `src/data/adventures.ts` as TypeScript, not in a data file.
+- `content/adventures/` holds six JSON files that **nothing in the app imports**. They also use a different shape than the app (`puzzle_module` + `puzzle_id`, versus the `renderer_id` + inline `puzzle` object that `AdventurePlayPage` reads), so they would not load even if they were wired up.
+- Stages are a flat list. There are no branching paths.
+- Nothing here is YAML. This section previously said "YAML with branching paths"; all three of those words were wrong.
+
+Adding a loader for `content/adventures/` is tracked in `docs/PRD-content-gaps-v1.md`. Until that lands, adventures change by editing `src/data/adventures.ts`, which makes this an L3 (developer) task rather than an L2 one.
+
+冒险模式将题目串联成叙事旅程，我们很欢迎外部作者参与。**但目前没有可用的贡献路径，请不要以为写了就能上线。**
+
+现状：17 个已上线的冒险都写在 `src/data/adventures.ts` 里（TypeScript，不是数据文件）；`content/adventures/` 下那 6 个 JSON **没有任何代码 import**，而且字段结构与应用实际读取的也不一致，即便接上也加载不了；stages 是扁平列表，没有分支路径；仓库里也不存在 YAML。本节原先写的「YAML + 分支路径」三个词全是错的。接入加载器一事记录在 `docs/PRD-content-gaps-v1.md`；在那之前，改冒险等于改 `src/data/adventures.ts`，属于 L3 开发者任务。
 
 ### L3: Add Renderers (React Components) — Developers / 添加渲染器（React 组件）— 开发者
 
