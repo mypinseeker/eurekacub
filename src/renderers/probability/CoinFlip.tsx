@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useLayoutEffect } from 'react'
 import type { RendererProps } from '../registry'
 import CanvasBase from '../common/CanvasBase'
 import PuzzleIntro from '../common/PuzzleIntro'
@@ -72,18 +72,26 @@ function CoinFlipInner({ puzzle, onCorrect, onError, onAha, onComplete }: Render
   const lastTimeRef = useRef(0)
   const bouncePhaseRef = useRef(0)
 
-  // Stable refs for values accessed in draw
+  // Stable refs for values accessed in the draw loop
   const flipHistoryRef = useRef(flipHistory)
-  flipHistoryRef.current = flipHistory
   const isFlippingRef = useRef(isFlipping)
-  isFlippingRef.current = isFlipping
   const phaseRef = useRef(phase)
-  phaseRef.current = phase
   const predictionRef = useRef(prediction)
-  predictionRef.current = prediction
   const totalFlips = puzzleData.totalFlips
   const experimentsCompletedRef = useRef(experimentsCompleted)
-  experimentsCompletedRef.current = experimentsCompleted
+
+  // Mirror state into refs for the rAF draw loop. Assigning during render (as this did before)
+  // is unsafe: React can start a render and discard it — Strict Mode double-renders, concurrent
+  // interruptions — leaving the ref holding a value that was never committed while the loop
+  // paints from it. A layout effect runs only after commit, and before paint, so the next frame
+  // always sees a value that is really on screen.
+  useLayoutEffect(() => {
+    flipHistoryRef.current = flipHistory
+    isFlippingRef.current = isFlipping
+    phaseRef.current = phase
+    predictionRef.current = prediction
+    experimentsCompletedRef.current = experimentsCompleted
+  })
 
   // ── Coin flip logic ─────────────────────────────────────
 

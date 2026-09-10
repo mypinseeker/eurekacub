@@ -61,23 +61,6 @@ function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 
-function PlaceholderPage({ title, icon }: { title: string; icon: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] p-8">
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-        className="text-7xl mb-6"
-      >
-        {icon}
-      </motion.div>
-      <h1 className="text-2xl font-extrabold text-gray-700 mb-2">{title}</h1>
-      <p className="text-gray-400 text-sm">{'\uD83D\uDEA7'} Coming soon!</p>
-    </div>
-  )
-}
-
 export default function App() {
   return (
     <Layout>

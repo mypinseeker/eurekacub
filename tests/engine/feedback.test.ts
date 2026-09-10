@@ -78,7 +78,7 @@ describe('Feedback Selector', () => {
   })
 
   it('returns empty string when no match at all', () => {
-    const result = selectFeedback(messages, 'nonexistent' as any, 'default', 'en')
+    const result = selectFeedback(messages, 'nonexistent', 'default', 'en')
     expect(result).toBe('')
   })
 

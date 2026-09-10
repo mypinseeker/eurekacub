@@ -487,6 +487,9 @@ describe('undo logic (simulated)', () => {
     // Step 2: flipH
     history.push(cloneGrid(g1))
     const g2 = applyTransform(g1, 'flipH')
+    // Guard the premise: if flipH were a no-op here, the undo assertions below would pass
+    // trivially without proving anything.
+    expect(gridsMatch(g2, g1)).toBe(false)
 
     // Undo step 2
     const back1 = history.pop()!

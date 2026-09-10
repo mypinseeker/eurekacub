@@ -8,7 +8,7 @@
  *
  * Rounds: complete 3 puzzles to trigger onComplete().
  */
-import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import { useState, useCallback, useMemo, useRef, useEffect, useLayoutEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RendererProps } from '../registry'
 import SvgBase from '../common/SvgBase'
@@ -25,7 +25,6 @@ import {
   sum,
   colorForValue,
   calcTiltAngle,
-  rotatedPoint,
 } from './equation.utils'
 
 /* ─── Layout constants (viewBox 400x400) ──────────────────── */
@@ -386,7 +385,7 @@ function BalanceScaleInner({
   const [showGlow, setShowGlow] = useState(false)
 
   const successRef = useRef(successCount)
-  successRef.current = successCount
+  useLayoutEffect(() => { successRef.current = successCount })
 
   const { leftSide, rightSide, unknown, unknownSide, options } = puzzleData
 

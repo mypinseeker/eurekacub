@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { get, set } from 'idb-keyval'
 
 /**
@@ -14,7 +14,7 @@ export function useContentLoader<T>(
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
   const fetcherRef = useRef(fetcher)
-  fetcherRef.current = fetcher
+  useLayoutEffect(() => { fetcherRef.current = fetcher })
 
   useEffect(() => {
     let cancelled = false

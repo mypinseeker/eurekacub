@@ -7,7 +7,7 @@
  *
  * Rounds: complete 3 puzzles to trigger onComplete().
  */
-import { useState, useCallback, useMemo, useRef } from 'react'
+import { useState, useCallback, useMemo, useRef, useLayoutEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { RendererProps } from '../registry'
 import SvgBase from '../common/SvgBase'
@@ -148,7 +148,7 @@ function PizzaCutterInner({
 
   // Ref to track successCount in callbacks without stale closures
   const successRef = useRef(successCount)
-  successRef.current = successCount
+  useLayoutEffect(() => { successRef.current = successCount })
 
   const { targetSlices, showGuides, tolerance } = puzzleData
 

@@ -244,7 +244,6 @@ describe('Sequence (NumberTrain) — evaluateCarriageTap', () => {
 
   // FR-7: all blanks filled → complete after last correct placement
   it('returns allDone=true when last blank is correctly filled', () => {
-    const filled = new Map([[1, 4]]) // first blank already filled
     const result = evaluateCarriageTap({
       idx: 3,
       blanksSet,

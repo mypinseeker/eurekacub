@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useMemo } from 'react'
+import { useState, useCallback, useRef, useMemo, useLayoutEffect } from 'react'
 import CanvasBase from '../common/CanvasBase'
 import PuzzleIntro from '../common/PuzzleIntro'
 import type { RendererProps } from '../registry'
@@ -394,13 +394,20 @@ function PixelArtInner({
   const gridRef = useRef<Grid>(grid)
   const animStartRef = useRef<number | null>(null)
   const celebrationRef = useRef<CelebrationState | null>(null)
-  const historyLenRef = useRef(0)
-  const matchedRef = useRef(false)
+  const historyLenRef = useRef(history.length)
+  const matchedRef = useRef(matched)
 
-  // Keep refs in sync
-  gridRef.current = grid
-  historyLenRef.current = history.length
-  matchedRef.current = matched
+  // Mirror state into refs for the rAF draw loop. Assigning during render (as this did before)
+  // is unsafe: React can start a render and discard it — Strict Mode double-renders, concurrent
+  // interruptions — leaving the ref holding a value that was never committed while the loop
+  // paints from it. A layout effect runs only after commit, and before paint, so the next frame
+  // always sees a value that is really on screen.
+  useLayoutEffect(() => {
+    gridRef.current = grid
+    historyLenRef.current = history.length
+    matchedRef.current = matched
+  })
+
 
   /* ---- Apply transform ---- */
   const handleTransform = useCallback(

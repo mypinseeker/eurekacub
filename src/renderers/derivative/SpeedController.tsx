@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useLayoutEffect } from 'react'
 import type { RendererProps } from '../registry'
 import CanvasBase from '../common/CanvasBase'
 import PuzzleIntro from '../common/PuzzleIntro'
@@ -233,22 +233,30 @@ function SpeedControllerInner({
   const [isDragging, setIsDragging] = useState(false)
 
   // Refs for values accessed in the rAF draw loop
-  const phaseRef = useRef<Phase>('ready')
-  const speedRef = useRef(0)
+  const phaseRef = useRef<Phase>(phase)
+  const speedRef = useRef(speed)
   const carPosRef = useRef(0)
   const elapsedRef = useRef(0)
   const historyRef = useRef<PositionSample[]>([])
   const lastSampleTimeRef = useRef(0)
   const lastFrameTimeRef = useRef(0)
-  const isDraggingRef = useRef(false)
+  const isDraggingRef = useRef(isDragging)
+
+  // Mirror state into refs for the rAF draw loop. Assigning during render (as this did before)
+  // is unsafe: React can start a render and discard it — Strict Mode double-renders, concurrent
+  // interruptions — leaving the ref holding a value that was never committed while the loop
+  // paints from it. A layout effect runs only after commit, and before paint, so the next frame
+  // always sees a value that is really on screen.
+  useLayoutEffect(() => {
+    phaseRef.current = phase
+    speedRef.current = speed
+    isDraggingRef.current = isDragging
+  })
   const ahaFiredRef = useRef(false)
   const resultFiredRef = useRef(false)
   const wheelAngleRef = useRef(0)
 
-  // Sync React state → refs
-  phaseRef.current = phase
-  speedRef.current = speed
-  isDraggingRef.current = isDragging
+
 
   // Hit regions computed during draw, read during pointer events
   const hitRegions = useRef<{
