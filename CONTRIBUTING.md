@@ -16,6 +16,10 @@ Anyone can contribute puzzles! Each puzzle is a single JSON file. No programming
 
 任何人都可以贡献题目！每道题是一个 JSON 文件。不需要编程经验——只需要创造力和对数学的热爱。
 
+> ⚠️ **Heads-up (2026-09-10): JSON puzzles do not reach the game yet.** CI validates the files in `content/puzzles/`, but **nothing in the app loads them**, so a puzzle added there will not appear to any child. The levels children actually play live in `src/pages/puzzleConfigs.ts` (module levels) and `src/data/adventures.ts` (adventure stages). Some existing JSON files also use fields the renderers never read (for example symmetry's `targetShape`). Until a loader exists (tracked in `docs/PRD-content-gaps-v1.md`, A.11), adding a puzzle means editing `puzzleConfigs.ts`, which makes it an L3 task. `tests/content-puzzles-tripwire.test.ts` fails when this directory grows, and its message points back here.
+>
+> ⚠️ **注意（2026-09-10）：JSON 题目目前不会出现在游戏里。** CI 会校验 `content/puzzles/` 下的文件，但**应用里没有任何代码加载它们**，放在这里的题目孩子看不到。孩子实际玩到的关卡在 `src/pages/puzzleConfigs.ts`（模块关卡）和 `src/data/adventures.ts`（冒险关卡）里。部分现有 JSON 的字段渲染器根本不读（例如 symmetry 的 `targetShape`）。在加载器做出来之前（见 `docs/PRD-content-gaps-v1.md` A.11），加题等于改 `puzzleConfigs.ts`，属于 L3 任务。这个目录一旦新增文件，`tests/content-puzzles-tripwire.test.ts` 就会变红，并提示你回到这里。
+
 ### L2: Add Adventures — ⚠️ not open for contributions yet / 添加冒险故事 — ⚠️ 暂未开放
 
 Adventures chain puzzles into narrative journeys, and we would love outside writers here. **But there is no working contribution path today, so please do not start one expecting it to ship.**
