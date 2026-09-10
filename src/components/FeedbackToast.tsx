@@ -21,17 +21,24 @@ export default function FeedbackToast({
   onHide,
   duration = 2000,
 }: FeedbackToastProps) {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(visible)
+  const [prevVisible, setPrevVisible] = useState(visible)
+
+  // `show` is derived from `visible`, but it has to linger for one beat after the timer so the
+  // exit animation can play. Deriving it during render — React's documented pattern for state
+  // that follows a prop — avoids the extra render pass that setting it inside the effect caused.
+  if (prevVisible !== visible) {
+    setPrevVisible(visible)
+    if (visible) setShow(true)
+  }
 
   useEffect(() => {
-    if (visible) {
-      setShow(true)
-      const timer = setTimeout(() => {
-        setShow(false)
-        setTimeout(onHide, 300)
-      }, duration)
-      return () => clearTimeout(timer)
-    }
+    if (!visible) return
+    const timer = setTimeout(() => {
+      setShow(false)
+      setTimeout(onHide, 300)
+    }, duration)
+    return () => clearTimeout(timer)
   }, [visible, duration, onHide])
 
   if (!visible && !show) return null

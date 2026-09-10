@@ -928,7 +928,10 @@ function SpeedControllerInner({
         ctx.fillText('Your curve', legX + 34, legY + 30)
       }
     },
-    [targetCurve, duration, finishLine, onAha, onCorrect, onError, onComplete],
+    // themeMeta was missing: draw() paints the top area with themeMeta.topBg, so a puzzle that
+    // selects a different theme would otherwise keep drawing the previous one's backdrop.
+    // THEME_META is a module constant, so the reference is stable for a given theme.
+    [themeMeta, xAxisLabel, yAxisLabel, targetCurve, duration, finishLine, onAha, onCorrect, onError, onComplete],
   )
 
   // ── Pointer handling ──────────────────────────────────────

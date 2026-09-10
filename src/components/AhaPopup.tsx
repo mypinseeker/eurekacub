@@ -11,17 +11,24 @@ export default function AhaPopup({
   message = '\u592a\u68d2\u4e86\uff01\u4f60\u53d1\u73b0\u4e86\uff01 Amazing discovery!',
   onClose,
 }: AhaPopupProps) {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(visible)
+  const [prevVisible, setPrevVisible] = useState(visible)
+
+  // `show` is derived from `visible`, but it has to linger for one beat after the timer so the
+  // exit animation can play. Deriving it during render — React's documented pattern for state
+  // that follows a prop — avoids the extra render pass that setting it inside the effect caused.
+  if (prevVisible !== visible) {
+    setPrevVisible(visible)
+    if (visible) setShow(true)
+  }
 
   useEffect(() => {
-    if (visible) {
-      setShow(true)
-      const timer = setTimeout(() => {
-        setShow(false)
-        setTimeout(onClose, 400)
-      }, 3000)
-      return () => clearTimeout(timer)
-    }
+    if (!visible) return
+    const timer = setTimeout(() => {
+      setShow(false)
+      setTimeout(onClose, 400)
+    }, 3000)
+    return () => clearTimeout(timer)
   }, [visible, onClose])
 
   if (!visible && !show) return null
