@@ -38,6 +38,36 @@ export interface SymmetryPuzzleData {
 }
 
 /**
+ * Which symmetry game a level plays (CG-FR-2.1). `reflect` is the original mirror game and the
+ * default — a level that does not say otherwise behaves exactly as it did before.
+ */
+export type TransformType = 'reflect' | 'translate' | 'rotate'
+
+/** The two new games, which MirrorCanvas hands to TransformCanvas. */
+export type MovingTransform = Exclude<TransformType, 'reflect'>
+
+/**
+ * One round of a translate or rotate level.
+ *
+ * Unlike reflect, whose points live in one half of the canvas, these points are normalised 0–1
+ * over the largest centred square of the whole canvas, so a rotation stays a rotation even on a
+ * tall phone screen.
+ */
+export interface TransformRound {
+  targetPoints: number[][][]
+  /** translate only: how far the shape moves, in the same normalised units. */
+  vector?: [number, number]
+  /** rotate only: how many times the shape repeats around the centre (2, 3 or 4). */
+  rotationalOrder?: number
+}
+
+export interface TransformPuzzleData {
+  transformType: MovingTransform
+  rounds: TransformRound[]
+  tolerance: number
+}
+
+/**
  * Internal draw-state tracked by the MirrorCanvas component.
  */
 export interface DrawState {

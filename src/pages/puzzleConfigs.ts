@@ -70,6 +70,34 @@ export const PUZZLE_CONFIGS: Record<string, Record<string, Record<string, unknow
       mirrorAxis: 'vertical',
       tolerance: 0.14,
     },
+    // Translate (CG-FR-2.2). Points are normalised over the whole board's centred square, not a
+    // half. The child sees the shape and an arrow and must draw the shape where it lands; the
+    // destination is never drawn. Each vector is long enough that tracing the original in place
+    // cannot count (tests/renderers/symmetry-transform.test.ts checks this).
+    L4: {
+      transformType: 'translate',
+      rounds: [
+        // a tent, slid straight right
+        { targetPoints: [[[0.1, 0.66], [0.2, 0.46], [0.3, 0.66], [0.1, 0.66]]], vector: [0.55, 0] },
+        // an "L", slid down and to the right
+        { targetPoints: [[[0.14, 0.12], [0.14, 0.34], [0.3, 0.34]]], vector: [0.5, 0.5] },
+        // a lightning bolt, slid down and to the left
+        { targetPoints: [[[0.62, 0.1], [0.72, 0.2], [0.64, 0.24], [0.76, 0.36]]], vector: [-0.45, 0.5] },
+      ],
+      tolerance: 0.12,
+    },
+    // Rotate (CG-FR-2.3). One blade is drawn by the child; the board adds the turned copies live.
+    // Blades deliberately start away from the centre: a blade anchored on the centre shares that
+    // vertex with every copy, which lets a single blade "cover" most of the figure by itself.
+    L5: {
+      transformType: 'rotate',
+      rounds: [
+        { targetPoints: [[[0.5, 0.36], [0.62, 0.16], [0.76, 0.24], [0.6, 0.4]]], rotationalOrder: 2 },
+        { targetPoints: [[[0.5, 0.36], [0.5, 0.14], [0.64, 0.2], [0.58, 0.38]]], rotationalOrder: 3 },
+        { targetPoints: [[[0.5, 0.36], [0.5, 0.16], [0.68, 0.24], [0.6, 0.38]]], rotationalOrder: 4 },
+      ],
+      tolerance: 0.1,
+    },
   },
   fraction: {
     L1: { targetSlices: 2, showGuides: true, tolerance: 20 },

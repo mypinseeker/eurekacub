@@ -2,9 +2,11 @@ import { useState, useCallback, useRef, useMemo } from 'react'
 import CanvasBase from '../common/CanvasBase'
 import type { RendererProps } from '../registry'
 import PuzzleIntro from '../common/PuzzleIntro'
+import TransformCanvas from './TransformCanvas'
 import type { Point, Stroke, MirrorAxis } from './types'
 import {
   ROUNDS_TO_COMPLETE,
+  transformTypeOf,
   parsePuzzle,
   mirrorPoint,
   targetToCanvas,
@@ -224,6 +226,44 @@ export default function MirrorCanvas(props: RendererProps) {
   // here is safe and MirrorCanvasInner always mounts with a stable hook order.
   const [showIntro, setShowIntro] = useState(true)
 
+  // translate / rotate (CG-FR-2) are different games on the same board, so they get their own
+  // intro and their own component. A level without `transformType` is the mirror game, unchanged.
+  const mode = transformTypeOf(props.puzzle)
+
+  if (showIntro && mode === 'translate') {
+    return (
+      <PuzzleIntro
+        icon="➡️"
+        title={{ zh: '平移魔法', en: 'Slide It' }}
+        goal={{ zh: '把蓝色的图形沿着箭头搬过去！在箭头指的地方，画出一模一样的图形', en: 'Slide the blue shape along the arrow! Draw the exact same shape where the arrow points' }}
+        howTo={[
+          { zh: '看箭头：它告诉你图形往哪儿走、走多远', en: 'The arrow shows which way the shape moves, and how far' },
+          { zh: '从绿色的点开始画', en: 'Start drawing at the green dot' },
+          { zh: '画出一样的形状——不转、不翻，只是搬过去', en: 'Draw the same shape — no turning, no flipping, just sliding' },
+        ]}
+        insight={{ zh: '平移就是整体搬家：每一个点都朝同一个方向、走同样远，所以形状和大小都不变。', en: 'Sliding moves every point the same way by the same distance, so the shape and size stay the same.' }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
+  if (showIntro && mode === 'rotate') {
+    return (
+      <PuzzleIntro
+        icon="🌀"
+        title={{ zh: '旋转风车', en: 'Spin It' }}
+        goal={{ zh: '画一片风车叶子，画板会把它转着复制到其他位置！把虚线风车画完整', en: 'Draw one blade and the board spins copies of it around! Complete the dotted pinwheel' }}
+        howTo={[
+          { zh: '中间的点是风车的轴', en: "The dot in the middle is the pinwheel's axle" },
+          { zh: '沿着虚线画一片叶子', en: 'Trace one blade along the dotted line' },
+          { zh: '看它转着出现在其他位置', en: 'Watch it appear, turned, in the other spots' },
+        ]}
+        insight={{ zh: '转一圈的时候，有好几次看起来一模一样——这就是旋转对称。风车、花朵、雪花都有！', en: 'If a shape looks the same several times as it turns, it has rotational symmetry — like pinwheels, flowers and snowflakes!' }}
+        onStart={() => setShowIntro(false)}
+      />
+    )
+  }
+
   if (showIntro) {
     return (
       <PuzzleIntro
@@ -241,7 +281,7 @@ export default function MirrorCanvas(props: RendererProps) {
     )
   }
 
-  return <MirrorCanvasInner {...props} />
+  return mode === 'reflect' ? <MirrorCanvasInner {...props} /> : <TransformCanvas {...props} />
 }
 
 function MirrorCanvasInner({
