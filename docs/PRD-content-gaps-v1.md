@@ -4,6 +4,7 @@
 |---|---|
 | **状态** | 🟡 **GATE-1 待审批**（用户说 "approved/批准" 后方可进 GATE-2） |
 | **提出日期** | 2026-09-05 |
+| **最后更新** | 2026-09-10 —— 附录 A 的缺陷修复已合并到 `main`（`c7fbbb3`）；CI 真实状态见 A.9 |
 | **依据** | `~/Workspace/ai-think-tank/engagements/2026-09-05-marble-taxonomy-fit/R3/gap_audit_8modules.md` |
 | **方法** | 用 Marble Skill Taxonomy 的 `centrality`（图中心度）做外部参照，反向审计本项目 41 道 puzzle 的覆盖盲区。**只读该数据集的数值，不导入其数据、不复用其文本** → 零许可证风险 |
 | **前置 PRD** | `docs/PRD-kids-math-v1.md` (v1.1) —— 本 PRD 为其增量，不替代 |
@@ -304,10 +305,57 @@ A.4 记录过这 6 个 JSON 从不被加载。本轮补查了一件更关键的�
 已加绊线测试：有人再往 `content/adventures/` 放文件就会变红并指向 CONTRIBUTING，
 避免又一个「PR 合了但什么也没发生」。
 
-### A.9 仍未处理
+### A.9 合并到 `main` 与 CI 的真实状态（2026-09-10）
 
+附录 A 的 9 个 commit 已按用户指示**快进**合并到 `main`：`5a35d4d → c7fbbb3`，远端经 `ls-remote` 复核。
+快进意味着合并后的树与本地实测的树完全相同，没有合并提交会引入差异。
+
+**`main` 上的 CI 从 2026-03-29 起连续红**（可查到的最近 5 次 push 全部 `failure`），没人发现。
+
+合并后的第一次 CI（run `34480092893`）：
+
+| Job | 合并前（`5a35d4d`） | 合并后（`c7fbbb3`） |
+|---|---|---|
+| lint-and-typecheck | ❌ | ✅（lint 45 → 0 的效果） |
+| content-validate | ✅ | ✅ |
+| test | ❌ | ❌ **仍红：18 个失败** |
+| build | 跳过 | 跳过（依赖前两项） |
+
+**test 为何仍红**：18 个失败全在 `haptic.test.ts` / `useFeedback.test.ts`，都报
+`ReferenceError: navigator is not defined`。CI 用 **Node 20**，本机用 **Node 22**；
+Node 从 v21 起才自带全局 `navigator`。测试写的是 `Object.defineProperty(navigator, …)`
+——在本机能跑，只因为运行时恰好提供了这个全局。
+
+- 本地用 Node 20 **复现**：修复前 18/18 红；同样两个文件在 Node 22 下 18/18 绿
+- 修复：改为 `vi.stubGlobal('navigator', …)`，测试自己提供全局，不再赌运行时
+- 修复后：Node 20 **562/562**、Node 22 **562/562**，tsc / lint exit 0
+- 反向验证：把 `tap` 的 10ms 注入改成 11ms → 2 个测试红，报的是 `AssertionError`
+  而不是 `ReferenceError`——证明换成 stub 之后测试仍能抓真 bug，没变成空转
+
+> ⏳ 该修复在分支 `fix/ci-node20-navigator`，**尚未进 `main`**。GitHub 上的 CI 转绿要等它合并后
+> 才能确认——上面的「修复后」都是本地 Node 20 的结果，不是 GitHub 的结果。
+>
+> **推断，未证实**：旧 CI 的 test 失败很可能也是同一原因（CI 一直是 Node 20）。
+> 但 3–4 月那几次 run 的日志已过期（GitHub 返回 HTTP 410），无法核对。
+
+**留痕**：合并前我按 CI 的原命令本地跑了 tsc、lint、validate-content，然后告诉用户
+「旧 CI 挂的两处正是这个分支修掉的」。这话**只对了一半**——lint 那处对；test 那处我
+**根本没在 CI 的运行时上跑过**，只是拿本机 Node 22 的绿灯去代替 CI 的 Node 20。
+教训：**本地绿 ≠ CI 绿，除非运行时一致**。「按 CI 的命令跑」不够，还得「按 CI 的环境跑」。
+
+**建议（未执行，需用户决定）**：Node 20 已于 2026-04 结束维护，本机开发用的是 22。
+可以把 `ci.yml` / `content-validate.yml` 的 `node-version` 升到 22，让 CI 与开发环境一致。
+这与上面的修复**互相独立**：修复让测试不依赖任何运行时，升级只是消除环境差。
+
+### A.10 仍未处理
+
+- **CI 修复待合并**：`fix/ci-node20-navigator` → `main`，合并后需确认 GitHub CI 全绿
+- **线上部署渠道未确认**：仓库里没有 `.vercel/`，GitHub 上也没有 environments 或 deployments
+  记录。合并到 `main` 是否已经到达孩子手里的页面，**目前无法判定**
+- **SHIP 未做**：version bump、CHANGELOG、STATUS 都还没更新（`package.json` 版本仍是 `0.0.0`）
 - symmetry / derivative 的难度梯度需 A7 真机验收（工程占位，测试替代不了孩子）
 - `content/adventures/` 字段迁移 + loader（架构级，待批准）
+- **本 PRD 的正文范围 FR-1 ~ FR-4 尚未开工**：附录 A 修的全是审计中挖出的既有缺陷，不占 FR 范围
 
 ---
 
