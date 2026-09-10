@@ -9,6 +9,24 @@
  * Sample a position curve at `n + 1` evenly spaced time steps over t ∈ [0, 1].
  * SpeedController expects the series to start at 0 and end at the finish line.
  */
+/**
+ * The pixel-art starting picture, shared by all three matrix levels.
+ *
+ * It has no symmetry at all — the four rotations and their four mirrors are eight different
+ * pictures. That matters: the level before this one used a left-right symmetric glyph, which
+ * turned flipH into a no-op the child could press to "win" without thinking.
+ */
+const GLYPH: number[][] = [
+  [0, 1, 1, 1, 1, 1, 0, 0],
+  [0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+]
+
 const curve = (fn: (t: number) => number, n = 40): number[] =>
   Array.from({ length: n + 1 }, (_, i) => fn(i / n))
 
@@ -86,10 +104,68 @@ export const PUZZLE_CONFIGS: Record<string, Record<string, Record<string, unknow
   // silently fell back to the renderer default, which offers ALL four transforms — so L1 was
   // never actually easier than L3. `initialGrid`/`targetGrid` still use the renderer's built-in
   // artwork; only the transform palette and step budget differ per level.
+  // PixelArt reads `{ initialGrid, targetGrid, allowedTransforms, maxSteps }`. Both grids used to
+  // be omitted, and parsePuzzle() silently defaults BOTH of them to the same DEFAULT_GRID — so
+  // every level shipped with the picture already sitting on its own target. That made L1
+  // unsolvable (only rotate90 is allowed, returning to the start takes 4 turns, the cap was 3)
+  // and L2/L3 winnable by pressing any single button, because DEFAULT_GRID is its own mirror.
+  //
+  // GLYPH is deliberately asymmetric: its eight rotations and reflections are eight distinct
+  // pictures, so no transform is ever a no-op the way flipH was before.
+  //
+  // The transforms form the dihedral group of order 8, so no target is ever more than 3 moves
+  // away — difficulty here cannot come from making the solution longer. It comes from the search
+  // instead: the button palette widens (1 -> 2 -> 4 choices per move) while the spare-move budget
+  // shrinks (2 -> 1 -> 1). L2 is the interesting one: its goal is GLYPH flipped top-to-bottom,
+  // which would be one press of flipV, but flipV is not on the menu yet — the child has to find
+  // it as rotate + flipH + rotate. tests/matrix-solvability.test.ts proves each of these against
+  // the renderer's own applyTransform, not against a re-implementation.
   matrix: {
-    L1: { maxSteps: 3, allowedTransforms: ['rotate90'] },
-    L2: { maxSteps: 5, allowedTransforms: ['rotate90', 'flipH'] },
-    L3: { maxSteps: 8, allowedTransforms: ['rotate90', 'flipH', 'flipV', 'transpose'] },
+    L1: {
+      initialGrid: GLYPH,
+      targetGrid: [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 1, 0, 0, 1],
+        [0, 0, 0, 0, 1, 0, 0, 1],
+        [0, 0, 0, 0, 1, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+      ],
+      allowedTransforms: ['rotate90'],
+      maxSteps: 3,
+    },
+    L2: {
+      initialGrid: GLYPH,
+      targetGrid: [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 0, 0],
+      ],
+      allowedTransforms: ['rotate90', 'flipH'],
+      maxSteps: 4,
+    },
+    L3: {
+      initialGrid: GLYPH,
+      targetGrid: [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1, 0, 0, 1],
+        [0, 0, 0, 0, 1, 0, 0, 1],
+        [0, 0, 0, 0, 1, 0, 0, 1],
+        [0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+      ],
+      allowedTransforms: ['rotate90', 'flipH', 'flipV', 'transpose'],
+      maxSteps: 3,
+    },
   },
   // NumberTrain reads `{ sequence, blanks, options }`. `blanks` is an array of INDICES into
   // `sequence` (it becomes `new Set(blanks)`) — a bare count crashed it. `sequence` must hold the
