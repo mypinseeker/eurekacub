@@ -24,11 +24,10 @@ describe('useFeedback — Three-Channel Feedback Rules', () => {
 
   beforeEach(() => {
     vibrateMock = vi.fn()
-    Object.defineProperty(navigator, 'vibrate', {
-      value: vibrateMock,
-      writable: true,
-      configurable: true,
-    })
+    // Stub the global itself: Node < 21 has no `navigator`, so defining a property on it threw
+    // on CI (Node 20). Not unstubbed after each test, because that would also drop the
+    // module-level Audio stub above.
+    vi.stubGlobal('navigator', { vibrate: vibrateMock })
     setHapticEnabled(true)
     audio.setEnabled(true)
   })

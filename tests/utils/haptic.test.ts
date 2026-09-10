@@ -6,16 +6,16 @@ describe('Haptic Feedback', () => {
 
   beforeEach(() => {
     vibrateMock = vi.fn()
-    Object.defineProperty(navigator, 'vibrate', {
-      value: vibrateMock,
-      writable: true,
-      configurable: true,
-    })
+    // Stub the whole global, not a property on it: Node only ships a global `navigator` from
+    // v21, so defineProperty(navigator, …) threw "navigator is not defined" on CI's Node 20
+    // while passing on Node 22 locally. Owning the global makes the test runtime-independent.
+    vi.stubGlobal('navigator', { vibrate: vibrateMock })
     setHapticEnabled(true)
   })
 
   afterEach(() => {
     vi.restoreAllMocks()
+    vi.unstubAllGlobals()
   })
 
   it('tap triggers short vibration (10ms)', () => {
@@ -79,11 +79,7 @@ describe('Haptic Feedback', () => {
   })
 
   it('gracefully handles missing vibrate API', () => {
-    Object.defineProperty(navigator, 'vibrate', {
-      value: undefined,
-      writable: true,
-      configurable: true,
-    })
+    vi.stubGlobal('navigator', {})
     // Should not throw
     expect(() => haptic.tap()).not.toThrow()
     expect(() => haptic.success()).not.toThrow()
