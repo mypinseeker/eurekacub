@@ -19,6 +19,31 @@ const FRACTION_L4 = PUZZLE_CONFIGS.fraction.L4 as { rounds: EqRound[] }
 const SYMMETRY_L4 = PUZZLE_CONFIGS.symmetry.L4 as { rounds: TfRound[] }
 const SYMMETRY_L5 = PUZZLE_CONFIGS.symmetry.L5 as { rounds: TfRound[] }
 
+/*
+ * Flight recorder: a failing test prints every console.error and main-frame navigation.
+ *
+ * It found the cause of two flaky failures on 2026-09-10. Each time, the game had unmounted and
+ * the intro screen was back, because the page had reloaded. Rewriting an existing repo document
+ * while this suite runs against the dev server reloads the page under test, even with the same
+ * bytes (reproduced 2/2; 0 with no change; 0 for new files). Both reloads matched a doc write to
+ * within ~40 ms. Vite's log shows nothing. So: don't edit repo files while E2E runs. The shipped
+ * build has no HMR client and is not affected.
+ */
+let pageEvents: string[] = []
+test.beforeEach(async ({ page }) => {
+  pageEvents = []
+  const t0 = Date.now()
+  const at = () => `+${Date.now() - t0}ms`
+  page.on('console', (m) => { if (m.type() === 'error') pageEvents.push(`${at()} console.error: ${m.text()}`) })
+  page.on('framenavigated', (f) => { if (f === page.mainFrame()) pageEvents.push(`${at()} navigated: ${f.url()}`) })
+})
+test.afterEach(async ({ page }, info) => {
+  if (info.status !== info.expectedStatus) {
+    const lines = [...pageEvents, `final url: ${page.url()}`]
+    console.log(`[page events] ${info.title}\n  ${lines.join('\n  ')}`)
+  }
+})
+
 /** Collect uncaught page errors so each test can assert there were none. */
 function watchErrors(page: Page): string[] {
   const errors: string[] = []

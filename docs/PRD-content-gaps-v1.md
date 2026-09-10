@@ -2,9 +2,9 @@
 
 | 项 | 值 |
 |---|---|
-| **状态** | ✅ **GATE-1 已批准**（2026-09-10）→ 🟡 **GATE-2 迭代计划待确认**：`ITERATION_PLAN_content-gaps-v1.md` |
+| **状态** | ✅ GATE-1 已批准 → ✅ GATE-2 已批准（2026-09-10，D-1/D-2/D-3 均选 A）→ ✅ **GATE-3 开发与 QA 完成**（FR-1 + FR-2，见迭代计划 §5）→ ⛔ **GATE-4 阻塞**：未部署（Vercel 凭证），A7 未做 |
 | **提出日期** | 2026-09-05 |
-| **最后更新** | 2026-09-10 —— 附录 A 的缺陷修复 + CI 修复已合并到 `main`（当前 `a6abad4`），**GitHub CI 连续 3 次全绿**；但**尚未部署到线上**（阻塞于 Vercel 凭证），见 A.9 |
+| **最后更新** | 2026-09-10 —— FR-1（分数 L4「一样多」）+ FR-2（对称 L4 平移、L5 旋转）已实现并通过门禁：单测 562 → **661**，E2E 79 → **89**。仍**未部署到线上**（阻塞于 Vercel 凭证，见 A.9），所以孩子还玩不到 |
 | **依据** | `~/Workspace/ai-think-tank/engagements/2026-09-05-marble-taxonomy-fit/R3/gap_audit_8modules.md` |
 | **方法** | 用 Marble Skill Taxonomy 的 `centrality`（图中心度）做外部参照，反向审计本项目 41 道 puzzle 的覆盖盲区。**只读该数据集的数值，不导入其数据、不复用其文本** → 零许可证风险 |
 | **前置 PRD** | `docs/PRD-kids-math-v1.md` (v1.1) —— 本 PRD 为其增量，不替代 |
@@ -395,11 +395,22 @@ Node 从 v21 起才自带全局 `navigator`。测试写的是 `Object.defineProp
 - **部署到 Vercel**（阻塞于凭证）：需要用户在本机执行 `vercel login`，或告知线上地址 /
   Vercel 项目名。之后：`vercel link` → `vercel --prod` → 用 bundle 特征字符串核对线上版本 → 真机验收
 - **建议接上 Vercel 的 GitHub 集成**：否则每次都得手动部署，而且「合并了但没上线」会再次悄悄发生
-- **SHIP 未做**：version bump、CHANGELOG、STATUS 都还没更新（`package.json` 版本仍是 `0.0.0`）
+- **版本号未切**：已新建 `CHANGELOG.md`，内容记在 `[Unreleased]` 下；`package.json` 仍是 `0.0.0`。
+  按 GATE-4，要等部署完成、A7 通过后才切版本
 - symmetry / derivative 的难度梯度需 A7 真机验收（工程占位，测试替代不了孩子）
 - `content/adventures/` 字段迁移 + loader（架构级，待批准）
-- **正文 FR 范围**：FR-1 + FR-2 已进入 GATE-2（`ITERATION_PLAN_content-gaps-v1.md`，待用户确认后开工）；FR-3 / FR-4 放到下一迭代
-- **`content/puzzles/` 同样是死路径**（见 A.11），处理方式待 GATE-2 的决策 D-3
+- ~~正文 FR 范围~~ → **FR-1 + FR-2 已实现**（2026-09-10，迭代计划 TASK-1~8）。FR-3 / FR-4 放到下一迭代
+- ~~`content/puzzles/` 的处理~~ → 按决策 D-3 = A 处理：保留目录，加绊线测试，改 CONTRIBUTING（`ea80fae`）
+- ~~E2E 偶发失败~~ → **原因已查明，是测试环境问题，不是产品 bug**（2026-09-10）。两次偶发失败
+  （平移测试和分数整关测试）现场一样：页面整页重新加载，游戏回到引导页。起因是我在 E2E 连着
+  dev server 运行时改写了仓库里的文档：
+  - 证据：新加的现场记录显示两次导航发生在 +2700ms 和 +5316ms，分别与 `ITERATION_PLAN`
+    （16:14:11.723）和 PRD（16:14:14.375）的写入时间吻合，误差约 40 毫秒；
+  - 对照实验：改写已有文档每次都触发 1 次导航（2/2，内容相同也触发）；不做任何操作 0 次；新建文件 0 次；
+  - 为什么之前误判：第一次对照用的是 `touch`，只改修改时间，和真实写入不对等，得出了错误的「不会刷新」；
+  - vite 日志没有记录这类刷新。dev 工具链内部是哪个环节发出的刷新**尚未确定**（推断与 Tailwind 插件的文件监听有关）；
+  - 产品不受影响：线上构建的 `index.html` 里没有 `@vite/client`（dev server 页面里有，作为对照）。
+  应对：E2E 运行期间不改仓库文件。spec 里的现场记录保留，以后同类失败能直接看出原因
 
 ### A.11 `content/puzzles/` 也是死路径（2026-09-10，写迭代计划时发现）
 
