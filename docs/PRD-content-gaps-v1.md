@@ -358,6 +358,9 @@ Node 从 v21 起才自带全局 `navigator`。测试写的是 `Object.defineProp
 | 仓库 webhooks | 空 | 同上 |
 | 仓库内 `.vercel/project.json` | 不存在 | 本机从未 `vercel link` 过这个项目 |
 | 本机 Vercel CLI 凭证 | `auth.json` 只有 3 字节（空对象），自 2026-06-11 起 | **已登出**，无法用 CLI 查询或部署 |
+| Mac mini 构建机 Vercel CLI 凭证 | 有 token，但 Vercel 返回 `The specified token is not valid` | **已失效**。⚠️ CLI 在拒绝后**自动删除了** Mac 上的 `auth.json`（2026-09-10 由本次调查的 `vercel whoami` 触发）；因 token 本已无效，未损失可用凭证 |
+| Mac mini 上的 `.vercel/project.json` | 只有 `sonora-app` 一个 | Mac 上**没有** EurekaCub 的克隆，也没 link 过 |
+| 文档 / git 历史 / SecondBrain 笔记 | 零条 EurekaCub 部署记录；v1.0.0 commit 只写「Vercel-ready」 | 笔记里「Vercel 部署后待验证 BUG-1」**是 PinSeeker 的**（`GoalTrackerBadge`），不是本项目 |
 | `eurekacub.vercel.app` 等 3 个候选地址 | `404 DEPLOYMENT_NOT_FOUND` | 不存在（阴性对照：随机子域名同样 404，探针有效） |
 | `kids-math.vercel.app` | 200，但**不是本项目** | 见下 |
 
@@ -365,8 +368,10 @@ Node 从 v21 起才自带全局 `navigator`。测试写的是 `Object.defineProp
 本地 `23acf87` 的构建产物中出现 **12** 次（阳性对照，证明这个特征字符串检测是有效的）；
 页面标题也不同（线上 `Vite + React`，本项目 `eurekacub-init`）。它是另一个恰好同名的 Vercel 项目。
 
-**结论**：EurekaCub 的线上地址和 Vercel 项目名**目前查不到**。因为 GitHub 集成没接，之前的部署
-（推断，未证实）应该是用 CLI 手动 `vercel --prod` 做的。**附录 A 的全部修复现在只在 `main` 上，孩子
+**结论**：EurekaCub 的线上地址和 Vercel 项目名**目前查不到**。两台机器上的 Vercel 凭证都不可用，
+两台机器上都没有任何 EurekaCub 的部署痕迹。因为 GitHub 集成没接，如果之前部署过，应该是用 CLI
+手动 `vercel --prod` 做的（推断，未证实）。**不排除 EurekaCub 从未部署过**：「Vercel-ready」只说明
+配置就绪（推断，未证实——只有用户在 Vercel 后台能确认）。**附录 A 的全部修复现在只在 `main` 上，孩子
 看到的仍是旧版**，直到有人手动部署一次。
 
 ### A.10 仍未处理
