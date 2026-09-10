@@ -233,6 +233,22 @@ test.describe('CG-FR-2 symmetry L4 (translate) and L5 (rotate)', () => {
     expect(errors).toEqual([])
   })
 
+  test('the drawing board is big enough to draw on, not the 150 px canvas default', async ({ page }) => {
+    // Regression, found on the live site on 2026-09-10. The board's wrapper had no definite
+    // height, so it fell back to the canvas default of 150 px. That is a 150 x 150 drawing square
+    // on any screen, phone or desktop.
+    for (const url of ['/module/m1/play/L4', '/module/m1/play/L5']) {
+      await gotoPuzzle(page, url)
+      const canvas = page.getByTestId('transform-canvas').locator('canvas')
+      await expect
+        .poll(async () => {
+          const b = await canvas.boundingBox()
+          return b ? Math.round(Math.min(b.width, b.height)) : 0
+        })
+        .toBeGreaterThanOrEqual(300)
+    }
+  })
+
   /** Play every round of a translate/rotate level, then expect the page to return to m1. */
   async function playWholeLevel(page: Page, url: string, rounds: TfRound[], strokesFor: (r: TfRound) => number[][][]) {
     const errors = watchErrors(page)

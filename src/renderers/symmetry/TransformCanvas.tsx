@@ -243,9 +243,12 @@ export default function TransformCanvas({ puzzle, onCorrect, onAha, onComplete }
       ? { zh: '从绿点开始，画出搬过去的图形', en: 'Start at the green dot and draw the moved shape' }
       : { zh: '沿着虚线画一片叶子，看它转起来', en: 'Trace one blade and watch it spin' }
 
+  // The board needs a definite height. With `h-full` under a parent that has no height,
+  // CanvasBase measured the canvas element's default 150 px and locked to it. Because shapes
+  // live in the centred min(w, h) square, that left a 150 x 150 px drawing area on any screen.
   return (
     <div
-      className="relative w-full h-full"
+      className="relative w-full h-[min(65vh,560px)]"
       data-testid="transform-canvas"
       data-mode={transformType}
       data-solved={solved}

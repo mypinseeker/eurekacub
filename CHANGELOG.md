@@ -30,6 +30,12 @@ currently blocked on Vercel credentials (see `docs/PRD-content-gaps-v1.md` A.9).
   3.4 seconds after the first success and absorbed any tap that landed on it. A child who pressed
   "Next" and started straight away lost cuts or strokes. The E2E suite found it on the second round
   of fraction L4; the mirror game had the same exposure.
+- **The Slide It and Spin It boards were only 150 px tall.** The board's wrapper had no definite
+  height, so the canvas kept its browser default of 150 px on every screen. Shapes live in a
+  centred square, so a child had a 150 × 150 px area to draw in, and on phones the Spin It blade
+  covered the instructions. The board is now `min(65vh, 560px)` tall: a 358 px square on a
+  390 × 844 phone. Found by measuring the live site. The mirror levels (L1–L3) have the same
+  150 px board and were left unchanged; see PRD-content-gaps A.10.
 - Earlier fixes on the way to this release, each detailed in PRD-content-gaps Appendix A:
   - all eight renderers white-screened when Start was pressed (a Rules-of-Hooks violation);
   - four modules' level configs were silently ignored, and two crashed;

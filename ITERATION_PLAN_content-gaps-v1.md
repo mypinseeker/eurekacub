@@ -244,10 +244,10 @@ symmetry.L5 = { transformType: 'rotate',    rounds: [ { targetPoints, rotational
 
 | 交付物 | 状态 |
 |--------|------|
-| 代码已合并到 `main`，GitHub CI 全绿 | 🔄 本地门禁全绿，合并与 CI 结果见交付报告 |
+| 代码已合并到 `main`，GitHub CI 全绿 | ✅ `a83fc61`，CI run `34501978814` 四项全绿 |
 | PRD 验收标准 A1–A6 逐项确认 | ✅ A1 FR-1+FR-2 已实现；A2 无回归（661 单测、89 E2E）；A3/A4 清单 28 项，❌0；A5/A6 由契约测试和「各关不雷同」测试覆盖 |
-| **Vercel 部署，并用 bundle 特征字符串核对线上版本** | ⛔ 阻塞于 `vercel login`（需要用户操作） |
-| A7 孩子真机验收（用户亲自确认） | ⛔ 要等部署完成 |
+| **Vercel 部署，并用 bundle 特征字符串核对线上版本** | ✅ 用户新建项目并接上 GitHub 集成，`a83fc61` 自动部署到 `https://eurekacub.vercel.app`；线上 JS 与本地构建逐字节相同。上线后的手机检查发现画板只有 150 像素高，已修复（见 PRD A.10） |
+| A7 孩子真机验收（用户亲自确认） | ⏳ 线上已可玩，等用户安排 |
 | 新建 CHANGELOG；版本号从 `0.0.0` 校正为 `1.1.0` | 🟡 CHANGELOG 已建，内容记在 `[Unreleased]` 下；**版本号暂不切**，要等部署完成、A7 通过（遵循本项目 GATE-4） |
 
 ---
