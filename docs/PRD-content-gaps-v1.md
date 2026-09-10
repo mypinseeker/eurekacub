@@ -2,7 +2,7 @@
 
 | 项 | 值 |
 |---|---|
-| **状态** | 🟡 **GATE-1 待审批**（用户说 "approved/批准" 后方可进 GATE-2） |
+| **状态** | ✅ **GATE-1 已批准**（2026-09-10）→ 🟡 **GATE-2 迭代计划待确认**：`ITERATION_PLAN_content-gaps-v1.md` |
 | **提出日期** | 2026-09-05 |
 | **最后更新** | 2026-09-10 —— 附录 A 的缺陷修复 + CI 修复已合并到 `main`（当前 `a6abad4`），**GitHub CI 连续 3 次全绿**；但**尚未部署到线上**（阻塞于 Vercel 凭证），见 A.9 |
 | **依据** | `~/Workspace/ai-think-tank/engagements/2026-09-05-marble-taxonomy-fit/R3/gap_audit_8modules.md` |
@@ -27,6 +27,10 @@
 | `symmetry` | 5 | `mirror-canvas` ×5 | 目标图形（均为 `mirrorAxis`） |
 | `matrix` | 5 | `pixel-art` ×5 | 变换类型 |
 | `derivative` | 5 | `speed-controller` ×5 | 速度曲线 |
+
+> **注（2026-09-10）**：本表统计的是 `content/puzzles/` 下的 41 个 JSON。后来查明**这些文件从不被运行时加载**（见 A.11），
+> 孩子实际玩到的是 `puzzleConfigs.ts` 中每个模块的 L1–L3，加上冒险模式里内联的关卡。
+> 不过「一个模块一种交互形态」这个核心判断**对线上内容同样成立**，所以本 PRD 的立论不受影响；受影响的只是题数口径。
 
 ### 1.2 为什么现有 QA 没能发现
 
@@ -394,13 +398,31 @@ Node 从 v21 起才自带全局 `navigator`。测试写的是 `Object.defineProp
 - **SHIP 未做**：version bump、CHANGELOG、STATUS 都还没更新（`package.json` 版本仍是 `0.0.0`）
 - symmetry / derivative 的难度梯度需 A7 真机验收（工程占位，测试替代不了孩子）
 - `content/adventures/` 字段迁移 + loader（架构级，待批准）
-- **本 PRD 的正文范围 FR-1 ~ FR-4 尚未开工**：附录 A 修的全是审计中挖出的既有缺陷，不占 FR 范围
+- **正文 FR 范围**：FR-1 + FR-2 已进入 GATE-2（`ITERATION_PLAN_content-gaps-v1.md`，待用户确认后开工）；FR-3 / FR-4 放到下一迭代
+- **`content/puzzles/` 同样是死路径**（见 A.11），处理方式待 GATE-2 的决策 D-3
+
+### A.11 `content/puzzles/` 也是死路径（2026-09-10，写迭代计划时发现）
+
+本 PRD 1.1 的「41 道 puzzle」统计的正是 `content/puzzles/**/*.json`。写 GATE-2 计划、确定「新题放在哪」时查明，
+**这 41 个文件从不被运行时加载**，情况与 A.8 的 `content/adventures/` 相同：
+
+| 检查 | 结果 | 对照 |
+|---|---|---|
+| `src/` 中对 `content/puzzles` / `import.meta.glob` 的引用 | 0 | 阳性对照：同一搜索能找到 `PuzzlePage.tsx` 对 `puzzleConfigs` 的 import |
+| `src/api/contentSync.ts`（Supabase） | 没有任何文件 import 它 | 阳性对照：能找到它自己对 `./supabase` 的 import |
+| `.env*`、`public/*.json`、种子脚本 | 都不存在 | — |
+
+字段结构同样对不上：例如 `symmetry/L2-castle.json` 用 `targetShape` 和 `tolerance: 20`，渲染器读的是 `targetPoints` 和取值 0–1 的 `tolerance`。
+CI 的 `content-validate` 每次校验这些文件、每次都是绿的，**这个绿灯并不代表孩子看到的内容没问题**。
+
+**对本 PRD 的影响**：核心判断不变（1.1 的注里有说明）。但 FR-1.2「新增 ≥3 道 puzzle」如果照字面放进 `content/puzzles/`，孩子仍然看不到。
+新题放在哪由迭代计划的决策 D-1 决定；这 41 个文件怎么处理由 D-3 决定。
 
 ---
 
 ## 七、GATE-1 审批
 
-- [ ] 用户审批（说 "approved" / "批准" 后进入 GATE-2 ITERATION_PLAN）
-- [ ] 确认本迭代 FR 范围
+- [x] 用户审批（2026-09-10 用户说「批准PRD」）→ 进入 GATE-2 ITERATION_PLAN
+- [x] 确认本迭代 FR 范围：**FR-1 + FR-2**。沿用第三节的建议，用户批准时没有另外指定；在 GATE-2 仍可调整
 - [ ] 确认 A7 真机验收安排
 - [ ] 完成 Vercel 部署并核对线上版本（A7 的前置条件，见开放问题 4、5）
