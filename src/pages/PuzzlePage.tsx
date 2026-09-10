@@ -8,19 +8,7 @@ import FeedbackToast from '../components/FeedbackToast'
 import AhaPopup from '../components/AhaPopup'
 import { getRenderer } from '../renderers/registry'
 import { getRandomPuzzle } from '../renderers/geometry/tangram.puzzles'
-import { PUZZLE_CONFIGS } from './puzzleConfigs'
-
-/* Map moduleId (m1-m8) → renderer registry id */
-const MODULE_RENDERER_MAP: Record<string, string> = {
-  m1: 'symmetry',
-  m2: 'fraction',
-  m3: 'geometry',
-  m4: 'derivative',
-  m5: 'equation',
-  m6: 'matrix',
-  m7: 'sequence',
-  m8: 'probability',
-}
+import { PUZZLE_CONFIGS, MODULE_RENDERER_MAP } from './puzzleConfigs'
 
 export default function PuzzlePage() {
   const { moduleId, levelId } = useParams<{ moduleId: string; levelId: string }>()

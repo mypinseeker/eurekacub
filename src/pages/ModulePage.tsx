@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { MODULE_RENDERER_MAP, levelIdsFor, levelMetaFor, type LevelMeta } from './puzzleConfigs'
 
 const MODULE_KEYS: Record<string, { nameKey: string; descKey: string; icon: string; gradient: string; light: string }> = {
   m1: { nameKey: 'symmetry', descKey: 'symmetryDesc', icon: '\uD83E\uDE9E', gradient: 'from-pink-400 to-rose-500', light: 'bg-pink-50 text-pink-600 border-pink-200' },
@@ -13,16 +14,15 @@ const MODULE_KEYS: Record<string, { nameKey: string; descKey: string; icon: stri
   m8: { nameKey: 'probability', descKey: 'probabilityDesc', icon: '\uD83C\uDFB2', gradient: 'from-emerald-400 to-green-500', light: 'bg-emerald-50 text-emerald-600 border-emerald-200' },
 }
 
-const LEVELS = [
-  { id: 'L1', num: 1, titleKey: 'level.explorer', ageKey: 'level.age7', stars: 0, maxStars: 3 },
-  { id: 'L2', num: 2, titleKey: 'level.standard', ageKey: 'level.age8', stars: 0, maxStars: 3 },
-  { id: 'L3', num: 3, titleKey: 'level.challenge', ageKey: 'level.age10', stars: 0, maxStars: 3 },
-]
+/** Only reached if a level has no metadata \u2014 tests/puzzle-configs.test.ts fails in that case. */
+const FALLBACK_META: LevelMeta = { titleKey: 'level.challenge', ageKey: 'level.ageAll' }
 
 const levelColors = [
   { bg: 'from-emerald-400 to-green-500', shadow: 'shadow-emerald-200/60', emoji: '\uD83C\uDF31' },
   { bg: 'from-sky-400 to-blue-500', shadow: 'shadow-sky-200/60', emoji: '\u2B50' },
   { bg: 'from-purple-400 to-violet-500', shadow: 'shadow-purple-200/60', emoji: '\uD83D\uDD25' },
+  { bg: 'from-orange-400 to-pink-500', shadow: 'shadow-orange-200/60', emoji: '\u2728' },
+  { bg: 'from-fuchsia-400 to-pink-500', shadow: 'shadow-fuchsia-200/60', emoji: '\uD83C\uDF00' },
 ]
 
 export default function ModulePage() {
@@ -34,6 +34,17 @@ export default function ModulePage() {
   const fullNameKey = `module.${modInfo.nameKey}Full`
   const shortNameKey = `module.${modInfo.nameKey}`
   const descKey = modInfo.descKey ? `module.${modInfo.descKey}` : ''
+
+  // The cards come from the level table, so a module with a new mode (fraction L4, symmetry
+  // L4/L5) shows it without this page knowing anything about it.
+  const rendererId = MODULE_RENDERER_MAP[moduleId ?? ''] ?? ''
+  const levels = levelIdsFor(rendererId).map((id) => ({
+    id,
+    num: Number(id.slice(1)),
+    ...(levelMetaFor(rendererId, id) ?? FALLBACK_META),
+    stars: 0,
+    maxStars: 3,
+  }))
 
   return (
     <div className="min-h-screen">
@@ -64,7 +75,7 @@ export default function ModulePage() {
 
         {/* Level cards — colorful and inviting */}
         <div className="space-y-3">
-          {LEVELS.map((level, i) => (
+          {levels.map((level, i) => (
             <motion.button
               key={level.id}
               initial={{ opacity: 0, x: -30 }}
@@ -75,8 +86,8 @@ export default function ModulePage() {
               onClick={() => navigate(`/module/${moduleId}/play/${level.id}`)}
               aria-label={t('a11y.levelCard', { level: t(level.titleKey) })}
               className={`
-                w-full p-5 rounded-3xl bg-gradient-to-r ${levelColors[i].bg}
-                shadow-lg ${levelColors[i].shadow}
+                w-full p-5 rounded-3xl bg-gradient-to-r ${levelColors[i % levelColors.length].bg}
+                shadow-lg ${levelColors[i % levelColors.length].shadow}
                 transition-all duration-200 text-left text-white
                 overflow-hidden relative
               `}
@@ -87,7 +98,7 @@ export default function ModulePage() {
 
               <div className="relative flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl">{levelColors[i].emoji}</span>
+                  <span className="text-3xl">{levelColors[i % levelColors.length].emoji}</span>
                   <div>
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-xs font-bold bg-white/25 px-2 py-0.5 rounded-full">

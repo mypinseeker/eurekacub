@@ -187,3 +187,65 @@ export const PUZZLE_CONFIGS: Record<string, Record<string, Record<string, unknow
     L3: { totalFlips: 50 },
   },
 }
+
+/**
+ * moduleId (m1–m8) → renderer registry id. Shared by the module page, which needs to know which
+ * levels exist, and the puzzle page, which needs to know which renderer to mount.
+ */
+export const MODULE_RENDERER_MAP: Record<string, string> = {
+  m1: 'symmetry',
+  m2: 'fraction',
+  m3: 'geometry',
+  m4: 'derivative',
+  m5: 'equation',
+  m6: 'matrix',
+  m7: 'sequence',
+  m8: 'probability',
+}
+
+/** Geometry draws its levels from tangram presets rather than this table, so it has no keys here. */
+const FIXED_LEVELS = ['L1', 'L2', 'L3']
+
+/**
+ * The levels a renderer offers, in play order, derived from PUZZLE_CONFIGS.
+ *
+ * The module page used to hard-code three cards, so a new mode (fraction L4, symmetry L4/L5) had
+ * nowhere to appear. Deriving the list from this table makes adding a level a one-line config
+ * change. It also makes rollback trivial: delete the entry and its card disappears.
+ */
+export function levelIdsFor(rendererId: string): string[] {
+  const keys = Object.keys(PUZZLE_CONFIGS[rendererId] ?? {}).filter((k) => /^L\d+$/.test(k))
+  if (keys.length === 0) return [...FIXED_LEVELS]
+  return keys.sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)))
+}
+
+/** i18n keys for a level card's title and age band. */
+export type LevelMeta = { titleKey: string; ageKey: string }
+
+/** L1–L3 are the difficulty tiers every module shares. */
+const BASE_LEVEL_META: Record<string, LevelMeta> = {
+  L1: { titleKey: 'level.explorer', ageKey: 'level.age7' },
+  L2: { titleKey: 'level.standard', ageKey: 'level.age8' },
+  L3: { titleKey: 'level.challenge', ageKey: 'level.age10' },
+}
+
+/** L4+ are new modes, not harder tiers, so their card names the mode instead of a difficulty. */
+const MODE_LEVEL_META: Record<string, Record<string, LevelMeta>> = {
+  fraction: { L4: { titleKey: 'level.fractionSame', ageKey: 'level.age8' } },
+  symmetry: {
+    L4: { titleKey: 'level.symmetrySlide', ageKey: 'level.age8' },
+    L5: { titleKey: 'level.symmetrySpin', ageKey: 'level.age9' },
+  },
+}
+
+/**
+ * Card title and age band for a level, or undefined when nobody wrote one.
+ *
+ * Returning undefined rather than a generic default is deliberate. A new level with no entry
+ * would otherwise render as "Challenge Master" without complaint — the same silent fallback that
+ * hid four broken modules in this file (see the header comment). The tests turn undefined into a
+ * failure; the page still falls back so a child never sees a blank card.
+ */
+export function levelMetaFor(rendererId: string, levelId: string): LevelMeta | undefined {
+  return MODE_LEVEL_META[rendererId]?.[levelId] ?? BASE_LEVEL_META[levelId]
+}
